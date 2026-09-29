@@ -1,0 +1,180 @@
+import 'package:shared_models/shared_models.dart';
+
+class MockDatabase {
+  static final List<Category> categories = [
+    const Category(
+      id: 'cat_electronics',
+      name: 'Electronics',
+      slug: 'electronics',
+      iconName: 'devices',
+      imageUrl: 'https://images.unsplash.com/photo-1498049794561-7780e7231661?w=500',
+    ),
+    const Category(
+      id: 'cat_fashion',
+      name: 'Fashion & Apparel',
+      slug: 'fashion',
+      iconName: 'checkroom',
+      imageUrl: 'https://images.unsplash.com/photo-1445205170230-053b83016050?w=500',
+    ),
+    const Category(
+      id: 'cat_home',
+      name: 'Home & Living',
+      slug: 'home-living',
+      iconName: 'chair',
+      imageUrl: 'https://images.unsplash.com/photo-1513694203232-719a280e022f?w=500',
+    ),
+    const Category(
+      id: 'cat_footwear',
+      name: 'Sneakers & Shoes',
+      slug: 'footwear',
+      iconName: 'roller_skating',
+      imageUrl: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500',
+    ),
+    const Category(
+      id: 'cat_audio',
+      name: 'Audio & Sound',
+      slug: 'audio',
+      iconName: 'headphones',
+      imageUrl: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500',
+    ),
+  ];
+
+  static final List<Product> products = [
+    Product(
+      id: 'prod_1',
+      title: 'Galletrix Pulse ANC Wireless Headphones',
+      description: 'Studio-grade noise cancellation with 40-hour battery life, spatial audio tracking, and ultra-plush memory foam earcups.',
+      price: 299.99,
+      discountPrice: 249.99,
+      rating: 4.9,
+      reviewCount: 342,
+      stock: 45,
+      images: [
+        'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800',
+        'https://images.unsplash.com/photo-1583394838336-acd977736f90?w=800',
+      ],
+      categoryId: 'cat_audio',
+      category: categories[4],
+      vendorId: 'ven_101',
+      vendorName: 'Acoustic Labs',
+      isFeatured: true,
+      createdAt: DateTime.now().subtract(const Duration(days: 5)),
+    ),
+    Product(
+      id: 'prod_2',
+      title: 'Horizon Pro Mechanical Keyboard (RGB)',
+      description: 'Custom hot-swappable switches, aircraft-grade CNC aluminum chassis, Bluetooth 5.3 + 2.4GHz multi-device pairing.',
+      price: 179.00,
+      discountPrice: 149.00,
+      rating: 4.8,
+      reviewCount: 189,
+      stock: 22,
+      images: [
+        'https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=800',
+      ],
+      categoryId: 'cat_electronics',
+      category: categories[0],
+      vendorId: 'ven_102',
+      vendorName: 'KeyCrafters',
+      isFeatured: true,
+      createdAt: DateTime.now().subtract(const Duration(days: 8)),
+    ),
+    Product(
+      id: 'prod_3',
+      title: 'Velocity Runners - Carbon Series',
+      description: 'Ultra-lightweight responsive carbon plate running shoes engineered for peak marathon performance and everyday comfort.',
+      price: 210.00,
+      discountPrice: 185.00,
+      rating: 4.7,
+      reviewCount: 512,
+      stock: 60,
+      images: [
+        'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=800',
+      ],
+      categoryId: 'cat_footwear',
+      category: categories[3],
+      vendorId: 'ven_103',
+      vendorName: 'Strides Athletics',
+      isFeatured: true,
+      createdAt: DateTime.now().subtract(const Duration(days: 12)),
+    ),
+    Product(
+      id: 'prod_4',
+      title: 'Minimalist Nordic Desk Lamp',
+      description: 'Dimmable warm-to-cool LED with Qi-wireless charging pad integrated in the solid walnut base.',
+      price: 89.99,
+      rating: 4.6,
+      reviewCount: 78,
+      stock: 35,
+      images: [
+        'https://images.unsplash.com/photo-1507473885765-e6ed057f782c?w=800',
+      ],
+      categoryId: 'cat_home',
+      category: categories[2],
+      vendorId: 'ven_104',
+      vendorName: 'Nordic Studio',
+      isFeatured: false,
+      createdAt: DateTime.now().subtract(const Duration(days: 15)),
+    ),
+    Product(
+      id: 'prod_5',
+      title: 'Oversized Raw Denim Chore Jacket',
+      description: '14oz Japanese selvedge denim crafted with triple-needle stitching and brass hardware.',
+      price: 165.00,
+      discountPrice: 135.00,
+      rating: 4.9,
+      reviewCount: 94,
+      stock: 18,
+      images: [
+        'https://images.unsplash.com/photo-1551028719-00167b16eac5?w=800',
+      ],
+      categoryId: 'cat_fashion',
+      category: categories[1],
+      vendorId: 'ven_105',
+      vendorName: 'Atelier Indigo',
+      isFeatured: true,
+      createdAt: DateTime.now().subtract(const Duration(days: 2)),
+    ),
+  ];
+
+  static List<CartItem> cartItems = [
+    CartItem(
+      id: 'cart_item_1',
+      productId: 'prod_1',
+      product: products[0],
+      quantity: 1,
+      unitPrice: 249.99,
+      selectedVariant: 'Midnight Black',
+    ),
+  ];
+
+  static List<Order> orders = [
+    Order(
+      id: 'ord_9042',
+      userId: 'usr_guest',
+      items: [
+        CartItem(
+          id: 'item_prev_1',
+          productId: 'prod_3',
+          product: products[2],
+          quantity: 1,
+          unitPrice: 185.00,
+          selectedVariant: 'Size 42',
+        ),
+      ],
+      totalAmount: 190.00,
+      status: OrderStatus.shipped,
+      shippingAddress: const ShippingAddress(
+        fullName: 'Alex Morgan',
+        street: '742 Evergreen Terrace',
+        city: 'San Francisco',
+        state: 'CA',
+        postalCode: '94107',
+        country: 'United States',
+        phoneNumber: '+1 (555) 019-2834',
+      ),
+      paymentMethod: 'Apple Pay',
+      createdAt: DateTime.now().subtract(const Duration(days: 1, hours: 4)),
+    ),
+  ];
+}

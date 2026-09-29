@@ -1,0 +1,94 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'core/services/api_service.dart';
+import 'core/theme/app_theme.dart';
+import 'features/cart/cubit/cart_cubit.dart';
+import 'features/explore/presentation/explore_screen.dart';
+import 'features/home/presentation/home_screen.dart';
+import 'features/home/presentation/widgets/figma_bottom_nav_bar.dart';
+import 'features/messages/presentation/messages_screen.dart';
+import 'features/products/cubit/products_cubit.dart';
+import 'features/profile/presentation/profile_screen.dart';
+import 'features/selling/presentation/selling_page_screen.dart';
+
+void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  final apiService = ApiService();
+  runApp(GalletrixMarketplaceApp(apiService: apiService));
+}
+
+class GalletrixMarketplaceApp extends StatelessWidget {
+  final ApiService apiService;
+
+  const GalletrixMarketplaceApp({super.key, required this.apiService});
+
+  @override
+  Widget build(BuildContext context) {
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<ProductsCubit>(
+          create: (_) => ProductsCubit(apiService)..loadInitialData(),
+        ),
+        BlocProvider<CartCubit>(
+          create: (_) => CartCubit(),
+        ),
+      ],
+      child: MaterialApp(
+        title: 'Galletrix Marketplace',
+        debugShowCheckedModeBanner: false,
+        theme: AppTheme.lightTheme,
+        darkTheme: AppTheme.darkTheme,
+        themeMode: ThemeMode.light,
+        home: const MainNavigationScreen(),
+      ),
+    );
+  }
+}
+
+class MainNavigationScreen extends StatefulWidget {
+  const MainNavigationScreen({super.key});
+
+  @override
+  State<MainNavigationScreen> createState() => _MainNavigationScreenState();
+}
+
+class _MainNavigationScreenState extends State<MainNavigationScreen> {
+  int _currentIndex = 0;
+
+  void _goToTab(int index) {
+    setState(() => _currentIndex = index);
+  }
+
+
+  @override
+  Widget build(BuildContext context) {
+    final screens = [
+      // Tab 0: Home Screen
+      HomeScreen(
+        onOpenCart: () => _goToTab(1),
+        onOpenSearch: () => _goToTab(1),
+      ),
+      // Tab 1: Explore Screen
+      const ExploreScreen(),
+      // Tab 2: Selling Page / "Your Marketplace"
+      const SellingPageScreen(),
+      // Tab 3: Messages Screen
+      const MessagesScreen(),
+      // Tab 4: Account / Profile Screen
+      const ProfileScreen(),
+    ];
+
+    return Scaffold(
+      extendBody: true,
+      body: IndexedStack(
+        index: _currentIndex,
+        children: screens,
+      ),
+      bottomNavigationBar: FigmaBottomNavBar(
+        currentIndex: _currentIndex,
+        onTabSelected: _goToTab,
+        onAddPressed: () => _goToTab(2),
+      ),
+    );
+  }
+}
