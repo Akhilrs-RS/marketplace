@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_models/shared_models.dart';
+import '../../../core/services/api_service.dart';
 
 class SellingPageScreen extends StatefulWidget {
   const SellingPageScreen({super.key});
@@ -11,6 +13,30 @@ class SellingPageScreen extends StatefulWidget {
 class _SellingPageScreenState extends State<SellingPageScreen> {
   int _selectedType = 0; // 0: Individual, 1: Business Shop
   String _selectedFilter = 'All';
+
+  SellerMetrics _metrics = const SellerMetrics(
+    activeListings: 12,
+    totalViews: 2400,
+    enquiries: 38,
+    messages: 7,
+    growthPercent: 16,
+    period: 'This Month',
+  );
+
+  @override
+  void initState() {
+    super.initState();
+    _loadMetrics();
+  }
+
+  Future<void> _loadMetrics() async {
+    try {
+      final metrics = await ApiService().getSellerMetrics();
+      if (mounted) {
+        setState(() => _metrics = metrics);
+      }
+    } catch (_) {}
+  }
 
   final List<String> _statusFilters = [
     'All',
@@ -167,7 +193,7 @@ class _SellingPageScreenState extends State<SellingPageScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'This Month',
+                    _metrics.period,
                     style: GoogleFonts.inter(
                       fontSize: 11,
                       fontWeight: FontWeight.w500,
@@ -197,7 +223,7 @@ class _SellingPageScreenState extends State<SellingPageScreen> {
                             const Icon(Icons.north_east_rounded, size: 12, color: Color(0xFF10B981)),
                             const SizedBox(width: 3),
                             Text(
-                              '16 %',
+                              '${_metrics.growthPercent} %',
                               style: GoogleFonts.inter(
                                 fontSize: 11,
                                 fontWeight: FontWeight.w700,
@@ -215,13 +241,13 @@ class _SellingPageScreenState extends State<SellingPageScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      _buildStatItem('12', 'Active'),
+                      _buildStatItem('${_metrics.activeListings}', 'Active'),
                       _buildStatDivider(),
-                      _buildStatItem('2.4k', 'Views'),
+                      _buildStatItem('${(_metrics.totalViews / 1000).toStringAsFixed(1)}k', 'Views'),
                       _buildStatDivider(),
-                      _buildStatItem('38', 'Enquiries'),
+                      _buildStatItem('${_metrics.enquiries}', 'Enquiries'),
                       _buildStatDivider(),
-                      _buildStatItem('7', 'Messages'),
+                      _buildStatItem('${_metrics.messages}', 'Messages'),
                     ],
                   ),
                 ],
@@ -505,7 +531,34 @@ class _SellingPageScreenState extends State<SellingPageScreen> {
               ),
               title: const Text('Post Vehicle', style: TextStyle(fontWeight: FontWeight.w600)),
               subtitle: const Text('Cars, motorcycles, trucks, spare parts'),
-              onTap: () => Navigator.pop(ctx),
+              onTap: () async {
+                Navigator.pop(ctx);
+                final newListing = MarketListing(
+                  id: 'list_car_${DateTime.now().millisecondsSinceEpoch}',
+                  title: '2023 Tata Harrier XZ+',
+                  price: 1820000,
+                  formattedPrice: '₹ 18,20,000',
+                  location: 'Kochi',
+                  category: 'Vehicles',
+                  subcategory: 'Car',
+                  imagePath: 'assets/images/h1.png',
+                  description: 'Top end diesel automatic with panoramic sunroof.',
+                  sellerId: 'ven_user',
+                  sellerName: 'Alex Morgan',
+                  status: 'Active',
+                  createdAt: DateTime.now(),
+                );
+                await ApiService().createListing(newListing);
+                if (context.mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Vehicle listing published to backend!'),
+                      backgroundColor: Color(0xFF6366F1),
+                      behavior: SnackBarBehavior.floating,
+                    ),
+                  );
+                }
+              },
             ),
             ListTile(
               leading: const CircleAvatar(
@@ -514,7 +567,34 @@ class _SellingPageScreenState extends State<SellingPageScreen> {
               ),
               title: const Text('Post Property', style: TextStyle(fontWeight: FontWeight.w600)),
               subtitle: const Text('Apartments, plots, commercial rentals'),
-              onTap: () => Navigator.pop(ctx),
+              onTap: () async {
+                Navigator.pop(ctx);
+                final newListing = MarketListing(
+                  id: 'list_prop_${DateTime.now().millisecondsSinceEpoch}',
+                  title: '2BHK Luxury Studio in HSR',
+                  price: 45000,
+                  formattedPrice: '₹ 45,000 /mo',
+                  location: 'Bengaluru',
+                  category: 'Property',
+                  subcategory: 'Rent',
+                  imagePath: 'assets/images/h8.png',
+                  description: 'Fully furnished studio apartment with power backup.',
+                  sellerId: 'ven_user',
+                  sellerName: 'Alex Morgan',
+                  status: 'Active',
+                  createdAt: DateTime.now(),
+                );
+                await ApiService().createListing(newListing);
+                if (context.mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Property listing published to backend!'),
+                      backgroundColor: Color(0xFF6366F1),
+                      behavior: SnackBarBehavior.floating,
+                    ),
+                  );
+                }
+              },
             ),
             ListTile(
               leading: const CircleAvatar(
@@ -523,7 +603,34 @@ class _SellingPageScreenState extends State<SellingPageScreen> {
               ),
               title: const Text('Sell Electronics / Other', style: TextStyle(fontWeight: FontWeight.w600)),
               subtitle: const Text('Phones, laptops, furniture, appliances'),
-              onTap: () => Navigator.pop(ctx),
+              onTap: () async {
+                Navigator.pop(ctx);
+                final newListing = MarketListing(
+                  id: 'list_tech_${DateTime.now().millisecondsSinceEpoch}',
+                  title: 'iPad Pro 11" M2 256GB',
+                  price: 79900,
+                  formattedPrice: '₹ 79,900',
+                  location: 'Bengaluru',
+                  category: 'Mobiles',
+                  subcategory: 'Tablets',
+                  imagePath: 'assets/images/h6.png',
+                  description: 'Space Gray, mint condition with Apple Pencil 2.',
+                  sellerId: 'ven_user',
+                  sellerName: 'Alex Morgan',
+                  status: 'Active',
+                  createdAt: DateTime.now(),
+                );
+                await ApiService().createListing(newListing);
+                if (context.mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Product listing published to backend!'),
+                      backgroundColor: Color(0xFF6366F1),
+                      behavior: SnackBarBehavior.floating,
+                    ),
+                  );
+                }
+              },
             ),
           ],
         ),

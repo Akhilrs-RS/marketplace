@@ -24,22 +24,25 @@ class GalletrixMarketplaceApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider<ProductsCubit>(
-          create: (_) => ProductsCubit(apiService)..loadInitialData(),
+    return RepositoryProvider<ApiService>.value(
+      value: apiService,
+      child: MultiBlocProvider(
+        providers: [
+          BlocProvider<ProductsCubit>(
+            create: (_) => ProductsCubit(apiService)..loadInitialData(),
+          ),
+          BlocProvider<CartCubit>(
+            create: (_) => CartCubit(),
+          ),
+        ],
+        child: MaterialApp(
+          title: 'Galletrix Marketplace',
+          debugShowCheckedModeBanner: false,
+          theme: AppTheme.lightTheme,
+          darkTheme: AppTheme.darkTheme,
+          themeMode: ThemeMode.light,
+          home: const MainNavigationScreen(),
         ),
-        BlocProvider<CartCubit>(
-          create: (_) => CartCubit(),
-        ),
-      ],
-      child: MaterialApp(
-        title: 'Galletrix Marketplace',
-        debugShowCheckedModeBanner: false,
-        theme: AppTheme.lightTheme,
-        darkTheme: AppTheme.darkTheme,
-        themeMode: ThemeMode.light,
-        home: const MainNavigationScreen(),
       ),
     );
   }
