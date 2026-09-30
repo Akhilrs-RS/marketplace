@@ -44,6 +44,7 @@ class SellerCtaBanner extends StatelessWidget {
 
           // White Action Button: "Start selling >"
           GestureDetector(
+            key: const Key('start_selling_cta_button'),
             onTap: onStartSelling,
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 9),

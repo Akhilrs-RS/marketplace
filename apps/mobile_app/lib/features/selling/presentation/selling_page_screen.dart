@@ -54,6 +54,16 @@ class _SellingPageScreenState extends State<SellingPageScreen> {
         backgroundColor: Colors.white,
         elevation: 0,
         centerTitle: false,
+        leading: Navigator.canPop(context)
+            ? IconButton(
+                icon: const Icon(
+                  Icons.arrow_back_ios_new_rounded,
+                  size: 18,
+                  color: Color(0xFF1E293B),
+                ),
+                onPressed: () => Navigator.pop(context),
+              )
+            : null,
         title: Text(
           'Your Marketplace',
           style: GoogleFonts.inter(

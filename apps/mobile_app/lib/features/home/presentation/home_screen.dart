@@ -11,12 +11,14 @@ import 'widgets/trusted_business_card.dart';
 import '../../categories/presentation/vehicles_screen.dart';
 import '../../categories/presentation/category_browse_screen.dart';
 import '../../products/presentation/car_details_screen.dart';
+import '../../selling/presentation/selling_page_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   final VoidCallback onOpenCart;
   final VoidCallback? onOpenSearch;
   final VoidCallback? onOpenNotifications;
   final VoidCallback? onOpenProfile;
+  final VoidCallback? onStartSelling;
 
   const HomeScreen({
     super.key,
@@ -24,6 +26,7 @@ class HomeScreen extends StatelessWidget {
     this.onOpenSearch,
     this.onOpenNotifications,
     this.onOpenProfile,
+    this.onStartSelling,
   });
 
   // The 8 categories mapped to images h1.png through h8.png in exact order
@@ -293,7 +296,14 @@ class HomeScreen extends StatelessWidget {
 
                       // ── SECTION 3: Turn What you have into your next opportunity (CTA) ──
                       SellerCtaBanner(
-                        onStartSelling: () {},
+                        onStartSelling: onStartSelling ?? () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => const SellingPageScreen(),
+                            ),
+                          );
+                        },
                       ),
 
                       // ── SECTION 4: Featured Near You ──

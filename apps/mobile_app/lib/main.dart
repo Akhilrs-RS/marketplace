@@ -72,6 +72,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
         onOpenCart: () => _goToTab(1),
         onOpenSearch: () => _goToTab(1),
         onOpenProfile: () => _goToTab(4),
+        onStartSelling: () => _goToTab(2),
         onOpenNotifications: () {
           Navigator.push(
             context,

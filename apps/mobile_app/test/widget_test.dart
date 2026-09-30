@@ -204,5 +204,30 @@ void main() {
 
     // Verify Profile screen is shown
     expect(find.text('alexg@gamil.com'), findsOneWidget);
+
+    // 13. Return to Home and tap "Start selling" CTA button
+    final backHomeBtn = find.descendant(
+      of: find.byType(FigmaBottomNavBar),
+      matching: find.byIcon(Icons.home_outlined),
+    );
+    await tester.tap(backHomeBtn);
+    await tester.pumpAndSettle();
+
+    final startSellingBtn = find.byKey(const Key('start_selling_cta_button'));
+    await tester.scrollUntilVisible(
+      startSellingBtn,
+      200.0,
+      scrollable: find.byType(Scrollable).first,
+    );
+    await tester.pumpAndSettle();
+    expect(startSellingBtn, findsOneWidget);
+
+    // Tap "Start selling"
+    await tester.tap(startSellingBtn);
+    await tester.pumpAndSettle();
+
+    // Verify redirected to Selling Page ("Your Marketplace")
+    expect(find.text('Your Marketplace'), findsOneWidget);
+    expect(find.text('Add a listing'), findsOneWidget);
   });
 }
