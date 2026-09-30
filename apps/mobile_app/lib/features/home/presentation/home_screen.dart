@@ -12,6 +12,8 @@ import '../../categories/presentation/vehicles_screen.dart';
 import '../../categories/presentation/category_browse_screen.dart';
 import '../../products/presentation/car_details_screen.dart';
 import '../../selling/presentation/selling_page_screen.dart';
+import '../../shops/presentation/shop_details_screen.dart';
+import '../../shops/presentation/trusted_businesses_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   final VoidCallback onOpenCart;
@@ -391,7 +393,15 @@ class HomeScreen extends StatelessWidget {
                           Padding(
                             padding: const EdgeInsets.only(bottom: 2),
                             child: GestureDetector(
-                              onTap: () {},
+                              key: const Key('home_view_all_trusted_btn'),
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (_) => const TrustedBusinessesScreen(),
+                                  ),
+                                );
+                              },
                               child: Row(
                                 children: [
                                   Text(
@@ -424,8 +434,18 @@ class HomeScreen extends StatelessWidget {
                         itemCount: trustedBusinesses.length,
                         itemBuilder: (ctx, i) {
                           return TrustedBusinessCard(
+                            key: Key('trusted_biz_card_$i'),
                             item: trustedBusinesses[i],
-                            onViewShop: () {},
+                            onViewShop: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => ShopDetailsScreen(
+                                    business: trustedBusinesses[i],
+                                  ),
+                                ),
+                              );
+                            },
                           );
                         },
                       ),
