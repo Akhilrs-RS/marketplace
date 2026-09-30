@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '../../notifications/presentation/notifications_screen.dart';
 import '../../products/presentation/car_details_screen.dart';
+import '../../profile/presentation/profile_screen.dart';
 
 class ExploreListingItem {
   final String imagePath;
@@ -297,51 +299,67 @@ class _ExploreScreenState extends State<ExploreScreen> {
           ),
         ),
         actions: [
-          Container(
-            width: 36,
-            height: 36,
-            margin: const EdgeInsets.only(right: 10),
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: Colors.white,
-              border: Border.all(color: const Color(0xFFE2E8F0)),
-            ),
-            child: Stack(
-              alignment: Alignment.center,
-              children: [
-                const Icon(
-                  Icons.notifications_none_rounded,
-                  color: Color(0xFF1E293B),
-                  size: 19,
-                ),
-                Positioned(
-                  top: 7,
-                  right: 8,
-                  child: Container(
-                    width: 6,
-                    height: 6,
-                    decoration: const BoxDecoration(
-                      color: Color(0xFFEF4444),
-                      shape: BoxShape.circle,
+          GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const NotificationsScreen()),
+              );
+            },
+            child: Container(
+              width: 36,
+              height: 36,
+              margin: const EdgeInsets.only(right: 10),
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.white,
+                border: Border.all(color: const Color(0xFFE2E8F0)),
+              ),
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  const Icon(
+                    Icons.notifications_none_rounded,
+                    color: Color(0xFF1E293B),
+                    size: 19,
+                  ),
+                  Positioned(
+                    top: 7,
+                    right: 8,
+                    child: Container(
+                      width: 6,
+                      height: 6,
+                      decoration: const BoxDecoration(
+                        color: Color(0xFFEF4444),
+                        shape: BoxShape.circle,
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
-          Container(
-            width: 36,
-            height: 36,
-            margin: const EdgeInsets.only(right: 16),
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              border: Border.all(color: const Color(0xFFE2E8F0), width: 1.5),
-            ),
-            clipBehavior: Clip.antiAlias,
-            child: Image.network(
-              'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200',
-              fit: BoxFit.cover,
-              errorBuilder: (ctx, err, stack) => const Icon(Icons.person, color: Colors.grey),
+          GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const ProfileScreen()),
+              );
+            },
+            child: Container(
+              width: 36,
+              height: 36,
+              margin: const EdgeInsets.only(right: 16),
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                border: Border.all(color: const Color(0xFFE2E8F0), width: 1.5),
+              ),
+              clipBehavior: Clip.antiAlias,
+              child: Image.network(
+                'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200',
+                fit: BoxFit.cover,
+                errorBuilder: (ctx, err, stack) => const Icon(Icons.person, color: Colors.grey),
+              ),
             ),
           ),
         ],

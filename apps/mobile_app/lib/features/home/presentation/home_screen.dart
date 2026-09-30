@@ -15,11 +15,15 @@ import '../../products/presentation/car_details_screen.dart';
 class HomeScreen extends StatelessWidget {
   final VoidCallback onOpenCart;
   final VoidCallback? onOpenSearch;
+  final VoidCallback? onOpenNotifications;
+  final VoidCallback? onOpenProfile;
 
   const HomeScreen({
     super.key,
     required this.onOpenCart,
     this.onOpenSearch,
+    this.onOpenNotifications,
+    this.onOpenProfile,
   });
 
   // The 8 categories mapped to images h1.png through h8.png in exact order
@@ -163,6 +167,8 @@ class HomeScreen extends StatelessWidget {
                   context.read<ProductsCubit>().search(val);
                 },
                 onSearchSubmit: onOpenSearch ?? () {},
+                onNotificationTap: onOpenNotifications,
+                onProfileTap: onOpenProfile,
               ),
 
               // 2. White Curved Main Content Sheet

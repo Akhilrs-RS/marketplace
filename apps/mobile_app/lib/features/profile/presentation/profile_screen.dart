@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '../../notifications/presentation/notifications_screen.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -205,6 +206,12 @@ class ProfileScreen extends StatelessWidget {
               icon: Icons.notifications_none_rounded,
               title: 'Notifications',
               subtitle: 'Push , email, SMS',
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const NotificationsScreen()),
+                );
+              },
             ),
             _buildActionItem(
               context,
@@ -304,9 +311,10 @@ class ProfileScreen extends StatelessWidget {
     required IconData icon,
     required String title,
     required String subtitle,
+    VoidCallback? onTap,
   }) {
     return InkWell(
-      onTap: () {
+      onTap: onTap ?? () {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Opened $title ($subtitle)'),

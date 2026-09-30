@@ -1,14 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '../../../notifications/presentation/notifications_screen.dart';
+import '../../../profile/presentation/profile_screen.dart';
 
 class FigmaHeroSection extends StatelessWidget {
   final ValueChanged<String>? onSearchChanged;
   final VoidCallback? onSearchSubmit;
+  final VoidCallback? onNotificationTap;
+  final VoidCallback? onProfileTap;
 
   const FigmaHeroSection({
     super.key,
     this.onSearchChanged,
     this.onSearchSubmit,
+    this.onNotificationTap,
+    this.onProfileTap,
   });
 
   @override
@@ -81,43 +87,61 @@ class FigmaHeroSection extends StatelessWidget {
                         Row(
                           children: [
                             // Notification bell with translucent backdrop
-                            Container(
-                              width: 38,
-                              height: 38,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: Colors.black.withValues(alpha: 0.35),
-                                border: Border.all(
-                                  color: Colors.white.withValues(alpha: 0.2),
-                                  width: 1,
+                            GestureDetector(
+                              key: const Key('navbar_notification_icon'),
+                              onTap: onNotificationTap ?? () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (_) => const NotificationsScreen()),
+                                );
+                              },
+                              child: Container(
+                                width: 38,
+                                height: 38,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: Colors.black.withValues(alpha: 0.35),
+                                  border: Border.all(
+                                    color: Colors.white.withValues(alpha: 0.2),
+                                    width: 1,
+                                  ),
                                 ),
-                              ),
-                              child: const Icon(
-                                Icons.notifications_none_rounded,
-                                color: Colors.white,
-                                size: 20,
+                                child: const Icon(
+                                  Icons.notifications_none_rounded,
+                                  color: Colors.white,
+                                  size: 20,
+                                ),
                               ),
                             ),
                             const SizedBox(width: 10),
 
                             // User Profile Avatar
-                            Container(
-                              width: 38,
-                              height: 38,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                border: Border.all(
-                                  color: Colors.white.withValues(alpha: 0.4),
-                                  width: 1.5,
+                            GestureDetector(
+                              key: const Key('navbar_profile_icon'),
+                              onTap: onProfileTap ?? () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (_) => const ProfileScreen()),
+                                );
+                              },
+                              child: Container(
+                                width: 38,
+                                height: 38,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  border: Border.all(
+                                    color: Colors.white.withValues(alpha: 0.4),
+                                    width: 1.5,
+                                  ),
                                 ),
-                              ),
-                              clipBehavior: Clip.antiAlias,
-                              child: Image.network(
-                                'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200',
-                                fit: BoxFit.cover,
-                                errorBuilder: (ctx, err, stack) => Container(
-                                  color: const Color(0xFF6366F1),
-                                  child: const Icon(Icons.person, color: Colors.white, size: 20),
+                                clipBehavior: Clip.antiAlias,
+                                child: Image.network(
+                                  'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200',
+                                  fit: BoxFit.cover,
+                                  errorBuilder: (ctx, err, stack) => Container(
+                                    color: const Color(0xFF6366F1),
+                                    child: const Icon(Icons.person, color: Colors.white, size: 20),
+                                  ),
                                 ),
                               ),
                             ),

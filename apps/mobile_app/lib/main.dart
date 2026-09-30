@@ -7,6 +7,7 @@ import 'features/explore/presentation/explore_screen.dart';
 import 'features/home/presentation/home_screen.dart';
 import 'features/home/presentation/widgets/figma_bottom_nav_bar.dart';
 import 'features/messages/presentation/messages_screen.dart';
+import 'features/notifications/presentation/notifications_screen.dart';
 import 'features/products/cubit/products_cubit.dart';
 import 'features/profile/presentation/profile_screen.dart';
 import 'features/selling/presentation/selling_page_screen.dart';
@@ -70,6 +71,13 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
       HomeScreen(
         onOpenCart: () => _goToTab(1),
         onOpenSearch: () => _goToTab(1),
+        onOpenProfile: () => _goToTab(4),
+        onOpenNotifications: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (_) => const NotificationsScreen()),
+          );
+        },
       ),
       // Tab 1: Explore Screen
       const ExploreScreen(),

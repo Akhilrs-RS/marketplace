@@ -163,5 +163,46 @@ void main() {
     expect(find.text('Help center'), findsOneWidget);
     expect(find.text('Notifications'), findsOneWidget);
     expect(find.text('Privacy & Security'), findsOneWidget);
+
+    // 9. Tap Notifications item inside Profile screen -> opens NotificationsScreen
+    await tester.tap(find.text('Notifications'));
+    await tester.pumpAndSettle();
+    expect(find.text('Price Drop Alert!'), findsOneWidget);
+    expect(find.text('New Message from Rohan'), findsOneWidget);
+
+    // Pop back to Profile
+    await tester.tap(find.byIcon(Icons.arrow_back_ios_new_rounded));
+    await tester.pumpAndSettle();
+
+    // 10. Switch back to Home tab
+    final returnHomeNavBtn = find.descendant(
+      of: find.byType(FigmaBottomNavBar),
+      matching: find.byIcon(Icons.home_outlined),
+    );
+    await tester.tap(returnHomeNavBtn);
+    await tester.pumpAndSettle();
+
+    // 11. Tap header navbar notification icon on Home screen
+    final navNotifBtn = find.byKey(const Key('navbar_notification_icon'));
+    expect(navNotifBtn, findsOneWidget);
+    await tester.tap(navNotifBtn);
+    await tester.pumpAndSettle();
+
+    // Verify Notifications screen
+    expect(find.text('Price Drop Alert!'), findsOneWidget);
+    expect(find.text('Deals'), findsOneWidget);
+
+    // Pop back
+    await tester.tap(find.byIcon(Icons.arrow_back_ios_new_rounded));
+    await tester.pumpAndSettle();
+
+    // 12. Tap header navbar profile icon on Home screen
+    final navProfileBtn = find.byKey(const Key('navbar_profile_icon'));
+    expect(navProfileBtn, findsOneWidget);
+    await tester.tap(navProfileBtn);
+    await tester.pumpAndSettle();
+
+    // Verify Profile screen is shown
+    expect(find.text('alexg@gamil.com'), findsOneWidget);
   });
 }
