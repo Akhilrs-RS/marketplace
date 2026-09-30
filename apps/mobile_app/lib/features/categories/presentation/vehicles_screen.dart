@@ -29,6 +29,14 @@ class VehiclesScreen extends StatefulWidget {
 
 class _VehiclesScreenState extends State<VehiclesScreen> {
   String _selectedSubcategory = 'Car';
+  String _searchQuery = '';
+  final TextEditingController _searchController = TextEditingController();
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
 
   final List<String> _subcategories = [
     'Car',
@@ -83,8 +91,32 @@ class _VehiclesScreenState extends State<VehiclesScreen> {
     ),
   ];
 
+  List<VehicleDealership> get _filteredDealerships {
+    final list = _dealerships.where((d) {
+      bool matchesSub = true;
+      if (_selectedSubcategory == 'Car') {
+        matchesSub = d.category.toLowerCase().contains('car');
+      } else if (_selectedSubcategory == 'Bikes' || _selectedSubcategory == 'Scooters') {
+        matchesSub = d.category.toLowerCase().contains('bike') ||
+            d.category.toLowerCase().contains('scooter') ||
+            d.category.toLowerCase().contains('wheeler');
+      } else if (_selectedSubcategory == 'Commercial Vehicle') {
+        matchesSub = d.category.toLowerCase().contains('commercial');
+      }
+      final q = _searchQuery.trim().toLowerCase();
+      final matchesQuery = q.isEmpty ||
+          d.name.toLowerCase().contains(q) ||
+          d.location.toLowerCase().contains(q) ||
+          d.category.toLowerCase().contains(q);
+      return matchesSub && matchesQuery;
+    }).toList();
+    return list.isNotEmpty ? list : _dealerships;
+  }
+
   @override
   Widget build(BuildContext context) {
+    final items = _filteredDealerships;
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -124,6 +156,8 @@ class _VehiclesScreenState extends State<VehiclesScreen> {
                   const SizedBox(width: 8),
                   Expanded(
                     child: TextField(
+                      controller: _searchController,
+                      onChanged: (val) => setState(() => _searchQuery = val),
                       style: GoogleFonts.inter(fontSize: 13, color: const Color(0xFF1E293B)),
                       decoration: InputDecoration(
                         isDense: true,
@@ -136,7 +170,16 @@ class _VehiclesScreenState extends State<VehiclesScreen> {
                       ),
                     ),
                   ),
-                  const Icon(Icons.mic_none_rounded, color: Color(0xFF94A3B8), size: 20),
+                  if (_searchQuery.isNotEmpty)
+                    GestureDetector(
+                      onTap: () {
+                        _searchController.clear();
+                        setState(() => _searchQuery = '');
+                      },
+                      child: const Icon(Icons.close_rounded, color: Color(0xFF94A3B8), size: 18),
+                    )
+                  else
+                    const Icon(Icons.mic_none_rounded, color: Color(0xFF94A3B8), size: 20),
                 ],
               ),
             ),
@@ -183,7 +226,7 @@ class _VehiclesScreenState extends State<VehiclesScreen> {
               padding: EdgeInsets.zero,
               physics: const NeverScrollableScrollPhysics(),
               shrinkWrap: true,
-              itemCount: _dealerships.length,
+              itemCount: items.length,
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
                 crossAxisSpacing: 10,
@@ -191,7 +234,7 @@ class _VehiclesScreenState extends State<VehiclesScreen> {
                 childAspectRatio: 0.69,
               ),
               itemBuilder: (ctx, index) {
-                final item = _dealerships[index];
+                final item = items[index];
                 return GestureDetector(
                   onTap: () {
                     Navigator.push(

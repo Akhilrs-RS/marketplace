@@ -9,6 +9,7 @@ import 'widgets/fresh_listing_tile.dart';
 import 'widgets/seller_cta_banner.dart';
 import 'widgets/trusted_business_card.dart';
 import '../../categories/presentation/vehicles_screen.dart';
+import '../../categories/presentation/category_browse_screen.dart';
 import '../../products/presentation/car_details_screen.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -215,13 +216,19 @@ class HomeScreen extends StatelessWidget {
                           return CategoryCard(
                             data: item,
                             onTap: () {
+                              context.read<ProductsCubit>().selectCategory(item.title.toLowerCase());
                               if (item.title == 'Vehicles') {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(builder: (_) => const VehiclesScreen()),
                                 );
                               } else {
-                                context.read<ProductsCubit>().selectCategory(item.title.toLowerCase());
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (_) => CategoryBrowseScreen(categoryTitle: item.title),
+                                  ),
+                                );
                               }
                             },
                           );
