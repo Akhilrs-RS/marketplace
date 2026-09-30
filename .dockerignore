@@ -1,0 +1,9 @@
+.git
+.gitignore
+.DS_Store
+**/.DS_Store
+apps/mobile_app
+apps/backend_api/build
+apps/backend_api/.dart_frog
+apps/backend_api/.dart_tool
+packages/shared_models/.dart_tool

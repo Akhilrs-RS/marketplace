@@ -1,9 +1,9 @@
 import 'dart:io';
-import 'package:backend_api/src/data/mock_database.dart';
+import 'package:backend_api/src/database/database_service.dart';
 import 'package:dart_frog/dart_frog.dart';
 import 'package:shared_models/shared_models.dart';
 
-Response onRequest(RequestContext context) {
+Future<Response> onRequest(RequestContext context) async {
   if (context.request.method != HttpMethod.get) {
     return Response.json(
       statusCode: HttpStatus.methodNotAllowed,
@@ -12,11 +12,7 @@ Response onRequest(RequestContext context) {
   }
 
   final status = context.request.uri.queryParameters['status'];
-  var sellerItems = MockDatabase.listings;
-
-  if (status != null && status.isNotEmpty && status.toLowerCase() != 'all') {
-    sellerItems = sellerItems.where((l) => l.status.toLowerCase() == status.toLowerCase()).toList();
-  }
+  final sellerItems = await DatabaseService().getListings(status: status);
 
   final response = ApiResponse<List<dynamic>>.success(
     data: sellerItems.map((e) => e.toJson()).toList(),

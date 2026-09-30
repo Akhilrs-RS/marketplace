@@ -1,9 +1,9 @@
 import 'dart:io';
-import 'package:backend_api/src/data/mock_database.dart';
+import 'package:backend_api/src/database/database_service.dart';
 import 'package:dart_frog/dart_frog.dart';
 import 'package:shared_models/shared_models.dart';
 
-Response onRequest(RequestContext context) {
+Future<Response> onRequest(RequestContext context) async {
   if (context.request.method != HttpMethod.get) {
     return Response.json(
       statusCode: HttpStatus.methodNotAllowed,
@@ -12,13 +12,8 @@ Response onRequest(RequestContext context) {
   }
 
   final type = context.request.uri.queryParameters['type'];
-  var convs = MockDatabase.conversations;
-
-  if (type == 'buying') {
-    convs = convs.where((c) => c.isBuying).toList();
-  } else if (type == 'selling') {
-    convs = convs.where((c) => !c.isBuying).toList();
-  }
+  final isBuying = type != 'selling';
+  final convs = await DatabaseService().getConversations(isBuying: isBuying);
 
   final response = ApiResponse<List<dynamic>>.success(
     data: convs.map((c) => c.toJson()).toList(),

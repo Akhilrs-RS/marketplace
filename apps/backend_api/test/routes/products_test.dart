@@ -19,7 +19,7 @@ void main() {
       when(() => context.request).thenReturn(request);
       when(() => request.method).thenReturn(HttpMethod.get);
 
-      final response = categories_route.onRequest(context);
+      final response = await categories_route.onRequest(context);
       expect(response.statusCode, equals(HttpStatus.ok));
 
       final body = jsonDecode(await response.body()) as Map<String, dynamic>;
@@ -35,7 +35,7 @@ void main() {
       when(() => request.method).thenReturn(HttpMethod.get);
       when(() => request.uri).thenReturn(Uri.parse('http://localhost:8080/api/products'));
 
-      final response = products_route.onRequest(context);
+      final response = await products_route.onRequest(context);
       expect(response.statusCode, equals(HttpStatus.ok));
 
       final body = jsonDecode(await response.body()) as Map<String, dynamic>;

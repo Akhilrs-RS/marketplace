@@ -74,4 +74,40 @@ class MarketListing {
       'specifications': specifications,
     };
   }
+
+  MarketListing copyWith({
+    String? id,
+    String? title,
+    double? price,
+    String? formattedPrice,
+    String? location,
+    String? category,
+    String? subcategory,
+    String? imagePath,
+    String? description,
+    String? sellerId,
+    String? sellerName,
+    String? status,
+    bool? isFeatured,
+    DateTime? createdAt,
+    Map<String, dynamic>? specifications,
+  }) {
+    return MarketListing(
+      id: id ?? this.id,
+      title: title ?? this.title,
+      price: price ?? this.price,
+      formattedPrice: formattedPrice ?? this.formattedPrice,
+      location: location ?? this.location,
+      category: category ?? this.category,
+      subcategory: subcategory ?? this.subcategory,
+      imagePath: imagePath ?? this.imagePath,
+      description: description ?? this.description,
+      sellerId: sellerId ?? this.sellerId,
+      sellerName: sellerName ?? this.sellerName,
+      status: status ?? this.status,
+      isFeatured: isFeatured ?? this.isFeatured,
+      createdAt: createdAt ?? this.createdAt,
+      specifications: specifications ?? this.specifications,
+    );
+  }
 }

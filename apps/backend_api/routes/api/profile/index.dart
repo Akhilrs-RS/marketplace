@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'package:backend_api/src/data/mock_database.dart';
+import 'package:backend_api/src/database/database_service.dart';
 import 'package:dart_frog/dart_frog.dart';
 import 'package:shared_models/shared_models.dart';
 
@@ -17,8 +17,8 @@ Future<Response> onRequest(RequestContext context) async {
   }
 }
 
-Response _getProfile() {
-  final profile = MockDatabase.userProfile;
+Future<Response> _getProfile() async {
+  final profile = await DatabaseService().getUserProfile('usr_default');
   final response = ApiResponse<Map<String, dynamic>>.success(
     data: profile.toJson(),
     message: 'Profile retrieved successfully',
@@ -29,7 +29,7 @@ Response _getProfile() {
 Future<Response> _updateProfile(RequestContext context) async {
   try {
     final body = await context.request.json() as Map<String, dynamic>;
-    final existing = MockDatabase.userProfile;
+    final existing = await DatabaseService().getUserProfile('usr_default');
 
     final updated = UserProfile(
       id: existing.id,
@@ -43,8 +43,6 @@ Future<Response> _updateProfile(RequestContext context) async {
       recentlyViewedCount: existing.recentlyViewedCount,
       activeEnquiriesCount: existing.activeEnquiriesCount,
     );
-
-    MockDatabase.userProfile = updated;
 
     final response = ApiResponse<Map<String, dynamic>>.success(
       data: updated.toJson(),

@@ -51,17 +51,33 @@ Marketplace/
 
 ## 🚀 Getting Started
 
-### 1. Run the Backend API Server
+### 1. Run Backend API & Database with Docker Compose (Recommended)
+
+Run the backend and PostgreSQL 16 database with persistent storage:
+```bash
+docker compose up -d
+```
+- **Database**: PostgreSQL 16 Alpine on port `5432` (persistent named volume `marketplace_pgdata`).
+- **Schema & Seeding**: Automatically initialized via `apps/backend_api/database/init.sql`.
+- **API Server**: Native AOT compiled Dart Frog server on `http://localhost:8080`.
+- Health check: `curl http://localhost:8080`
+- Listings API: `curl http://localhost:8080/api/listings`
+- Categories API: `curl http://localhost:8080/api/categories`
+
+To view logs or stop:
+```bash
+docker compose logs -f api
+docker compose down
+```
+
+### 2. Run Backend API Locally (Development Mode)
 ```bash
 cd apps/backend_api
 dart_frog dev
 ```
-The API server will start on `http://localhost:8080`.
-- Health check: `http://localhost:8080`
-- Products API: `http://localhost:8080/api/products`
-- Categories API: `http://localhost:8080/api/categories`
+The API server will connect to PostgreSQL if available, or gracefully fallback to the in-memory mock database.
 
-### 2. Run the Flutter Mobile App
+### 3. Run the Flutter Mobile App
 In another terminal:
 ```bash
 cd apps/mobile_app
@@ -69,7 +85,7 @@ flutter run
 ```
 You can select iOS Simulator, Android Emulator, macOS Desktop, or Chrome browser.
 
-### 3. Run Automated Tests
+### 4. Run Automated Tests
 - Mobile app tests:
   ```bash
   cd apps/mobile_app && flutter test

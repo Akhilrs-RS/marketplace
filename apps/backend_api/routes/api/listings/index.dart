@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'package:backend_api/src/data/mock_database.dart';
+import 'package:backend_api/src/database/database_service.dart';
 import 'package:dart_frog/dart_frog.dart';
 import 'package:shared_models/shared_models.dart';
 
@@ -17,39 +17,21 @@ Future<Response> onRequest(RequestContext context) async {
   }
 }
 
-Response _getListings(RequestContext context) {
+Future<Response> _getListings(RequestContext context) async {
   final params = context.request.uri.queryParameters;
   final category = params['category'];
   final subcategory = params['subcategory'];
-  final query = params['q']?.toLowerCase();
+  final query = params['q'];
   final status = params['status'] ?? 'active';
+  final sort = params['sort'];
 
-  var results = List<MarketListing>.from(MockDatabase.listings);
-
-  // Filter by status if specified
-  if (status != 'all') {
-    results = results.where((item) => item.status == status).toList();
-  }
-
-  // Filter by category
-  if (category != null && category.isNotEmpty && category.toLowerCase() != 'all') {
-    results = results.where((item) => item.category.toLowerCase() == category.toLowerCase()).toList();
-  }
-
-  // Filter by subcategory
-  if (subcategory != null && subcategory.isNotEmpty) {
-    results = results.where((item) => item.subcategory.toLowerCase() == subcategory.toLowerCase()).toList();
-  }
-
-  // Filter by search query
-  if (query != null && query.isNotEmpty) {
-    results = results.where((item) {
-      return item.title.toLowerCase().contains(query) ||
-          item.location.toLowerCase().contains(query) ||
-          item.category.toLowerCase().contains(query) ||
-          item.formattedPrice.toLowerCase().contains(query);
-    }).toList();
-  }
+  final results = await DatabaseService().getListings(
+    category: category,
+    subcategory: subcategory,
+    q: query,
+    status: status,
+    sort: sort,
+  );
 
   final response = ApiResponse<List<dynamic>>.success(
     data: results.map((e) => e.toJson()).toList(),
@@ -63,7 +45,7 @@ Future<Response> _createListing(RequestContext context) async {
   try {
     final body = await context.request.json() as Map<String, dynamic>;
     final newListing = MarketListing(
-      id: 'list_${DateTime.now().millisecondsSinceEpoch}',
+      id: body['id'] as String? ?? 'list_${DateTime.now().millisecondsSinceEpoch}',
       title: body['title'] as String? ?? 'Untitled Listing',
       price: (body['price'] as num?)?.toDouble() ?? 0.0,
       formattedPrice: body['formatted_price'] as String? ?? '₹ ${body['price'] ?? 0}',
@@ -72,18 +54,18 @@ Future<Response> _createListing(RequestContext context) async {
       subcategory: body['subcategory'] as String? ?? '',
       imagePath: body['image_path'] as String? ?? 'assets/images/h.png',
       description: body['description'] as String? ?? '',
-      sellerId: 'ven_alex_m',
-      sellerName: 'Alex Morgan',
-      status: 'active',
-      isFeatured: false,
+      sellerId: body['seller_id'] as String? ?? 'ven_alex_m',
+      sellerName: body['seller_name'] as String? ?? 'Alex Morgan',
+      status: body['status'] as String? ?? 'active',
+      isFeatured: body['is_featured'] as bool? ?? false,
       createdAt: DateTime.now(),
       specifications: (body['specifications'] as Map<String, dynamic>?) ?? {},
     );
 
-    MockDatabase.listings.insert(0, newListing);
+    final saved = await DatabaseService().createListing(newListing);
 
     final response = ApiResponse<Map<String, dynamic>>.success(
-      data: newListing.toJson(),
+      data: saved.toJson(),
       message: 'Listing created successfully',
     );
     return Response.json(statusCode: HttpStatus.created, body: response.toJson((data) => data));

@@ -1,0 +1,51 @@
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: marketplace_db
+    restart: always
+    environment:
+      POSTGRES_DB: marketplace_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: marketplace_secret_pw
+    ports:
+      - "5432:5432"
+    volumes:
+      - marketplace_pgdata:/var/lib/postgresql/data
+      - ./apps/backend_api/database/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d marketplace_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - marketplace_net
+
+  api:
+    build:
+      context: .
+      dockerfile: apps/backend_api/Dockerfile
+    container_name: marketplace_api
+    restart: always
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      PORT: 8080
+      HOST: 0.0.0.0
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_NAME: marketplace_db
+      DB_USER: postgres
+      DB_PASSWORD: marketplace_secret_pw
+    ports:
+      - "8080:8080"
+    networks:
+      - marketplace_net
+
+volumes:
+  marketplace_pgdata:
+    driver: local
+
+networks:
+  marketplace_net:
+    driver: bridge

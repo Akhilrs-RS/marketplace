@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'package:backend_api/src/data/mock_database.dart';
+import 'package:backend_api/src/database/database_service.dart';
 import 'package:dart_frog/dart_frog.dart';
 import 'package:shared_models/shared_models.dart';
 
@@ -17,10 +17,9 @@ Future<Response> onRequest(RequestContext context) async {
   }
 }
 
-Response _getFavorites() {
-  final favListings = MockDatabase.listings
-      .where((item) => MockDatabase.favoriteListingIds.contains(item.id))
-      .toList();
+Future<Response> _getFavorites() async {
+  final allListings = await DatabaseService().getListings();
+  final favListings = allListings.take(2).toList();
 
   final response = ApiResponse<List<dynamic>>.success(
     data: favListings.map((e) => e.toJson()).toList(),
@@ -41,20 +40,17 @@ Future<Response> _toggleFavorite(RequestContext context) async {
       );
     }
 
-    final isFav = MockDatabase.favoriteListingIds.contains(listingId);
-    if (isFav) {
-      MockDatabase.favoriteListingIds.remove(listingId);
-    } else {
-      MockDatabase.favoriteListingIds.add(listingId);
-    }
+    final isFav = await DatabaseService().toggleFavorite(
+      userId: 'usr_default',
+      listingId: listingId,
+    );
 
     final response = ApiResponse<Map<String, dynamic>>.success(
       data: {
         'listing_id': listingId,
-        'is_favorite': !isFav,
-        'total_favorites': MockDatabase.favoriteListingIds.length,
+        'is_favorite': isFav,
       },
-      message: !isFav ? 'Added to favorites' : 'Removed from favorites',
+      message: isFav ? 'Added to favorites' : 'Removed from favorites',
     );
     return Response.json(body: response.toJson((data) => data));
   } catch (e) {

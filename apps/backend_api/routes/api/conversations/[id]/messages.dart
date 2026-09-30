@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'package:backend_api/src/data/mock_database.dart';
+import 'package:backend_api/src/database/database_service.dart';
 import 'package:dart_frog/dart_frog.dart';
 import 'package:shared_models/shared_models.dart';
 
@@ -17,8 +17,8 @@ Future<Response> onRequest(RequestContext context, String id) async {
   }
 }
 
-Response _getMessages(String conversationId) {
-  final list = MockDatabase.messages[conversationId] ?? [];
+Future<Response> _getMessages(String conversationId) async {
+  final list = await DatabaseService().getMessages(conversationId);
   final response = ApiResponse<List<dynamic>>.success(
     data: list.map((m) => m.toJson()).toList(),
     message: '${list.length} messages retrieved',
@@ -38,16 +38,12 @@ Future<Response> _sendMessage(RequestContext context, String conversationId) asy
       );
     }
 
-    final newMsg = ChatMessage(
-      id: 'msg_${DateTime.now().millisecondsSinceEpoch}',
+    final newMsg = await DatabaseService().sendMessage(
       conversationId: conversationId,
-      senderId: 'user_alex',
       content: content,
-      sentAt: DateTime.now(),
+      senderId: 'usr_me',
       isFromMe: true,
     );
-
-    MockDatabase.messages.putIfAbsent(conversationId, () => []).add(newMsg);
 
     final response = ApiResponse<Map<String, dynamic>>.success(
       data: newMsg.toJson(),
