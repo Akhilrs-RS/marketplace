@@ -159,6 +159,8 @@ void main() {
     expect(find.text('Seller & Payments'), findsOneWidget);
     expect(find.text('Seller Profile'), findsOneWidget);
     expect(find.text('My Listings'), findsOneWidget);
+    expect(find.text('Payments & invoices'), findsOneWidget);
+    expect(find.text('2 receipts'), findsOneWidget);
     expect(find.text('Help & Settings'), findsOneWidget);
     expect(find.text('Help center'), findsOneWidget);
     expect(find.text('Notifications'), findsOneWidget);
