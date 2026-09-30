@@ -58,6 +58,12 @@ class _MessagesScreenState extends State<MessagesScreen> {
         backgroundColor: Colors.white,
         elevation: 0,
         centerTitle: false,
+        leading: Navigator.canPop(context)
+            ? IconButton(
+                icon: const Icon(Icons.arrow_back_ios_new_rounded, size: 16, color: Color(0xFF0F172A)),
+                onPressed: () => Navigator.pop(context),
+              )
+            : null,
         title: Text(
           'Messages',
           style: GoogleFonts.inter(
