@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../../../selling/presentation/selling_page_screen.dart';
+import '../../../selling/presentation/screens/select_listing_category_screen.dart';
 import '../../../products/presentation/car_details_screen.dart';
 
 class MyListingItem {
@@ -146,7 +146,7 @@ class _MyListingsScreenState extends State<MyListingsScreen> with SingleTickerPr
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (_) => const SellingPageScreen()),
+            MaterialPageRoute(builder: (_) => const SelectListingCategoryScreen()),
           );
         },
         backgroundColor: const Color(0xFF6366F1),

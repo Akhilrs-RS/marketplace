@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_models/shared_models.dart';
 import '../../../core/services/api_service.dart';
+import '../../products/presentation/car_details_screen.dart';
+import 'screens/select_listing_category_screen.dart';
 
 class SellingPageScreen extends StatefulWidget {
   const SellingPageScreen({super.key});
@@ -13,6 +15,8 @@ class SellingPageScreen extends StatefulWidget {
 class _SellingPageScreenState extends State<SellingPageScreen> {
   int _selectedType = 0; // 0: Individual, 1: Business Shop
   String _selectedFilter = 'All';
+  List<MarketListing> _listings = [];
+  bool _isLoadingListings = false;
 
   SellerMetrics _metrics = const SellerMetrics(
     activeListings: 12,
@@ -27,6 +31,7 @@ class _SellingPageScreenState extends State<SellingPageScreen> {
   void initState() {
     super.initState();
     _loadMetrics();
+    _loadListings();
   }
 
   Future<void> _loadMetrics() async {
@@ -36,6 +41,23 @@ class _SellingPageScreenState extends State<SellingPageScreen> {
         setState(() => _metrics = metrics);
       }
     } catch (_) {}
+  }
+
+  Future<void> _loadListings() async {
+    setState(() => _isLoadingListings = true);
+    try {
+      final items = await ApiService().getListings(
+        status: _selectedFilter == 'All' ? null : _selectedFilter,
+      );
+      if (mounted) {
+        setState(() {
+          _listings = items;
+          _isLoadingListings = false;
+        });
+      }
+    } catch (_) {
+      if (mounted) setState(() => _isLoadingListings = false);
+    }
   }
 
   final List<String> _statusFilters = [
@@ -271,8 +293,18 @@ class _SellingPageScreenState extends State<SellingPageScreen> {
               width: double.infinity,
               height: 48,
               child: ElevatedButton.icon(
-                onPressed: () {
-                  _showCreateListingSheet(context);
+                key: const Key('add_a_listing_button'),
+                onPressed: () async {
+                  final result = await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => const SelectListingCategoryScreen(),
+                    ),
+                  );
+                  if (result == true && mounted) {
+                    _loadMetrics();
+                    _loadListings();
+                  }
                 },
                 icon: const Icon(Icons.add_rounded, color: Colors.white, size: 20),
                 label: Text(
@@ -346,7 +378,10 @@ class _SellingPageScreenState extends State<SellingPageScreen> {
                   final filter = _statusFilters[i];
                   final isSelected = filter == _selectedFilter;
                   return GestureDetector(
-                    onTap: () => setState(() => _selectedFilter = filter),
+                    onTap: () {
+                      setState(() => _selectedFilter = filter);
+                      _loadListings();
+                    },
                     child: Container(
                       padding: const EdgeInsets.symmetric(horizontal: 14),
                       decoration: BoxDecoration(
@@ -371,21 +406,57 @@ class _SellingPageScreenState extends State<SellingPageScreen> {
             const SizedBox(height: 16),
 
             // Listing Items
-            _buildMyListingTile(
-              imagePath: 'assets/images/h1.png',
-              title: '2024 Hyundai Creta SX',
-              status: 'Active',
-              location: 'Kochi',
-              sellerRole: 'Dealer',
-            ),
-            const SizedBox(height: 10),
-            _buildMyListingTile(
-              imagePath: 'assets/images/h2.png',
-              title: '3BHK Apartment in Kakkanad',
-              status: 'Active',
-              location: 'Kochi',
-              sellerRole: 'Business',
-            ),
+            if (_isLoadingListings)
+              const Center(
+                child: Padding(
+                  padding: EdgeInsets.all(24),
+                  child: CircularProgressIndicator(strokeWidth: 2, color: Color(0xFF6366F1)),
+                ),
+              )
+            else if (_listings.isNotEmpty)
+              ..._listings.map((item) {
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: 10),
+                  child: _buildMyListingTile(
+                    imagePath: item.imagePath,
+                    title: item.title,
+                    status: item.status,
+                    location: item.location,
+                    sellerRole: item.isFeatured ? 'Featured' : 'Individual',
+                    price: item.formattedPrice,
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => CarDetailsScreen(
+                            title: item.title,
+                            price: item.formattedPrice,
+                            imagePath: item.imagePath,
+                            location: item.location,
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                );
+              })
+            else ...[
+              _buildMyListingTile(
+                imagePath: 'assets/images/h1.png',
+                title: '2024 Hyundai Creta SX',
+                status: 'Active',
+                location: 'Kochi',
+                sellerRole: 'Dealer',
+              ),
+              const SizedBox(height: 10),
+              _buildMyListingTile(
+                imagePath: 'assets/images/h2.png',
+                title: '3BHK Apartment in Kakkanad',
+                status: 'Active',
+                location: 'Kochi',
+                sellerRole: 'Business',
+              ),
+            ],
           ],
         ),
       ),
@@ -429,222 +500,115 @@ class _SellingPageScreenState extends State<SellingPageScreen> {
     required String status,
     required String location,
     required String sellerRole,
+    String? price,
+    VoidCallback? onTap,
   }) {
-    return Container(
-      padding: const EdgeInsets.all(10),
-      decoration: BoxDecoration(
-        color: Colors.white,
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onTap,
         borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: const Color(0xFFE2E8F0)),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.02),
-            blurRadius: 6,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Row(
-        children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(10),
-            child: SizedBox(
-              width: 76,
-              height: 72,
-              child: Image.asset(
-                imagePath,
-                fit: BoxFit.cover,
+        child: Container(
+          padding: const EdgeInsets.all(10),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(14),
+            border: Border.all(color: const Color(0xFFE2E8F0)),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.02),
+                blurRadius: 6,
+                offset: const Offset(0, 2),
               ),
-            ),
+            ],
           ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          child: Row(
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: SizedBox(
+                  width: 76,
+                  height: 72,
+                  child: Image.asset(
+                    imagePath,
+                    fit: BoxFit.cover,
+                    errorBuilder: (ctx, err, stack) => Container(
+                      color: const Color(0xFFE2E8F0),
+                      child: const Icon(Icons.image, color: Colors.grey),
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Expanded(
-                      child: Text(
-                        title,
-                        style: GoogleFonts.inter(
-                          fontSize: 13,
-                          fontWeight: FontWeight.w600,
-                          color: const Color(0xFF0F172A),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          child: Text(
+                            title,
+                            style: GoogleFonts.inter(
+                              fontSize: 13,
+                              fontWeight: FontWeight.w600,
+                              color: const Color(0xFF0F172A),
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
                         ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
+                        const Icon(Icons.more_vert_rounded, size: 16, color: Color(0xFF94A3B8)),
+                      ],
+                    ),
+                    const SizedBox(height: 4),
+                    Row(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFECFDF5),
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                          child: Text(
+                            status,
+                            style: GoogleFonts.inter(
+                              fontSize: 10,
+                              fontWeight: FontWeight.w600,
+                              color: const Color(0xFF10B981),
+                            ),
+                          ),
+                        ),
+                        if (price != null) ...[
+                          const SizedBox(width: 8),
+                          Text(
+                            price,
+                            style: GoogleFonts.inter(
+                              fontSize: 11,
+                              fontWeight: FontWeight.w700,
+                              color: const Color(0xFF6366F1),
+                            ),
+                          ),
+                        ],
+                      ],
+                    ),
+                    const SizedBox(height: 6),
+                    Text(
+                      '$location • $sellerRole',
+                      style: GoogleFonts.inter(
+                        fontSize: 11,
+                        color: const Color(0xFF64748B),
                       ),
                     ),
-                    const Icon(Icons.more_vert_rounded, size: 16, color: Color(0xFF94A3B8)),
                   ],
                 ),
-                const SizedBox(height: 4),
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFECFDF5),
-                    borderRadius: BorderRadius.circular(4),
-                  ),
-                  child: Text(
-                    status,
-                    style: GoogleFonts.inter(
-                      fontSize: 10,
-                      fontWeight: FontWeight.w600,
-                      color: const Color(0xFF10B981),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 6),
-                Text(
-                  '$location • $sellerRole',
-                  style: GoogleFonts.inter(
-                    fontSize: 11,
-                    color: const Color(0xFF64748B),
-                  ),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
-        ],
-      ),
-    );
-  }
-
-  void _showCreateListingSheet(BuildContext context) {
-    showModalBottomSheet(
-      context: context,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
-      ),
-      builder: (ctx) => Padding(
-        padding: const EdgeInsets.all(24),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Add a New Listing',
-              style: GoogleFonts.inter(fontSize: 18, fontWeight: FontWeight.w700),
-            ),
-            const SizedBox(height: 6),
-            Text(
-              'Choose what you want to sell on the marketplace',
-              style: GoogleFonts.inter(color: const Color(0xFF64748B), fontSize: 13),
-            ),
-            const SizedBox(height: 18),
-            ListTile(
-              leading: const CircleAvatar(
-                backgroundColor: Color(0xFFEFF6FF),
-                child: Icon(Icons.directions_car_outlined, color: Color(0xFF2563EB)),
-              ),
-              title: const Text('Post Vehicle', style: TextStyle(fontWeight: FontWeight.w600)),
-              subtitle: const Text('Cars, motorcycles, trucks, spare parts'),
-              onTap: () async {
-                Navigator.pop(ctx);
-                final newListing = MarketListing(
-                  id: 'list_car_${DateTime.now().millisecondsSinceEpoch}',
-                  title: '2023 Tata Harrier XZ+',
-                  price: 1820000,
-                  formattedPrice: '₹ 18,20,000',
-                  location: 'Kochi',
-                  category: 'Vehicles',
-                  subcategory: 'Car',
-                  imagePath: 'assets/images/h1.png',
-                  description: 'Top end diesel automatic with panoramic sunroof.',
-                  sellerId: 'ven_user',
-                  sellerName: 'Alex Morgan',
-                  status: 'Active',
-                  createdAt: DateTime.now(),
-                );
-                await ApiService().createListing(newListing);
-                if (context.mounted) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Vehicle listing published to backend!'),
-                      backgroundColor: Color(0xFF6366F1),
-                      behavior: SnackBarBehavior.floating,
-                    ),
-                  );
-                }
-              },
-            ),
-            ListTile(
-              leading: const CircleAvatar(
-                backgroundColor: Color(0xFFF0FDF4),
-                child: Icon(Icons.apartment_outlined, color: Color(0xFF16A34A)),
-              ),
-              title: const Text('Post Property', style: TextStyle(fontWeight: FontWeight.w600)),
-              subtitle: const Text('Apartments, plots, commercial rentals'),
-              onTap: () async {
-                Navigator.pop(ctx);
-                final newListing = MarketListing(
-                  id: 'list_prop_${DateTime.now().millisecondsSinceEpoch}',
-                  title: '2BHK Luxury Studio in HSR',
-                  price: 45000,
-                  formattedPrice: '₹ 45,000 /mo',
-                  location: 'Bengaluru',
-                  category: 'Property',
-                  subcategory: 'Rent',
-                  imagePath: 'assets/images/h8.png',
-                  description: 'Fully furnished studio apartment with power backup.',
-                  sellerId: 'ven_user',
-                  sellerName: 'Alex Morgan',
-                  status: 'Active',
-                  createdAt: DateTime.now(),
-                );
-                await ApiService().createListing(newListing);
-                if (context.mounted) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Property listing published to backend!'),
-                      backgroundColor: Color(0xFF6366F1),
-                      behavior: SnackBarBehavior.floating,
-                    ),
-                  );
-                }
-              },
-            ),
-            ListTile(
-              leading: const CircleAvatar(
-                backgroundColor: Color(0xFFFAF5FF),
-                child: Icon(Icons.devices_outlined, color: Color(0xFF9333EA)),
-              ),
-              title: const Text('Sell Electronics / Other', style: TextStyle(fontWeight: FontWeight.w600)),
-              subtitle: const Text('Phones, laptops, furniture, appliances'),
-              onTap: () async {
-                Navigator.pop(ctx);
-                final newListing = MarketListing(
-                  id: 'list_tech_${DateTime.now().millisecondsSinceEpoch}',
-                  title: 'iPad Pro 11" M2 256GB',
-                  price: 79900,
-                  formattedPrice: '₹ 79,900',
-                  location: 'Bengaluru',
-                  category: 'Mobiles',
-                  subcategory: 'Tablets',
-                  imagePath: 'assets/images/h6.png',
-                  description: 'Space Gray, mint condition with Apple Pencil 2.',
-                  sellerId: 'ven_user',
-                  sellerName: 'Alex Morgan',
-                  status: 'Active',
-                  createdAt: DateTime.now(),
-                );
-                await ApiService().createListing(newListing);
-                if (context.mounted) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Product listing published to backend!'),
-                      backgroundColor: Color(0xFF6366F1),
-                      behavior: SnackBarBehavior.floating,
-                    ),
-                  );
-                }
-              },
-            ),
-          ],
         ),
       ),
     );
   }
 }
+
