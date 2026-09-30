@@ -126,7 +126,17 @@ void main() {
     expect(find.text('Engine Output'), findsOneWidget);
     expect(find.text('500 HP'), findsOneWidget);
     expect(find.text('Details'), findsOneWidget);
-    expect(find.text('Buy now'), findsOneWidget);
+    expect(find.text('Chat with the Seller'), findsOneWidget);
+
+    // Tap "Chat with the Seller" and verify chat bottom sheet opens
+    await tester.tap(find.text('Chat with the Seller'));
+    await tester.pumpAndSettle();
+    expect(find.text('Rohan Sharma'), findsOneWidget);
+    expect(find.text('Verified Seller'), findsOneWidget);
+
+    // Close chat bottom sheet
+    await tester.tap(find.byIcon(Icons.close_rounded));
+    await tester.pumpAndSettle();
 
     // Back from Car Details
     await tester.tap(find.byIcon(Icons.arrow_back_ios_new_rounded));

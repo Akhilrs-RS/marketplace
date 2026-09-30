@@ -217,34 +217,57 @@ class _CarDetailsScreenState extends State<CarDetailsScreen> {
 
                             const SizedBox(height: 24),
 
-                            // Details Section Heading
+                            // Details Section Heading matching screenshot
                             Text(
                               'Details',
                               style: GoogleFonts.inter(
-                                fontSize: 14,
+                                fontSize: 15,
                                 fontWeight: FontWeight.w700,
                                 color: const Color(0xFF0F172A),
                               ),
                             ),
-                            const SizedBox(height: 10),
-                            _buildDetailRow('Location', widget.location),
-                            _buildDetailRow('Fuel Type', 'Petrol'),
-                            _buildDetailRow('Transmission', 'Automatic'),
-                            _buildDetailRow('Owner', '1st Owner • Verified'),
+                            const SizedBox(height: 12),
+
+                            // Row 1: Brand, Model, Year, Fuel
+                            Row(
+                              children: [
+                                Expanded(child: _buildDetailBox('Brand', 'Hyundai')),
+                                const SizedBox(width: 8),
+                                Expanded(child: _buildDetailBox('Model', 'Creta SX')),
+                                const SizedBox(width: 8),
+                                Expanded(child: _buildDetailBox('Year', '2022')),
+                                const SizedBox(width: 8),
+                                Expanded(child: _buildDetailBox('Fuel', 'Petrol')),
+                              ],
+                            ),
+                            const SizedBox(height: 8),
+
+                            // Row 2: Transmission, Km, Ownership
+                            Row(
+                              children: [
+                                Expanded(child: _buildDetailBox('Transmission', 'Manual')),
+                                const SizedBox(width: 8),
+                                Expanded(child: _buildDetailBox('Km', '18400')),
+                                const SizedBox(width: 8),
+                                Expanded(child: _buildDetailBox('Ownership', '1st')),
+                                const SizedBox(width: 8),
+                                const Expanded(child: SizedBox()), // spacer for 4-column alignment
+                              ],
+                            ),
                           ],
                         ),
                       ),
                     ),
 
-                    // 4. Fixed Bottom Pricing and Buy Bar
+                    // 4. Fixed Bottom Pricing and Chat with the Seller Bar (Exact Figma Screenshot)
                     Container(
-                      padding: const EdgeInsets.fromLTRB(24, 14, 24, 20),
+                      padding: const EdgeInsets.fromLTRB(20, 12, 20, 16),
                       decoration: BoxDecoration(
                         color: Colors.white,
-                        border: Border(top: BorderSide(color: Colors.grey.shade100)),
+                        border: Border(top: BorderSide(color: Colors.grey.shade200, width: 0.8)),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withValues(alpha: 0.04),
+                            color: Colors.black.withValues(alpha: 0.03),
                             blurRadius: 10,
                             offset: const Offset(0, -4),
                           ),
@@ -254,44 +277,53 @@ class _CarDetailsScreenState extends State<CarDetailsScreen> {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               // Price
-                              Text(
-                                widget.price,
-                                style: GoogleFonts.inter(
-                                  fontSize: 22,
-                                  fontWeight: FontWeight.w700,
-                                  color: const Color(0xFF0F172A),
+                              Expanded(
+                                child: Text(
+                                  widget.price,
+                                  style: GoogleFonts.inter(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w700,
+                                    color: const Color(0xFF0F172A),
+                                  ),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
                                 ),
                               ),
+                              const SizedBox(width: 10),
 
-                              // Buy now Button
+                              // Chat with the Seller Button
                               ElevatedButton(
-                                onPressed: () {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      content: Text('Order initiated for ${widget.title} (${widget.price})'),
-                                      backgroundColor: const Color(0xFF6366F1),
-                                      behavior: SnackBarBehavior.floating,
-                                    ),
-                                  );
-                                },
+                                key: const Key('chat_with_seller_button'),
+                                onPressed: () => _openChatWithSeller(context),
                                 style: ElevatedButton.styleFrom(
-                                  backgroundColor: const Color(0xFF6366F1),
+                                  backgroundColor: const Color(0xFF7C3AED), // Exact #7C3AED from screenshot
                                   foregroundColor: Colors.white,
                                   elevation: 0,
-                                  padding: const EdgeInsets.symmetric(horizontal: 36, vertical: 14),
+                                  padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(16),
                                   ),
                                 ),
-                                child: Text(
-                                  'Buy now',
-                                  style: GoogleFonts.inter(
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.w600,
-                                  ),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    const Icon(
+                                      Icons.chat_bubble_outline_rounded,
+                                      color: Colors.white,
+                                      size: 16,
+                                    ),
+                                    const SizedBox(width: 6),
+                                    Text(
+                                      'Chat with the Seller',
+                                      style: GoogleFonts.inter(
+                                        fontSize: 13.5,
+                                        fontWeight: FontWeight.w600,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
                             ],
@@ -315,6 +347,60 @@ class _CarDetailsScreenState extends State<CarDetailsScreen> {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  void _openChatWithSeller(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.white,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      ),
+      builder: (ctx) => _ProductChatBottomSheet(
+        productTitle: widget.title,
+        price: widget.price,
+        imagePath: widget.imagePath,
+      ),
+    );
+  }
+
+  Widget _buildDetailBox(String label, String value) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 7),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(9),
+        border: Border.all(color: const Color(0xFFE2E8F0), width: 0.9),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            label,
+            style: GoogleFonts.inter(
+              fontSize: 9.5,
+              fontWeight: FontWeight.w400,
+              color: const Color(0xFF64748B),
+            ),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+          const SizedBox(height: 3),
+          Text(
+            value,
+            style: GoogleFonts.inter(
+              fontSize: 11.5,
+              fontWeight: FontWeight.w600,
+              color: const Color(0xFF0F172A),
+            ),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ],
       ),
     );
   }
@@ -362,22 +448,354 @@ class _CarDetailsScreenState extends State<CarDetailsScreen> {
       ),
     );
   }
+}
 
-  Widget _buildDetailRow(String label, String value) {
+class _ProductChatBottomSheet extends StatefulWidget {
+  final String productTitle;
+  final String price;
+  final String imagePath;
+
+  const _ProductChatBottomSheet({
+    required this.productTitle,
+    required this.price,
+    required this.imagePath,
+  });
+
+  @override
+  State<_ProductChatBottomSheet> createState() => _ProductChatBottomSheetState();
+}
+
+class _ProductChatBottomSheetState extends State<_ProductChatBottomSheet> {
+  final TextEditingController _messageController = TextEditingController();
+  final ScrollController _scrollController = ScrollController();
+
+  late final List<Map<String, dynamic>> _messages;
+
+  @override
+  void initState() {
+    super.initState();
+    _messages = [
+      {
+        'isMe': false,
+        'text': 'Hello! Thanks for your interest in ${widget.productTitle}. Are you looking to schedule a viewing or do you have any specific questions about the car condition?',
+        'time': 'Just now',
+      }
+    ];
+  }
+
+  @override
+  void dispose() {
+    _messageController.dispose();
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _sendMessage([String? presetText]) {
+    final text = presetText ?? _messageController.text.trim();
+    if (text.isEmpty) return;
+
+    setState(() {
+      _messages.add({
+        'isMe': true,
+        'text': text,
+        'time': 'Just now',
+      });
+    });
+
+    if (presetText == null) {
+      _messageController.clear();
+    }
+
+    _scrollToBottom();
+
+    // Simulated friendly seller response
+    Future.delayed(const Duration(milliseconds: 900), () {
+      if (mounted) {
+        setState(() {
+          _messages.add({
+            'isMe': false,
+            'text': 'Got it! I can show you the car tomorrow afternoon or share the full service booklet. Let me know what time works best for you.',
+            'time': 'Just now',
+          });
+        });
+        _scrollToBottom();
+      }
+    });
+  }
+
+  void _scrollToBottom() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (_scrollController.hasClients) {
+        _scrollController.animateTo(
+          _scrollController.position.maxScrollExtent,
+          duration: const Duration(milliseconds: 250),
+          curve: Curves.easeOut,
+        );
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final bottomInset = MediaQuery.of(context).viewInsets.bottom;
+
     return Padding(
-      padding: const EdgeInsets.only(bottom: 8),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            label,
-            style: GoogleFonts.inter(fontSize: 12, color: const Color(0xFF64748B)),
+      padding: EdgeInsets.only(bottom: bottomInset),
+      child: SizedBox(
+        height: 520,
+        child: Column(
+          children: [
+            // Sheet Handle
+            const SizedBox(height: 10),
+            Container(
+              width: 40,
+              height: 4,
+              decoration: BoxDecoration(
+                color: const Color(0xFFCBD5E1),
+                borderRadius: BorderRadius.circular(2),
+              ),
+            ),
+
+            // Header: Seller Info + Item Badge
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              decoration: const BoxDecoration(
+                border: Border(bottom: BorderSide(color: Color(0xFFF1F5F9))),
+              ),
+              child: Row(
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                    child: Image.asset(
+                      widget.imagePath,
+                      width: 44,
+                      height: 44,
+                      fit: BoxFit.cover,
+                      errorBuilder: (ctx, err, stack) => Container(
+                        width: 44,
+                        height: 44,
+                        color: const Color(0xFFE2E8F0),
+                        child: const Icon(Icons.directions_car_rounded, color: Color(0xFF64748B)),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Text(
+                              'Rohan Sharma',
+                              style: GoogleFonts.inter(
+                                fontWeight: FontWeight.w700,
+                                fontSize: 14.5,
+                                color: const Color(0xFF0F172A),
+                              ),
+                            ),
+                            const SizedBox(width: 6),
+                            Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                              decoration: BoxDecoration(
+                                color: const Color(0xFFECFDF5),
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: Text(
+                                'Verified Seller',
+                                style: GoogleFonts.inter(
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.w600,
+                                  color: const Color(0xFF059669),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 2),
+                        Text(
+                          '${widget.productTitle} • ${widget.price}',
+                          style: GoogleFonts.inter(
+                            color: const Color(0xFF7C3AED),
+                            fontSize: 11.5,
+                            fontWeight: FontWeight.w600,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ],
+                    ),
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.close_rounded, size: 20, color: Color(0xFF64748B)),
+                    onPressed: () => Navigator.pop(context),
+                  ),
+                ],
+              ),
+            ),
+
+            // Quick suggestion chips
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+              color: const Color(0xFFFAF5FF),
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: [
+                    Text(
+                      'Quick Ask:',
+                      style: GoogleFonts.inter(
+                        fontSize: 11,
+                        fontWeight: FontWeight.w600,
+                        color: const Color(0xFF7C3AED),
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    _buildQuickChip('Is this still available?'),
+                    _buildQuickChip('Can I inspect tomorrow?'),
+                    _buildQuickChip('What is your best price?'),
+                  ],
+                ),
+              ),
+            ),
+
+            // Messages List
+            Expanded(
+              child: ListView.builder(
+                controller: _scrollController,
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                itemCount: _messages.length,
+                itemBuilder: (ctx, index) {
+                  final msg = _messages[index];
+                  final isMe = msg['isMe'] as bool;
+                  return Align(
+                    alignment: isMe ? Alignment.centerRight : Alignment.centerLeft,
+                    child: Container(
+                      margin: const EdgeInsets.only(bottom: 10),
+                      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                      constraints: BoxConstraints(
+                        maxWidth: MediaQuery.of(context).size.width * 0.78,
+                      ),
+                      decoration: BoxDecoration(
+                        color: isMe ? const Color(0xFF7C3AED) : const Color(0xFFF1F5F9),
+                        borderRadius: BorderRadius.only(
+                          topLeft: const Radius.circular(16),
+                          topRight: const Radius.circular(16),
+                          bottomLeft: Radius.circular(isMe ? 16 : 4),
+                          bottomRight: Radius.circular(isMe ? 4 : 16),
+                        ),
+                      ),
+                      child: Column(
+                        crossAxisAlignment:
+                            isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            msg['text'] as String,
+                            style: GoogleFonts.inter(
+                              fontSize: 13,
+                              color: isMe ? Colors.white : const Color(0xFF1E293B),
+                              height: 1.35,
+                            ),
+                          ),
+                          const SizedBox(height: 3),
+                          Text(
+                            msg['time'] as String,
+                            style: GoogleFonts.inter(
+                              fontSize: 9.5,
+                              color: isMe ? Colors.white70 : const Color(0xFF94A3B8),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+
+            // Message Composer
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+              decoration: const BoxDecoration(
+                color: Colors.white,
+                border: Border(top: BorderSide(color: Color(0xFFF1F5F9))),
+              ),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 14),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFF8FAFC),
+                        borderRadius: BorderRadius.circular(24),
+                        border: Border.all(color: const Color(0xFFE2E8F0)),
+                      ),
+                      child: TextField(
+                        key: const Key('chat_seller_input'),
+                        controller: _messageController,
+                        onSubmitted: (_) => _sendMessage(),
+                        style: GoogleFonts.inter(fontSize: 13),
+                        decoration: InputDecoration(
+                          hintText: 'Message Rohan...',
+                          hintStyle: GoogleFonts.inter(
+                            fontSize: 13,
+                            color: const Color(0xFF94A3B8),
+                          ),
+                          border: InputBorder.none,
+                          isDense: true,
+                          contentPadding: const EdgeInsets.symmetric(vertical: 11),
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  GestureDetector(
+                    key: const Key('chat_seller_send_btn'),
+                    onTap: () => _sendMessage(),
+                    child: Container(
+                      width: 42,
+                      height: 42,
+                      decoration: const BoxDecoration(
+                        color: Color(0xFF7C3AED),
+                        shape: BoxShape.circle,
+                      ),
+                      child: const Icon(
+                        Icons.send_rounded,
+                        color: Colors.white,
+                        size: 18,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildQuickChip(String text) {
+    return Padding(
+      padding: const EdgeInsets.only(right: 6),
+      child: GestureDetector(
+        onTap: () => _sendMessage(text),
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(14),
+            border: Border.all(color: const Color(0xFFDDD6FE)),
           ),
-          Text(
-            value,
-            style: GoogleFonts.inter(fontSize: 12, fontWeight: FontWeight.w600, color: const Color(0xFF1E293B)),
+          child: Text(
+            text,
+            style: GoogleFonts.inter(
+              fontSize: 11,
+              fontWeight: FontWeight.w500,
+              color: const Color(0xFF7C3AED),
+            ),
           ),
-        ],
+        ),
       ),
     );
   }
