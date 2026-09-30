@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '../../../core/services/api_service.dart';
 import '../../notifications/presentation/notifications_screen.dart';
 import '../../products/presentation/car_details_screen.dart';
 import '../../profile/presentation/profile_screen.dart';
@@ -21,7 +22,14 @@ class ExploreListingItem {
 }
 
 class ExploreScreen extends StatefulWidget {
-  const ExploreScreen({super.key});
+  final String? initialQuery;
+  final bool autoFocus;
+
+  const ExploreScreen({
+    super.key,
+    this.initialQuery,
+    this.autoFocus = false,
+  });
 
   @override
   State<ExploreScreen> createState() => _ExploreScreenState();
@@ -31,6 +39,45 @@ class _ExploreScreenState extends State<ExploreScreen> {
   String _selectedCategory = 'All';
   final TextEditingController _searchController = TextEditingController();
   String _searchQuery = '';
+  List<ExploreListingItem> _liveListings = [];
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.initialQuery != null && widget.initialQuery!.isNotEmpty) {
+      _searchController.text = widget.initialQuery!;
+      _searchQuery = widget.initialQuery!.trim();
+    }
+    _loadLiveListings();
+  }
+
+  @override
+  void didUpdateWidget(ExploreScreen oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.initialQuery != null && widget.initialQuery != oldWidget.initialQuery) {
+      _searchController.text = widget.initialQuery!;
+      setState(() {
+        _searchQuery = widget.initialQuery!.trim();
+      });
+    }
+  }
+
+  Future<void> _loadLiveListings() async {
+    try {
+      final items = await ApiService().getListings();
+      if (items.isNotEmpty && mounted) {
+        setState(() {
+          _liveListings = items.map((e) => ExploreListingItem(
+            imagePath: e.imagePath,
+            price: e.formattedPrice,
+            title: e.title,
+            location: e.location,
+            category: e.category,
+          )).toList();
+        });
+      }
+    } catch (_) {}
+  }
 
   @override
   void dispose() {
@@ -266,7 +313,18 @@ class _ExploreScreenState extends State<ExploreScreen> {
 
   // Filtered listings based on selected category and search query
   List<ExploreListingItem> get _filteredListings {
-    return _allListings.where((item) {
+    final combined = [..._liveListings, ..._allListings];
+    final seen = <String>{};
+    final uniqueListings = <ExploreListingItem>[];
+    for (final item in combined) {
+      final key = '${item.title.toLowerCase().trim()}_${item.price}';
+      if (!seen.contains(key)) {
+        seen.add(key);
+        uniqueListings.add(item);
+      }
+    }
+
+    return uniqueListings.where((item) {
       final matchesCategory = _selectedCategory == 'All' ||
           item.category.toLowerCase() == _selectedCategory.toLowerCase();
 
@@ -384,7 +442,9 @@ class _ExploreScreenState extends State<ExploreScreen> {
                   const SizedBox(width: 8),
                   Expanded(
                     child: TextField(
+                      key: const Key('explore_search_input'),
                       controller: _searchController,
+                      autofocus: widget.autoFocus,
                       onChanged: (val) {
                         setState(() {
                           _searchQuery = val.trim();
@@ -419,6 +479,47 @@ class _ExploreScreenState extends State<ExploreScreen> {
                 ],
               ),
             ),
+
+            if (_searchQuery.isEmpty) ...[
+              const SizedBox(height: 10),
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: [
+                    Text(
+                      'Trending:',
+                      style: GoogleFonts.inter(
+                        fontSize: 11,
+                        fontWeight: FontWeight.w600,
+                        color: const Color(0xFF94A3B8),
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    ...['Hyundai Creta', 'iPhone 15', '3BHK Apartment', 'MacBook', 'Dining Table'].map((tag) {
+                      return Padding(
+                        padding: const EdgeInsets.only(right: 6),
+                        child: ActionChip(
+                          key: Key('quick_search_tag_$tag'),
+                          label: Text(tag),
+                          labelStyle: GoogleFonts.inter(fontSize: 11, color: const Color(0xFF475569)),
+                          backgroundColor: const Color(0xFFF1F5F9),
+                          padding: const EdgeInsets.symmetric(horizontal: 4),
+                          visualDensity: VisualDensity.compact,
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                          side: BorderSide.none,
+                          onPressed: () {
+                            _searchController.text = tag;
+                            setState(() {
+                              _searchQuery = tag;
+                            });
+                          },
+                        ),
+                      );
+                    }),
+                  ],
+                ),
+              ),
+            ],
 
             const SizedBox(height: 14),
 
@@ -537,6 +638,49 @@ class _ExploreScreenState extends State<ExploreScreen> {
 
             const SizedBox(height: 14),
 
+            if (_searchQuery.isNotEmpty) ...[
+              Container(
+                margin: const EdgeInsets.only(bottom: 12),
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFEEF2FF),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Row(
+                  children: [
+                    const Icon(Icons.search_rounded, size: 16, color: Color(0xFF6366F1)),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Text(
+                        'Showing ${listings.length} ${listings.length == 1 ? "result" : "results"} for "$_searchQuery"',
+                        style: GoogleFonts.inter(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w600,
+                          color: const Color(0xFF4338CA),
+                        ),
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        _searchController.clear();
+                        setState(() {
+                          _searchQuery = '';
+                        });
+                      },
+                      child: Text(
+                        'Clear',
+                        style: GoogleFonts.inter(
+                          fontSize: 11.5,
+                          fontWeight: FontWeight.w700,
+                          color: const Color(0xFF6366F1),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+
             // 3-Column Results Grid or Empty State
             if (listings.isEmpty)
               Container(
@@ -556,7 +700,9 @@ class _ExploreScreenState extends State<ExploreScreen> {
                     ),
                     const SizedBox(height: 6),
                     Text(
-                      'No ads found in "$_selectedCategory". Try selecting another category.',
+                      _searchQuery.isNotEmpty
+                          ? 'No ads found matching "$_searchQuery" in "$_selectedCategory".'
+                          : 'No ads found in "$_selectedCategory". Try selecting another category.',
                       textAlign: TextAlign.center,
                       style: GoogleFonts.inter(fontSize: 12, color: const Color(0xFF64748B)),
                     ),

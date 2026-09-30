@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../products/cubit/products_cubit.dart';
+import '../../explore/presentation/explore_screen.dart';
 import 'widgets/category_card.dart';
 import 'widgets/featured_near_you_card.dart';
 import 'widgets/figma_hero_section.dart';
@@ -15,9 +16,10 @@ import '../../selling/presentation/selling_page_screen.dart';
 import '../../shops/presentation/shop_details_screen.dart';
 import '../../shops/presentation/trusted_businesses_screen.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   final VoidCallback onOpenCart;
   final VoidCallback? onOpenSearch;
+  final ValueChanged<String>? onOpenSearchWithQuery;
   final VoidCallback? onOpenNotifications;
   final VoidCallback? onOpenProfile;
   final VoidCallback? onStartSelling;
@@ -26,6 +28,7 @@ class HomeScreen extends StatelessWidget {
     super.key,
     required this.onOpenCart,
     this.onOpenSearch,
+    this.onOpenSearchWithQuery,
     this.onOpenNotifications,
     this.onOpenProfile,
     this.onStartSelling,
@@ -156,6 +159,35 @@ class HomeScreen extends StatelessWidget {
   ];
 
   @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  final TextEditingController _searchController = TextEditingController();
+  String _searchQuery = '';
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  void _handleSearchSubmit() {
+    if (_searchQuery.isNotEmpty) {
+      if (widget.onOpenSearchWithQuery != null) {
+        widget.onOpenSearchWithQuery!(_searchQuery);
+      } else {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (_) => ExploreScreen(initialQuery: _searchQuery)),
+        );
+      }
+    } else {
+      widget.onOpenSearch?.call();
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
@@ -168,12 +200,16 @@ class HomeScreen extends StatelessWidget {
             children: [
               // 1. Hero Section (h.png + Branding + Headline + Search Capsule)
               FigmaHeroSection(
+                searchController: _searchController,
                 onSearchChanged: (val) {
+                  setState(() {
+                    _searchQuery = val.trim();
+                  });
                   context.read<ProductsCubit>().search(val);
                 },
-                onSearchSubmit: onOpenSearch ?? () {},
-                onNotificationTap: onOpenNotifications,
-                onProfileTap: onOpenProfile,
+                onSearchSubmit: _handleSearchSubmit,
+                onNotificationTap: widget.onOpenNotifications,
+                onProfileTap: widget.onOpenProfile,
               ),
 
               // 2. White Curved Main Content Sheet
@@ -186,36 +222,38 @@ class HomeScreen extends StatelessWidget {
                     borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
                   ),
                   padding: const EdgeInsets.fromLTRB(16, 24, 16, 100),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // ── SECTION 1: Browse by category ──
-                      Text(
-                        'Browse by category',
-                        style: GoogleFonts.inter(
-                          fontSize: 19,
-                          fontWeight: FontWeight.w700,
-                          color: const Color(0xFF111827),
-                          letterSpacing: -0.3,
-                        ),
-                      ),
-                      const SizedBox(height: 3),
-                      Text(
-                        'Curated collections across every need',
-                        style: GoogleFonts.inter(
-                          fontSize: 12.5,
-                          fontWeight: FontWeight.w400,
-                          color: const Color(0xFF6B7280),
-                        ),
-                      ),
-                      const SizedBox(height: 16),
+                  child: _searchQuery.isNotEmpty
+                      ? _buildLiveSearchResults()
+                      : Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            // ── SECTION 1: Browse by category ──
+                            Text(
+                              'Browse by category',
+                              style: GoogleFonts.inter(
+                                fontSize: 19,
+                                fontWeight: FontWeight.w700,
+                                color: const Color(0xFF111827),
+                                letterSpacing: -0.3,
+                              ),
+                            ),
+                            const SizedBox(height: 3),
+                            Text(
+                              'Curated collections across every need',
+                              style: GoogleFonts.inter(
+                                fontSize: 12.5,
+                                fontWeight: FontWeight.w400,
+                                color: const Color(0xFF6B7280),
+                              ),
+                            ),
+                            const SizedBox(height: 16),
 
                       // 2x4 Categories Grid (h1 to h8 in order)
                       GridView.builder(
                         padding: EdgeInsets.zero,
                         physics: const NeverScrollableScrollPhysics(),
                         shrinkWrap: true,
-                        itemCount: figmaCategories.length,
+                        itemCount: HomeScreen.figmaCategories.length,
                         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 4,
                           crossAxisSpacing: 8,
@@ -223,7 +261,7 @@ class HomeScreen extends StatelessWidget {
                           childAspectRatio: 86 / 136, // Exact proportions from Figma
                         ),
                         itemBuilder: (ctx, index) {
-                          final item = figmaCategories[index];
+                          final item = HomeScreen.figmaCategories[index];
                           return CategoryCard(
                             data: item,
                             onTap: () {
@@ -274,9 +312,9 @@ class HomeScreen extends StatelessWidget {
                         padding: EdgeInsets.zero,
                         physics: const NeverScrollableScrollPhysics(),
                         shrinkWrap: true,
-                        itemCount: freshListings.length,
+                        itemCount: HomeScreen.freshListings.length,
                         itemBuilder: (ctx, i) {
-                          final item = freshListings[i];
+                          final item = HomeScreen.freshListings[i];
                           return FreshListingTile(
                             item: item,
                             onTap: () {
@@ -298,7 +336,7 @@ class HomeScreen extends StatelessWidget {
 
                       // ── SECTION 3: Turn What you have into your next opportunity (CTA) ──
                       SellerCtaBanner(
-                        onStartSelling: onStartSelling ?? () {
+                        onStartSelling: widget.onStartSelling ?? () {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -334,9 +372,9 @@ class HomeScreen extends StatelessWidget {
                         height: 186,
                         child: ListView.builder(
                           scrollDirection: Axis.horizontal,
-                          itemCount: featuredNearYouItems.length,
+                          itemCount: HomeScreen.featuredNearYouItems.length,
                           itemBuilder: (ctx, i) {
-                            final item = featuredNearYouItems[i];
+                            final item = HomeScreen.featuredNearYouItems[i];
                             return FeaturedNearYouCard(
                               item: item,
                               onTap: () {
@@ -431,17 +469,17 @@ class HomeScreen extends StatelessWidget {
                         padding: EdgeInsets.zero,
                         physics: const NeverScrollableScrollPhysics(),
                         shrinkWrap: true,
-                        itemCount: trustedBusinesses.length,
+                        itemCount: HomeScreen.trustedBusinesses.length,
                         itemBuilder: (ctx, i) {
                           return TrustedBusinessCard(
                             key: Key('trusted_biz_card_$i'),
-                            item: trustedBusinesses[i],
+                            item: HomeScreen.trustedBusinesses[i],
                             onViewShop: () {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                   builder: (_) => ShopDetailsScreen(
-                                    business: trustedBusinesses[i],
+                                    business: HomeScreen.trustedBusinesses[i],
                                   ),
                                 ),
                               );
@@ -457,6 +495,284 @@ class HomeScreen extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildLiveSearchResults() {
+    final matchingCategories = HomeScreen.figmaCategories.where((c) =>
+        c.title.toLowerCase().contains(_searchQuery.toLowerCase()) ||
+        c.subtitle.toLowerCase().contains(_searchQuery.toLowerCase())).toList();
+
+    final matchingFresh = HomeScreen.freshListings.where((f) =>
+        f.title.toLowerCase().contains(_searchQuery.toLowerCase()) ||
+        f.location.toLowerCase().contains(_searchQuery.toLowerCase()) ||
+        f.price.toLowerCase().contains(_searchQuery.toLowerCase()) ||
+        f.sellerType.toLowerCase().contains(_searchQuery.toLowerCase())).toList();
+
+    final matchingFeatured = HomeScreen.featuredNearYouItems.where((f) =>
+        f.title.toLowerCase().contains(_searchQuery.toLowerCase()) ||
+        f.location.toLowerCase().contains(_searchQuery.toLowerCase()) ||
+        f.price.toLowerCase().contains(_searchQuery.toLowerCase())).toList();
+
+    final totalCount = matchingCategories.length + matchingFresh.length + matchingFeatured.length;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // Search Results Header
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+          decoration: BoxDecoration(
+            color: const Color(0xFFF5F3FF),
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: const Color(0xFFE0E7FF)),
+          ),
+          child: Row(
+            children: [
+              const Icon(Icons.search_rounded, size: 18, color: Color(0xFF6366F1)),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Text(
+                  'Search Results for "$_searchQuery"',
+                  style: GoogleFonts.inter(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w700,
+                    color: const Color(0xFF4338CA),
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                decoration: BoxDecoration(
+                  color: const Color(0xFF6366F1),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Text(
+                  '$totalCount found',
+                  style: GoogleFonts.inter(
+                    fontSize: 10.5,
+                    fontWeight: FontWeight.w700,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+              const SizedBox(width: 8),
+              GestureDetector(
+                key: const Key('clear_search_button'),
+                onTap: () {
+                  _searchController.clear();
+                  setState(() => _searchQuery = '');
+                },
+                child: Container(
+                  padding: const EdgeInsets.all(4),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    shape: BoxShape.circle,
+                    border: Border.all(color: const Color(0xFFCBD5E1)),
+                  ),
+                  child: const Icon(Icons.close_rounded, size: 12, color: Color(0xFF64748B)),
+                ),
+              ),
+            ],
+          ),
+        ),
+
+        const SizedBox(height: 18),
+
+        if (totalCount == 0)
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 20),
+            child: Column(
+              children: [
+                const Icon(Icons.search_off_rounded, size: 48, color: Color(0xFF94A3B8)),
+                const SizedBox(height: 12),
+                Text(
+                  'No listings found matching "$_searchQuery"',
+                  style: GoogleFonts.inter(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w600,
+                    color: const Color(0xFF1E293B),
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 6),
+                Text(
+                  'Try searching for "Creta", "Apartment", "iPhone", "MacBook", or "Furniture"',
+                  style: GoogleFonts.inter(fontSize: 12, color: const Color(0xFF64748B)),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 16),
+                ElevatedButton(
+                  key: const Key('reset_search_button'),
+                  onPressed: () {
+                    _searchController.clear();
+                    setState(() => _searchQuery = '');
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF6366F1),
+                    foregroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                  ),
+                  child: const Text('Reset Search'),
+                ),
+              ],
+            ),
+          )
+        else ...[
+          // Matching Categories
+          if (matchingCategories.isNotEmpty) ...[
+            Text(
+              'Matching Categories (${matchingCategories.length})',
+              style: GoogleFonts.inter(
+                fontSize: 15,
+                fontWeight: FontWeight.w700,
+                color: const Color(0xFF111827),
+              ),
+            ),
+            const SizedBox(height: 10),
+            GridView.builder(
+              padding: EdgeInsets.zero,
+              physics: const NeverScrollableScrollPhysics(),
+              shrinkWrap: true,
+              itemCount: matchingCategories.length,
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 4,
+                crossAxisSpacing: 8,
+                mainAxisSpacing: 10,
+                childAspectRatio: 86 / 136,
+              ),
+              itemBuilder: (ctx, index) {
+                final item = matchingCategories[index];
+                return CategoryCard(
+                  data: item,
+                  onTap: () {
+                    context.read<ProductsCubit>().selectCategory(item.title.toLowerCase());
+                    if (item.title == 'Vehicles') {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (_) => const VehiclesScreen()),
+                      );
+                    } else {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => CategoryBrowseScreen(categoryTitle: item.title),
+                        ),
+                      );
+                    }
+                  },
+                );
+              },
+            ),
+            const SizedBox(height: 20),
+          ],
+
+          // Matching Fresh Listings
+          if (matchingFresh.isNotEmpty) ...[
+            Text(
+              'Matching Listings (${matchingFresh.length})',
+              style: GoogleFonts.inter(
+                fontSize: 15,
+                fontWeight: FontWeight.w700,
+                color: const Color(0xFF111827),
+              ),
+            ),
+            const SizedBox(height: 10),
+            ListView.builder(
+              padding: EdgeInsets.zero,
+              physics: const NeverScrollableScrollPhysics(),
+              shrinkWrap: true,
+              itemCount: matchingFresh.length,
+              itemBuilder: (ctx, i) {
+                final item = matchingFresh[i];
+                return FreshListingTile(
+                  item: item,
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => CarDetailsScreen(
+                          title: item.title,
+                          price: item.price,
+                          imagePath: item.imagePath,
+                          location: item.location,
+                        ),
+                      ),
+                    );
+                  },
+                );
+              },
+            ),
+            const SizedBox(height: 20),
+          ],
+
+          // Matching Featured Listings
+          if (matchingFeatured.isNotEmpty) ...[
+            Text(
+              'Featured Results (${matchingFeatured.length})',
+              style: GoogleFonts.inter(
+                fontSize: 15,
+                fontWeight: FontWeight.w700,
+                color: const Color(0xFF111827),
+              ),
+            ),
+            const SizedBox(height: 10),
+            SizedBox(
+              height: 186,
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: matchingFeatured.length,
+                itemBuilder: (ctx, i) {
+                  final item = matchingFeatured[i];
+                  return FeaturedNearYouCard(
+                    item: item,
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => CarDetailsScreen(
+                            title: item.title,
+                            price: item.price,
+                            imagePath: item.imagePath,
+                            location: item.location,
+                          ),
+                        ),
+                      );
+                    },
+                  );
+                },
+              ),
+            ),
+          ],
+
+          const SizedBox(height: 16),
+
+          // "View All Results in Marketplace" Banner Button
+          SizedBox(
+            width: double.infinity,
+            height: 46,
+            child: OutlinedButton.icon(
+              onPressed: _handleSearchSubmit,
+              icon: const Icon(Icons.open_in_new_rounded, size: 16, color: Color(0xFF6366F1)),
+              label: Text(
+                'View all results in Explore >',
+                style: GoogleFonts.inter(
+                  fontSize: 13,
+                  fontWeight: FontWeight.w600,
+                  color: const Color(0xFF6366F1),
+                ),
+              ),
+              style: OutlinedButton.styleFrom(
+                side: const BorderSide(color: Color(0xFF6366F1)),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+              ),
+            ),
+          ),
+        ],
+      ],
     );
   }
 }

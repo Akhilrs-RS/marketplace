@@ -4,6 +4,7 @@ import '../../../notifications/presentation/notifications_screen.dart';
 import '../../../profile/presentation/profile_screen.dart';
 
 class FigmaHeroSection extends StatelessWidget {
+  final TextEditingController? searchController;
   final ValueChanged<String>? onSearchChanged;
   final VoidCallback? onSearchSubmit;
   final VoidCallback? onNotificationTap;
@@ -11,6 +12,7 @@ class FigmaHeroSection extends StatelessWidget {
 
   const FigmaHeroSection({
     super.key,
+    this.searchController,
     this.onSearchChanged,
     this.onSearchSubmit,
     this.onNotificationTap,
@@ -196,15 +198,22 @@ class FigmaHeroSection extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(horizontal: 14),
                       child: Row(
                         children: [
-                          const Icon(
-                            Icons.search_rounded,
-                            color: Color(0xFF9CA3AF),
-                            size: 22,
+                          GestureDetector(
+                            key: const Key('home_search_icon_button'),
+                            onTap: onSearchSubmit,
+                            child: const Icon(
+                              Icons.search_rounded,
+                              color: Color(0xFF9CA3AF),
+                              size: 22,
+                            ),
                           ),
                           const SizedBox(width: 10),
                           Expanded(
                             child: TextField(
+                              key: const Key('home_search_input'),
+                              controller: searchController,
                               onChanged: onSearchChanged,
+                              onSubmitted: (_) => onSearchSubmit?.call(),
                               style: GoogleFonts.inter(
                                 fontSize: 12.5,
                                 color: const Color(0xFF1F2937),
@@ -223,6 +232,7 @@ class FigmaHeroSection extends StatelessWidget {
                           ),
                           // Green circle with white arrow
                           GestureDetector(
+                            key: const Key('home_search_submit_button'),
                             onTap: onSearchSubmit,
                             child: Container(
                               width: 32,

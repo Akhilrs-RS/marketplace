@@ -58,11 +58,18 @@ class MainNavigationScreen extends StatefulWidget {
 
 class _MainNavigationScreenState extends State<MainNavigationScreen> {
   int _currentIndex = 0;
+  String? _searchQueryForExplore;
 
   void _goToTab(int index) {
     setState(() => _currentIndex = index);
   }
 
+  void _openSearchWithQuery(String query) {
+    setState(() {
+      _searchQueryForExplore = query;
+      _currentIndex = 1;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -70,7 +77,11 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
       // Tab 0: Home Screen
       HomeScreen(
         onOpenCart: () => _goToTab(1),
-        onOpenSearch: () => _goToTab(1),
+        onOpenSearch: () {
+          setState(() => _searchQueryForExplore = null);
+          _goToTab(1);
+        },
+        onOpenSearchWithQuery: _openSearchWithQuery,
         onOpenProfile: () => _goToTab(4),
         onStartSelling: () => _goToTab(2),
         onOpenNotifications: () {
@@ -81,7 +92,9 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
         },
       ),
       // Tab 1: Explore Screen
-      const ExploreScreen(),
+      ExploreScreen(
+        initialQuery: _searchQueryForExplore,
+      ),
       // Tab 2: Selling Page / "Your Marketplace"
       const SellingPageScreen(),
       // Tab 3: Messages Screen
