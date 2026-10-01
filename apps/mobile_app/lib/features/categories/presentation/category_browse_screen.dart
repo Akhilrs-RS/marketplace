@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../products/presentation/car_details_screen.dart';
+import 'screens/merchant_contact_details_screen.dart';
 
 /// Data model representing a curated merchant / business / item card in a category screen.
 class CategoryMerchantCardData {
@@ -859,14 +860,16 @@ class _CategoryBrowseScreenState extends State<CategoryBrowseScreen> {
                   Expanded(
                     flex: item.price.isNotEmpty ? 0 : 1,
                     child: ElevatedButton(
+                      key: const Key('view_and_contact_btn'),
                       onPressed: () {
                         Navigator.pop(ctx);
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text('Contacting ${item.name}...'),
-                            backgroundColor: const Color(0xFF6366F1),
-                            behavior: SnackBarBehavior.floating,
-                            duration: const Duration(seconds: 2),
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => MerchantContactDetailsScreen(
+                              item: item,
+                              categoryTitle: widget.categoryTitle,
+                            ),
                           ),
                         );
                       },
