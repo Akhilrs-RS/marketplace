@@ -1,0 +1,366 @@
+/* ═════════════════════════════════════════════════════════════════
+   Vehicle Shops Page Styling - Matching Figma Screenshot (Desktop - 72)
+   ═════════════════════════════════════════════════════════════════ */
+
+.shops-page-root {
+  background-color: #ffffff;
+  min-height: 100vh;
+}
+
+.vehicle-shops-main-section {
+  padding: 24px 0 64px 0;
+  background-color: #ffffff;
+}
+
+.vehicle-shops-container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 32px;
+}
+
+/* ── Back Navigation Button ── */
+.shops-nav-back-row {
+  margin-bottom: 18px;
+}
+
+.vehicle-shops-back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: #ffffff;
+  border: 1px solid #E2E8F0;
+  border-radius: 8px;
+  padding: 6px 14px;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: #334155;
+  text-decoration: none;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+  transition: all 0.15s ease;
+}
+
+.vehicle-shops-back-btn:hover {
+  background: #F8FAFC;
+  border-color: #CBD5E1;
+  color: #0F172A;
+}
+
+/* ── Header Row: Title & Subtitle on Left, Inline Search on Right ── */
+.vehicle-shops-header-row {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 28px;
+  margin-bottom: 28px;
+  flex-wrap: wrap;
+}
+
+.shops-title-col {
+  max-width: 520px;
+}
+
+.shops-title-serif {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 2.15rem;
+  font-weight: 700;
+  color: #0F172A;
+  margin: 0 0 6px 0;
+  letter-spacing: -0.015em;
+  line-height: 1.15;
+}
+
+.shops-subtitle-clean {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 0.85rem;
+  color: #64748B;
+  margin: 0;
+  line-height: 1.5;
+  font-weight: 400;
+}
+
+/* ── Right Inline Pill Search Bar ── */
+.shops-pill-search-bar {
+  display: flex;
+  align-items: center;
+  background: #ffffff;
+  border: 1px solid #E2E8F0;
+  border-radius: 9999px;
+  padding: 4px 6px 4px 16px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.shops-pill-search-bar:focus-within {
+  border-color: #94A3B8;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+}
+
+.search-bar-input-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.search-pill-icon {
+  color: #94A3B8;
+  flex-shrink: 0;
+}
+
+.search-pill-input {
+  border: none;
+  background: transparent;
+  outline: none;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 0.82rem;
+  color: #0F172A;
+  width: 155px;
+}
+
+.search-pill-input::placeholder {
+  color: #94A3B8;
+}
+
+.search-pill-location {
+  width: 85px;
+}
+
+.search-pill-divider {
+  width: 1px;
+  height: 20px;
+  background-color: #E2E8F0;
+  margin: 0 12px;
+}
+
+.search-pill-submit-btn {
+  background: #2563EB;
+  color: #ffffff;
+  border: none;
+  border-radius: 9999px;
+  padding: 8px 18px;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: background-color 0.15s ease, transform 0.15s ease;
+  flex-shrink: 0;
+}
+
+.search-pill-submit-btn:hover {
+  background: #1D4ED8;
+  transform: translateY(-1px);
+}
+
+/* ── 3x3 Grid of 9 Vehicle Shop Cards ── */
+.vehicle-shops-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 22px;
+}
+
+.vehicle-shop-card {
+  background: #ffffff;
+  border: 1px solid #E2E8F0;
+  border-radius: 14px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.02);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.vehicle-shop-card:hover {
+  transform: translateY(-3px);
+  border-color: #CBD5E1;
+  box-shadow: 0 10px 24px -4px rgba(0, 0, 0, 0.07);
+}
+
+/* ── Card Image Wrap ── */
+.shop-card-image-wrap {
+  position: relative;
+  width: 100%;
+  height: 175px;
+  background-color: #F1F5F9;
+  overflow: hidden;
+}
+
+.shop-card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.35s ease;
+}
+
+.vehicle-shop-card:hover .shop-card-img {
+  transform: scale(1.04);
+}
+
+/* Bottom Left Vehicles Count Pill */
+.shop-badge-vehicles {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  background: rgba(15, 23, 42, 0.72);
+  backdrop-filter: blur(4px);
+  color: #ffffff;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 20px;
+  letter-spacing: 0.01em;
+  pointer-events: none;
+}
+
+/* Top Right Action Button: Circular Heart / Arrow */
+.shop-action-btn-circle {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #475569;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+  cursor: pointer;
+  transition: transform 0.15s ease, background-color 0.15s ease, color 0.15s ease;
+  z-index: 2;
+  text-decoration: none;
+}
+
+.shop-action-btn-circle:hover {
+  transform: scale(1.08);
+  background: #FAFAFA;
+}
+
+.shop-action-btn-circle.is-favorited {
+  color: #EF4444;
+}
+
+/* ── Card Body ── */
+.shop-card-body {
+  padding: 14px 16px 16px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.shop-card-title {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 0.96rem;
+  font-weight: 700;
+  color: #0F172A;
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+/* Meta Row */
+.shop-card-meta-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 0.76rem;
+  color: #64748B;
+}
+
+.shop-meta-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.shop-meta-icon {
+  color: #94A3B8;
+  flex-shrink: 0;
+}
+
+/* Rating & Trust Row */
+.shop-card-rating-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 0.74rem;
+  margin-top: 1px;
+}
+
+.shop-rating-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-weight: 700;
+  color: #0F172A;
+}
+
+.shop-star-orange {
+  color: #F59E0B;
+  fill: #F59E0B;
+}
+
+.shop-rating-dot {
+  color: #CBD5E1;
+  font-size: 0.7rem;
+}
+
+.shop-trust-badge {
+  color: #64748B;
+  font-weight: 500;
+}
+
+/* ── Responsive ── */
+@media (max-width: 980px) {
+  .vehicle-shops-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px;
+  }
+
+  .vehicle-shops-header-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 18px;
+  }
+
+  .shops-pill-search-bar {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .search-pill-input {
+    width: 100%;
+  }
+}
+
+@media (max-width: 600px) {
+  .vehicle-shops-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .shops-pill-search-bar {
+    flex-direction: column;
+    border-radius: 16px;
+    padding: 12px;
+    gap: 10px;
+    align-items: stretch;
+  }
+
+  .search-pill-divider {
+    display: none;
+  }
+
+  .search-pill-location {
+    width: 100%;
+  }
+
+  .search-pill-submit-btn {
+    justify-content: center;
+  }
+}

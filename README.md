@@ -77,7 +77,16 @@ dart_frog dev
 ```
 The API server will connect to PostgreSQL if available, or gracefully fallback to the in-memory mock database.
 
-### 3. Run the Flutter Mobile App
+### 3. Run the React Web App (Vite + JSX)
+In another terminal:
+```bash
+cd apps/web_app
+npm install
+npm run dev
+```
+Open [http://localhost:5173](http://localhost:5173) in your browser. All API requests are proxied directly to the backend at port 8080.
+
+### 4. Run the Flutter Mobile App
 In another terminal:
 ```bash
 cd apps/mobile_app
@@ -85,7 +94,7 @@ flutter run
 ```
 You can select iOS Simulator, Android Emulator, macOS Desktop, or Chrome browser.
 
-### 4. Run Automated Tests
+### 5. Run Automated Tests
 - Mobile app tests:
   ```bash
   cd apps/mobile_app && flutter test
@@ -94,3 +103,8 @@ You can select iOS Simulator, Android Emulator, macOS Desktop, or Chrome browser
   ```bash
   cd apps/backend_api && dart test
   ```
+- Web app build validation:
+  ```bash
+  cd apps/web_app && npm run build
+  ```
+

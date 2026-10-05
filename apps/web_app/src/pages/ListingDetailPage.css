@@ -1,0 +1,627 @@
+/* ═════════════════════════════════════════════════════════════════
+   Listing Detail Page Styling - Matching Figma Screenshot (Desktop - 74)
+   ═════════════════════════════════════════════════════════════════ */
+
+.listing-detail-page-root {
+  background-color: #ffffff;
+  min-height: 100vh;
+}
+
+.listing-detail-container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 24px 32px 64px 32px;
+}
+
+/* ── Top Control Bar: Back Button & Secondary Search Bar ── */
+.detail-top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.detail-back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: #ffffff;
+  border: 1px solid #E2E8F0;
+  border-radius: 8px;
+  padding: 6px 14px;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: #334155;
+  text-decoration: none;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+  transition: all 0.15s ease;
+}
+
+.detail-back-btn:hover {
+  background: #F8FAFC;
+  border-color: #CBD5E1;
+  color: #0F172A;
+}
+
+.detail-search-pill {
+  display: flex;
+  align-items: center;
+  background: #ffffff;
+  border: 1px solid #E2E8F0;
+  border-radius: 9999px;
+  padding: 4px 6px 4px 16px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.02);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.detail-search-pill:focus-within {
+  border-color: #94A3B8;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+}
+
+.detail-search-icon {
+  color: #94A3B8;
+  margin-right: 8px;
+  flex-shrink: 0;
+}
+
+.detail-search-input {
+  border: none;
+  background: transparent;
+  outline: none;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 0.82rem;
+  color: #0F172A;
+  width: 220px;
+}
+
+.detail-search-input::placeholder {
+  color: #94A3B8;
+}
+
+.detail-search-submit {
+  background: #2563EB;
+  color: #ffffff;
+  border: none;
+  border-radius: 9999px;
+  padding: 7px 16px;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+  transition: background-color 0.15s ease, transform 0.15s ease;
+}
+
+.detail-search-submit:hover {
+  background: #1D4ED8;
+  transform: translateY(-1px);
+}
+
+/* ── Two-Column Grid Layout ── */
+.listing-detail-grid {
+  display: grid;
+  grid-template-columns: 1.35fr 1fr;
+  gap: 36px;
+  align-items: start;
+}
+
+/* ── Left Column ── */
+.detail-left-col {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Main Showcase Image Card */
+.detail-main-showcase-box {
+  background-color: #27272A;
+  border-radius: 16px;
+  padding: 30px 24px;
+  min-height: 380px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+}
+
+.detail-main-img {
+  max-width: 100%;
+  max-height: 330px;
+  object-fit: contain;
+  transition: transform 0.3s ease;
+}
+
+.detail-main-showcase-box:hover .detail-main-img {
+  transform: scale(1.02);
+}
+
+/* Thumbnails Row */
+.detail-thumbnails-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.detail-thumb-box {
+  width: 72px;
+  height: 52px;
+  border-radius: 8px;
+  border: 1px solid #E2E8F0;
+  background: #ffffff;
+  padding: 3px;
+  cursor: pointer;
+  overflow: hidden;
+  transition: all 0.15s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.detail-thumb-box:hover {
+  border-color: #94A3B8;
+  transform: translateY(-1px);
+}
+
+.detail-thumb-box.active {
+  border-color: #EA580C;
+  box-shadow: 0 0 0 2px rgba(234, 88, 12, 0.2);
+}
+
+.detail-thumb-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* Content Blocks */
+.detail-content-block {
+  margin-top: 28px;
+}
+
+.detail-block-title {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 1.12rem;
+  font-weight: 700;
+  color: #0F172A;
+  margin: 0 0 10px 0;
+  letter-spacing: -0.01em;
+}
+
+.detail-description-p {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 0.85rem;
+  color: #475569;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* Details (Specifications Grid) */
+.detail-specs-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+
+.spec-card-pill {
+  border: 1px solid #E2E8F0;
+  border-radius: 8px;
+  padding: 8px 12px;
+  background: #ffffff;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.spec-label-sub {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 0.7rem;
+  color: #94A3B8;
+  font-weight: 500;
+}
+
+.spec-value-main {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 0.84rem;
+  color: #0F172A;
+  font-weight: 700;
+}
+
+/* Similar Listings Card */
+.similar-listing-card {
+  display: inline-flex;
+  flex-direction: column;
+  width: 190px;
+  background: #ffffff;
+  border: 1px solid #E2E8F0;
+  border-radius: 12px;
+  overflow: hidden;
+  text-decoration: none;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.similar-listing-card:hover {
+  transform: translateY(-2px);
+  border-color: #CBD5E1;
+  box-shadow: 0 6px 16px -2px rgba(0, 0, 0, 0.08);
+}
+
+.similar-car-img-wrap {
+  width: 100%;
+  height: 110px;
+  background: #F8FAFC;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+}
+
+.similar-car-img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.similar-car-info {
+  padding: 10px 12px 12px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.similar-price-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.similar-price-text {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.86rem;
+  font-weight: 700;
+  color: #0F172A;
+}
+
+.similar-negotiable-badge {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.68rem;
+  color: #64748B;
+}
+
+.similar-title-text {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #334155;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.similar-meta-row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.68rem;
+  color: #94A3B8;
+  margin-top: 2px;
+}
+
+/* ── Right Column: Sticky Sidebar ── */
+.detail-right-col {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  position: sticky;
+  top: 84px;
+}
+
+.detail-card-panel {
+  background: #ffffff;
+  border: 1px solid #E2E8F0;
+  border-radius: 14px;
+  padding: 18px 20px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.02);
+}
+
+/* Price Card */
+.price-top-header-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.price-bold-amount {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 1.65rem;
+  font-weight: 800;
+  color: #0F172A;
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+
+.price-negotiable-tag {
+  display: inline-block;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.74rem;
+  font-weight: 600;
+  color: #16A34A;
+  margin-top: 4px;
+}
+
+.price-actions-icons-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.icon-action-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  transition: background-color 0.15s ease, transform 0.15s ease;
+}
+
+.icon-action-btn:hover {
+  background: #F1F5F9;
+  transform: translateY(-1px);
+}
+
+.detail-vehicle-name {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #0F172A;
+  margin: 12px 0 10px 0;
+  letter-spacing: -0.01em;
+}
+
+.vehicle-meta-tags-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.vehicle-meta-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.78rem;
+  color: #64748B;
+}
+
+.meta-icon {
+  color: #94A3B8;
+  flex-shrink: 0;
+}
+
+/* Contact Seller Card */
+.panel-subhead-bold {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 0.94rem;
+  font-weight: 700;
+  color: #0F172A;
+  margin: 0 0 12px 0;
+}
+
+.contact-buttons-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.btn-chat-orange {
+  background: #EA580C;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  padding: 11px 18px;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.84rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(234, 88, 12, 0.25);
+  transition: all 0.15s ease;
+}
+
+.btn-chat-orange:hover {
+  background: #C2410C;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(234, 88, 12, 0.35);
+}
+
+.btn-outline-white {
+  background: #ffffff;
+  border: 1px solid #E2E8F0;
+  border-radius: 8px;
+  padding: 10px 18px;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #334155;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btn-outline-white:hover {
+  background: #F8FAFC;
+  border-color: #CBD5E1;
+  color: #0F172A;
+}
+
+/* Seller Profile Card */
+.seller-header-flex {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.seller-avatar-initial {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #F1F5F9;
+  border: 1px solid #E2E8F0;
+  color: #334155;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.92rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.seller-name-col {
+  display: flex;
+  flex-direction: column;
+}
+
+.seller-full-name {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: #0F172A;
+  margin: 0;
+}
+
+.seller-sub-meta {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.72rem;
+  color: #64748B;
+}
+
+.seller-stats-three-boxes {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.seller-stat-box {
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  border-radius: 8px;
+  padding: 8px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.stat-number {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #0F172A;
+}
+
+.stat-label {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.68rem;
+  color: #64748B;
+}
+
+.btn-view-profile-white {
+  width: 100%;
+  background: #ffffff;
+  border: 1px solid #E2E8F0;
+  border-radius: 8px;
+  padding: 8px 16px;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #334155;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btn-view-profile-white:hover {
+  background: #F8FAFC;
+  border-color: #CBD5E1;
+  color: #0F172A;
+}
+
+/* Safety Notice Box */
+.safety-notice-banner {
+  background: #F0F9FF;
+  border: 1px solid #E0F2FE;
+  border-radius: 10px;
+  padding: 10px 14px;
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.safety-shield-icon {
+  color: #0284C7;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.safety-notice-text {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 0.72rem;
+  color: #0369A1;
+  margin: 0;
+  line-height: 1.45;
+}
+
+/* ── Responsive ── */
+@media (max-width: 900px) {
+  .listing-detail-grid {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+
+  .detail-right-col {
+    position: static;
+  }
+
+  .detail-specs-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .detail-top-bar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .detail-search-pill {
+    width: 100%;
+  }
+
+  .detail-search-input {
+    width: 100%;
+  }
+
+  .detail-specs-grid {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,0 +1,91 @@
+/* ── How It Works Dark Container Matching Figma Desktop - 71 ── */
+.how-it-works-section {
+  background-color: #ffffff;
+  padding: 10px 0 60px 0;
+}
+
+.how-container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 32px;
+}
+
+/* Enclosed Dark Rounded Container matching Figma */
+.how-it-works-dark-box {
+  background: #18181B;
+  border-radius: 20px;
+  padding: 46px 40px 52px 40px;
+  text-align: center;
+  color: #ffffff;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+}
+
+.how-title-serif {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 1.95rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0 0 8px 0;
+  letter-spacing: -0.015em;
+}
+
+.how-subtitle-clean {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 0.9rem;
+  color: #94A3B8;
+  margin: 0 auto 42px auto;
+  font-weight: 400;
+  max-width: 620px;
+}
+
+.how-steps-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 36px;
+}
+
+.how-step-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 0 10px;
+}
+
+.how-step-num {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.65rem;
+  font-weight: 800;
+  color: #F97316;
+  margin-bottom: 6px;
+  line-height: 1;
+}
+
+.how-step-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0 0 6px 0;
+  letter-spacing: -0.01em;
+}
+
+.how-step-desc {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 0.84rem;
+  color: #94A3B8;
+  margin: 0;
+  line-height: 1.55;
+  max-width: 290px;
+}
+
+/* Responsive */
+@media (max-width: 840px) {
+  .how-steps-row {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+
+  .how-it-works-dark-box {
+    padding: 36px 20px;
+  }
+}

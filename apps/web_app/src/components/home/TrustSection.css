@@ -1,0 +1,95 @@
+/* ── Marketplace built around trust. Section Matching Figma Desktop - 71 ── */
+.trust-section-figma {
+  padding: 40px 0 48px 0;
+  background-color: #ffffff;
+}
+
+.trust-container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 32px;
+}
+
+.trust-header-figma {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.trust-title-serif {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 1.85rem;
+  font-weight: 700;
+  color: #0F172A;
+  margin: 0 0 6px 0;
+  letter-spacing: -0.015em;
+}
+
+.trust-subtitle-clean {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 0.88rem;
+  color: #64748B;
+  margin: 0;
+  font-weight: 400;
+}
+
+.trust-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+
+.trust-card-figma {
+  background: #ffffff;
+  border: 1px solid #E2E8F0;
+  border-radius: 14px;
+  padding: 18px 20px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.02);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.trust-card-figma:hover {
+  transform: translateY(-2px);
+  border-color: #CBD5E1;
+  box-shadow: 0 8px 20px -4px rgba(0, 0, 0, 0.06);
+}
+
+.trust-icon-bubble {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #FFF7ED;
+  color: #EA580C;
+  border: 1px solid #FFEDD5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 12px;
+}
+
+.trust-card-title {
+  font-size: 0.94rem;
+  font-weight: 700;
+  color: #0F172A;
+  margin: 0 0 5px 0;
+}
+
+.trust-card-desc {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 0.78rem;
+  color: #64748B;
+  margin: 0;
+  line-height: 1.48;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .trust-cards-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .trust-cards-grid {
+    grid-template-columns: 1fr;
+  }
+}

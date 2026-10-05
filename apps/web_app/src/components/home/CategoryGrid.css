@@ -1,0 +1,164 @@
+/* ── Browse by Category Section Matching Figma Prototype Slide (node-id=99-109) ── */
+.figma-categories-section {
+  padding: 64px 0 72px 0;
+  background-color: #ffffff;
+}
+
+.figma-cat-container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 32px;
+}
+
+/* Section Header matching Figma slide */
+.figma-cat-header {
+  margin-bottom: 38px;
+  text-align: left;
+}
+
+.figma-cat-headline {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 2.85rem; /* ~46px bold serif */
+  font-weight: 800;
+  color: #0A0D14;
+  letter-spacing: -0.025em;
+  line-height: 1.15;
+  margin: 0 0 10px 0;
+}
+
+.figma-cat-subtitle {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 1.15rem; /* ~18.5px */
+  font-weight: 400;
+  color: #1F2937;
+  letter-spacing: -0.01em;
+  margin: 0;
+}
+
+/* 4 Columns x 2 Rows Grid matching Figma Prototype */
+.figma-cat-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+/* Category Card */
+.figma-cat-card {
+  position: relative;
+  height: 215px;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.28s ease;
+  display: block;
+  text-decoration: none;
+  background-color: #1F2937;
+}
+
+.figma-cat-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 14px 28px -4px rgba(0, 0, 0, 0.18);
+}
+
+.figma-cat-card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.5s ease;
+}
+
+.figma-cat-card:hover .figma-cat-card-img {
+  transform: scale(1.05);
+}
+
+/* Frosted Dark Acrylic Panel spanning bottom ~35% of card */
+.figma-cat-bottom-panel {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(22, 24, 28, 0.74);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  padding: 13px 18px 15px 18px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  z-index: 2;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.figma-cat-title-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 2px;
+}
+
+/* Title in bold Serif */
+.figma-cat-card-title {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 1.16rem;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+}
+
+/* Circular Arrow Icon Badge (↗) */
+.figma-cat-arrow-circle {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.22);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  margin-left: 4px;
+  flex-shrink: 0;
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.figma-cat-card:hover .figma-cat-arrow-circle {
+  transform: translate(2px, -2px);
+  background: rgba(255, 255, 255, 0.35);
+}
+
+/* Subtitle in clean regular sans-serif */
+.figma-cat-card-sub {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 0.82rem;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.85);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.25;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1100px) {
+  .figma-cat-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .figma-cat-headline {
+    font-size: 2.25rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .figma-cat-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .figma-cat-card {
+    height: 180px;
+  }
+  
+  .figma-cat-headline {
+    font-size: 1.85rem;
+  }
+}

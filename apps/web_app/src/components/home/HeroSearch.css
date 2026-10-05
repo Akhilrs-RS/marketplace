@@ -1,0 +1,202 @@
+.figma-hero-section {
+  position: relative;
+  background: url('/images/h.png') center right / cover no-repeat;
+  padding: 170px 0 110px 0;
+  color: #ffffff;
+  overflow: hidden;
+}
+
+.figma-hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    rgba(17, 19, 23, 0.85) 0%,
+    rgba(17, 19, 23, 0.65) 50%,
+    rgba(17, 19, 23, 0.40) 100%
+  );
+  z-index: 1;
+}
+
+.figma-hero-inner {
+  position: relative;
+  z-index: 2;
+}
+
+.figma-hero-left-box {
+  max-width: 680px;
+  text-align: left;
+}
+
+/* Headline matching Figma Desktop - 71 */
+.figma-hero-title {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 3.6rem;
+  font-weight: 700;
+  line-height: 1.15;
+  color: #ffffff;
+  margin-bottom: 18px;
+  letter-spacing: -0.01em;
+}
+
+/* Subtitle matching Figma Desktop - 71 */
+.figma-hero-description {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.95rem;
+  color: rgba(255, 255, 255, 0.88);
+  line-height: 1.6;
+  margin-bottom: 32px;
+  max-width: 580px;
+}
+
+/* Translucent Search Capsule Bar matching Figma Desktop - 71 */
+.figma-glass-search-capsule {
+  width: 100%;
+  max-width: 580px;
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  padding: 5px 6px 5px 18px;
+  gap: 12px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
+  margin-bottom: 24px;
+}
+
+.capsule-field {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.capsule-field input {
+  border: none;
+  background: transparent;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.88rem;
+  color: #ffffff;
+  outline: none;
+  width: 100%;
+}
+
+.capsule-field input::placeholder {
+  color: rgba(255, 255, 255, 0.65);
+}
+
+.query-field {
+  flex: 1.8;
+}
+
+.location-field {
+  flex: 1.2;
+}
+
+.capsule-icon {
+  color: rgba(255, 255, 255, 0.65);
+  flex-shrink: 0;
+}
+
+.capsule-divider {
+  width: 1px;
+  height: 22px;
+  background: rgba(255, 255, 255, 0.25);
+  flex-shrink: 0;
+}
+
+/* Blue Button: "Search →" matching Figma Desktop - 71 */
+.capsule-blue-search-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background-color: #2563EB;
+  color: #ffffff;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-weight: 600;
+  font-size: 0.88rem;
+  padding: 10px 22px;
+  border-radius: 9999px;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.35);
+}
+
+.capsule-blue-search-btn:hover {
+  background-color: #1D4ED8;
+  transform: translateY(-1px);
+}
+
+/* Popular Tags Row matching Figma Desktop - 71 */
+.figma-popular-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.popular-label {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.popular-tags-group {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.popular-pill-tag {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  color: #ffffff;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.76rem;
+  font-weight: 500;
+  padding: 3px 12px;
+  border-radius: 9999px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.popular-pill-tag:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: #ffffff;
+}
+
+@media (max-width: 768px) {
+  .figma-hero-section {
+    padding: 120px 0 70px 0;
+  }
+
+  .figma-hero-title {
+    font-size: 2.35rem;
+  }
+
+  .figma-glass-search-capsule {
+    flex-direction: column;
+    border-radius: 20px;
+    padding: 16px;
+  }
+
+  .capsule-divider {
+    display: none;
+  }
+
+  .capsule-field {
+    width: 100%;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    padding-bottom: 8px;
+  }
+
+  .capsule-blue-search-btn {
+    width: 100%;
+  }
+}

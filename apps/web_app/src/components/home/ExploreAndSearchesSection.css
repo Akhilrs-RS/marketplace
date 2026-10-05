@@ -1,0 +1,226 @@
+/* ── Continue Exploring & Saved Searches Section Matching Figma Desktop - 71 ── */
+.explore-searches-section-figma {
+  padding: 10px 0 42px 0;
+  background-color: #ffffff;
+}
+
+.explore-searches-container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 32px;
+}
+
+.explore-searches-two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+  align-items: start;
+}
+
+.column-head {
+  margin-bottom: 14px;
+}
+
+.column-title-serif {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: #0F172A;
+  margin: 0 0 3px 0;
+  letter-spacing: -0.01em;
+}
+
+.column-sub-clean {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 0.82rem;
+  color: #64748B;
+  margin: 0;
+  font-weight: 400;
+}
+
+/* ── Left Column: Continue Exploring ── */
+.continue-two-cards-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.continue-card-figma {
+  background: #ffffff;
+  border: 1px solid #E2E8F0;
+  border-radius: 14px;
+  overflow: hidden;
+  text-decoration: none;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.02);
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.continue-card-figma:hover {
+  transform: translateY(-2px);
+  border-color: #CBD5E1;
+  box-shadow: 0 8px 18px -4px rgba(0, 0, 0, 0.08);
+}
+
+.continue-img-box {
+  width: 100%;
+  height: 110px;
+  background: #F1F5F9;
+  overflow: hidden;
+}
+
+.continue-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.continue-card-figma:hover .continue-img {
+  transform: scale(1.05);
+}
+
+.continue-info-box {
+  padding: 10px 12px 12px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.continue-price-text {
+  font-size: 0.94rem;
+  font-weight: 700;
+  color: #0F172A;
+  font-family: 'Inter', sans-serif;
+}
+
+.continue-title-text {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #334155;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.continue-loc-text {
+  font-size: 0.72rem;
+  color: #94A3B8;
+}
+
+.continue-seller-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 3px;
+}
+
+.seller-status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: #10B981;
+}
+
+.seller-type-text {
+  font-size: 0.72rem;
+  color: #64748B;
+  font-weight: 500;
+}
+
+/* ── Right Column: Your Saved Searches ── */
+.saved-searches-box-figma {
+  background: #ffffff;
+  border: 1px solid #E2E8F0;
+  border-radius: 14px;
+  padding: 4px 18px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.02);
+}
+
+.saved-search-item-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 0;
+  border-bottom: 1px solid #F1F5F9;
+}
+
+.saved-search-item-row:last-child {
+  border-bottom: none;
+}
+
+.saved-search-text-col {
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+  gap: 1px;
+}
+
+.saved-query-name {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #0F172A;
+  transition: color 0.15s ease;
+}
+
+.saved-search-text-col:hover .saved-query-name {
+  color: #4F46E5;
+}
+
+.saved-matches-sub {
+  font-size: 0.72rem;
+  color: #64748B;
+}
+
+.saved-search-icons-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.search-icon-btn {
+  background: none;
+  border: none;
+  color: #94A3B8;
+  cursor: pointer;
+  padding: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  transition: color 0.15s ease, background 0.15s ease;
+}
+
+.search-icon-btn:hover {
+  color: #0F172A;
+  background: #F1F5F9;
+}
+
+.search-icon-btn.bell-btn {
+  color: #EA580C;
+}
+
+.search-icon-btn.bell-btn:hover {
+  background: #FFF7ED;
+  color: #C2410C;
+}
+
+.bell-icon-orange {
+  color: #EA580C;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .explore-searches-two-col {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+}
+
+@media (max-width: 480px) {
+  .continue-two-cards-grid {
+    grid-template-columns: 1fr;
+  }
+}

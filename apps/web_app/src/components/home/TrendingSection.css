@@ -1,0 +1,411 @@
+/* ── Third Page Sections Matching Figma Desktop - 71 ── */
+.home-third-page-wrap {
+  background-color: #ffffff;
+  padding: 10px 0 30px 0;
+}
+
+.third-page-container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 32px;
+}
+
+/* Headings Typography matching Figma */
+.section-title-serif {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 1.65rem;
+  font-weight: 700;
+  color: #0F172A;
+  margin: 0 0 4px 0;
+  letter-spacing: -0.015em;
+  line-height: 1.25;
+}
+
+.section-subtitle-clean {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 0.86rem;
+  color: #64748B;
+  margin: 0;
+  font-weight: 400;
+}
+
+/* ── 1. Discover what's trending ── */
+.trending-section-figma {
+  margin-bottom: 36px;
+}
+
+.section-head-figma {
+  margin-bottom: 18px;
+}
+
+.trending-three-grid-figma {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.trending-card-figma {
+  background: #ffffff;
+  border: 1px solid #E2E8F0;
+  border-radius: 16px;
+  overflow: hidden;
+  text-decoration: none;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.trending-card-figma:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 24px -4px rgba(0, 0, 0, 0.1);
+  border-color: #CBD5E1;
+}
+
+.trending-card-img-wrap {
+  width: 100%;
+  height: 185px;
+  background: #F1F5F9;
+  overflow: hidden;
+}
+
+.trending-card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.trending-card-figma:hover .trending-card-img {
+  transform: scale(1.04);
+}
+
+.trending-card-body {
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.trending-card-row-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.trending-card-title {
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: #1E293B;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.trending-card-loc {
+  font-size: 0.8rem;
+  color: #64748B;
+  margin-left: 8px;
+  flex-shrink: 0;
+}
+
+.trending-card-row-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.trending-card-price {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #0F172A;
+  font-family: 'Inter', sans-serif;
+}
+
+.trending-card-badges {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.trending-badge-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  border-radius: 12px;
+  padding: 2px 7px;
+  font-size: 0.68rem;
+  font-weight: 500;
+  color: #475569;
+}
+
+.badge-check-icon {
+  color: #10B981;
+}
+
+/* ── 2. Featured Near You (Enclosed Box Container) ── */
+.featured-near-container-box {
+  background: #ffffff;
+  border: 1px solid #E2E8F0;
+  border-radius: 20px;
+  padding: 24px 26px 26px 26px;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.02);
+  margin-bottom: 38px;
+}
+
+.featured-near-header {
+  margin-bottom: 18px;
+}
+
+.featured-near-four-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+
+.featured-four-card-figma {
+  background: #ffffff;
+  border: 1px solid #F1F5F9;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.02);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.featured-four-card-figma:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 18px -4px rgba(0, 0, 0, 0.08);
+}
+
+.featured-img-wrap {
+  position: relative;
+  width: 100%;
+  height: 125px;
+  background: #F1F5F9;
+  overflow: hidden;
+}
+
+.featured-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.4s ease;
+}
+
+.featured-four-card-figma:hover .featured-img {
+  transform: scale(1.05);
+}
+
+.featured-heart-btn {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(4px);
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 2;
+  transition: background 0.15s ease, transform 0.15s ease;
+}
+
+.featured-heart-btn:hover {
+  background: rgba(0, 0, 0, 0.55);
+  transform: scale(1.08);
+}
+
+.featured-info-box {
+  padding: 10px 12px 12px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.featured-price-text {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #0F172A;
+  font-family: 'Inter', sans-serif;
+}
+
+.featured-title-text {
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: #334155;
+  text-decoration: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.featured-title-text:hover {
+  color: #0F172A;
+}
+
+.featured-loc-text {
+  font-size: 0.72rem;
+  color: #94A3B8;
+  margin-top: 2px;
+}
+
+/* ── 3. Discover Trusted Business ── */
+.trusted-biz-section-figma {
+  margin-bottom: 10px;
+}
+
+.trusted-biz-header-row {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 18px;
+}
+
+.trusted-view-all-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.84rem;
+  font-weight: 600;
+  color: #4F46E5;
+  text-decoration: none;
+  padding-bottom: 2px;
+  transition: gap 0.15s ease;
+}
+
+.trusted-view-all-link:hover {
+  gap: 7px;
+}
+
+.trusted-biz-three-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.trusted-biz-card-figma {
+  background: #ffffff;
+  border: 1px solid #E2E8F0;
+  border-radius: 14px;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 14px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.02);
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.trusted-biz-card-figma:hover {
+  transform: translateY(-2px);
+  border-color: #CBD5E1;
+  box-shadow: 0 6px 16px -3px rgba(0, 0, 0, 0.06);
+}
+
+.biz-top-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.biz-logo-img {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  object-fit: cover;
+  background: #F1F5F9;
+  flex-shrink: 0;
+}
+
+.biz-details-col {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.biz-name-text {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #0F172A;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.biz-cat-loc-text {
+  font-size: 0.74rem;
+  color: #64748B;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.biz-rating-listings-row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 2px;
+}
+
+.biz-rating-num {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #0F172A;
+}
+
+.biz-listings-count {
+  font-size: 0.7rem;
+  color: #94A3B8;
+  margin-left: 4px;
+}
+
+.biz-view-shop-btn {
+  width: 100%;
+  height: 32px;
+  border: 1px solid #E2E8F0;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #1E293B;
+  font-size: 0.78rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  transition: all 0.15s ease;
+}
+
+.biz-view-shop-btn:hover {
+  background: #F8FAFC;
+  border-color: #CBD5E1;
+  color: #0F172A;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+  .featured-near-four-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .trending-three-grid-figma,
+  .trusted-biz-three-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .trending-three-grid-figma,
+  .featured-near-four-grid,
+  .trusted-biz-three-grid {
+    grid-template-columns: 1fr;
+  }
+}

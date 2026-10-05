@@ -1,0 +1,138 @@
+.navbar-root {
+  width: 100%;
+  z-index: 100;
+  transition: background-color 0.2s ease;
+}
+
+/* On Home page: Transparent directly over the hero image */
+.navbar-transparent {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: transparent;
+  border-bottom: none;
+}
+
+/* On other pages: sleek dark background */
+.navbar-solid {
+  position: sticky;
+  top: 0;
+  background: #111317;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.navbar-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 76px;
+}
+
+/* Brand text matching Figma Desktop - 71 */
+.figma-navbar-brand {
+  text-decoration: none;
+}
+
+.figma-brand-text {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 1.55rem;
+  font-weight: 700;
+  font-style: italic;
+  color: #ffffff;
+  letter-spacing: -0.01em;
+}
+
+/* Navigation items on the right matching Figma Desktop - 71 */
+.figma-desktop-nav {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+}
+
+.figma-nav-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #ffffff;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.92rem;
+  font-weight: 500;
+  background: transparent;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+  position: relative;
+}
+
+.figma-nav-item:hover {
+  opacity: 0.8;
+}
+
+.nav-item-icon {
+  color: #ffffff;
+  opacity: 0.9;
+}
+
+.nav-fav-pill {
+  background: var(--primary);
+  color: #ffffff;
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: var(--radius-pill);
+}
+
+/* Black pill button: "Post an Ad" matching Figma Desktop - 71 */
+.figma-post-btn-black {
+  background-color: #000000;
+  color: #ffffff;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-weight: 600;
+  font-size: 0.88rem;
+  padding: 8px 20px;
+  border-radius: 9999px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.figma-post-btn-black:hover {
+  background-color: #1a1a1a;
+  transform: translateY(-1px);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+.mobile-toggle {
+  display: none;
+  background: transparent;
+}
+
+.figma-mobile-drawer {
+  display: none;
+}
+
+@media (max-width: 860px) {
+  .figma-desktop-nav {
+    display: none;
+  }
+
+  .mobile-toggle {
+    display: block;
+  }
+
+  .figma-mobile-drawer {
+    display: flex;
+    flex-direction: column;
+    padding: 16px 24px;
+    background: #111317;
+    gap: 16px;
+  }
+
+  .figma-mobile-drawer a {
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.95rem;
+  }
+}
