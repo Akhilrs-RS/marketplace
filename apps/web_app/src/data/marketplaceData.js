@@ -613,6 +613,152 @@ export const MARKETPLACE_ITEMS = {
       time: '3d ago',
     },
   },
+
+  // ── GROCERIES & VEGETABLES ──────────────────────────────────────────────
+  'list_veg_combo': {
+    id: 'list_veg_combo',
+    category: 'Groceries',
+    subcategory: 'Vegetables',
+    title: 'Organic Vegetables Combo Pack',
+    price: 499,
+    formatted_price: '₹ 499',
+    negotiable: false,
+    location: 'Kakkanad, Kochi',
+    posted_time: 'Harvested Today',
+    views: '1,520 views',
+    showcase_image: '/images/h4.png',
+    is_car_layout: false,
+    thumbnails: [
+      { id: 0, label: 'Farm Assortment', thumb: '/images/h4.png', main: '/images/h4.png' },
+    ],
+    description: 'Fresh organic farm-picked daily essential vegetables box (5kg assortment). Crisp green vegetables, farm carrots, tomatoes, potatoes, onions, broccoli, and fresh herbs harvested daily with zero chemical pesticides. Directly sourced from certified organic farms.',
+    specs: [
+      { label: 'Weight', value: '5 kg Assortment' },
+      { label: 'Farming', value: '100% Certified Organic' },
+      { label: 'Harvest Date', value: 'Harvested Today Morning' },
+      { label: 'Farm Source', value: 'Green Harvest Farms' },
+      { label: 'Shelf Life', value: '5 - 7 Days (Refrigerated)' },
+      { label: 'Packaging', value: 'Eco-Friendly Jute Bag' },
+      { label: 'Delivery', value: 'Same-Day Express (2 hrs)' },
+    ],
+    seller: {
+      initial: 'G',
+      name: 'Green Harvest Farms',
+      role: 'Certified Organic Producer',
+      stats: [
+        { number: '4.9 ★', label: 'Farm Rating' },
+        { number: '99%', label: 'Freshness' },
+        { number: '340+', label: 'Delivered' },
+      ],
+      phone: '+91 98470 12345',
+    },
+    similar: {
+      id: 'list_farm_greens',
+      image: '/images/h4.png',
+      price: '₹ 249',
+      negotiable: false,
+      title: 'Hydroponic Salad Greens & Herb Box',
+      location: 'Ernakulam',
+      sellerType: 'Farm Direct',
+      time: 'Today',
+    },
+  },
+
+  'list_farm_greens': {
+    id: 'list_farm_greens',
+    category: 'Groceries',
+    subcategory: 'Leafy Greens',
+    title: 'Hydroponic Salad Greens & Herb Box',
+    price: 249,
+    formatted_price: '₹ 249',
+    negotiable: false,
+    location: 'Ernakulam, Kochi',
+    posted_time: 'Harvested Today',
+    views: '890 views',
+    showcase_image: '/images/h4.png',
+    is_car_layout: false,
+    thumbnails: [
+      { id: 0, label: 'Greens & Herbs', thumb: '/images/h4.png', main: '/images/h4.png' },
+    ],
+    description: 'Crisp hydroponic lettuce, Italian basil, baby spinach, and mint greens grown in temperature-controlled pesticide-free vertical farms. Washed with purified water and packed in breathable ventilated containers.',
+    specs: [
+      { label: 'Weight', value: '1.2 kg Box' },
+      { label: 'Farming', value: 'Pesticide-Free Hydroponic' },
+      { label: 'Harvest Date', value: 'Harvested Today' },
+      { label: 'Farm Source', value: 'Urban Flora Greens' },
+      { label: 'Shelf Life', value: '7 - 10 Days' },
+      { label: 'Delivery', value: 'Same-Day Express' },
+    ],
+    seller: {
+      initial: 'U',
+      name: 'Urban Flora Greens',
+      role: 'Hydroponic Farm Producer',
+      stats: [
+        { number: '4.8 ★', label: 'Rating' },
+        { number: '100%', label: 'Pesticide-Free' },
+        { number: '210+', label: 'Delivered' },
+      ],
+      phone: '+91 98470 23456',
+    },
+    similar: {
+      id: 'list_fruits_basket',
+      image: '/images/h4.png',
+      price: '₹ 699',
+      negotiable: false,
+      title: 'Seasonal Farm-Fresh Fruit Basket',
+      location: 'Aluva',
+      sellerType: 'Farm Direct',
+      time: 'Today',
+    },
+  },
+
+  'list_fruits_basket': {
+    id: 'list_fruits_basket',
+    category: 'Groceries',
+    subcategory: 'Fruits',
+    title: 'Seasonal Farm-Fresh Fruit Basket',
+    price: 699,
+    formatted_price: '₹ 699',
+    negotiable: false,
+    location: 'Aluva, Kochi',
+    posted_time: 'Picked Yesterday',
+    views: '1,120 views',
+    showcase_image: '/images/h4.png',
+    is_car_layout: false,
+    thumbnails: [
+      { id: 0, label: 'Fruit Crate', thumb: '/images/h4.png', main: '/images/h4.png' },
+    ],
+    description: 'Hand-picked 4kg seasonal fruit basket featuring tree-ripened mangoes, Himalayan apples, Robusta bananas, sweet seedless green grapes, and fresh papaya. 100% carbide-free natural ripening.',
+    specs: [
+      { label: 'Weight', value: '4 kg Crate' },
+      { label: 'Ripening', value: 'Carbide-Free Natural' },
+      { label: 'Contents', value: 'Apples, Mangoes, Bananas, Grapes' },
+      { label: 'Farm Source', value: 'Malabar Orchards' },
+      { label: 'Shelf Life', value: '5 - 6 Days' },
+      { label: 'Delivery', value: 'Express Next-Morning' },
+    ],
+    seller: {
+      initial: 'M',
+      name: 'Malabar Orchards',
+      role: 'Direct Orchard Partner',
+      stats: [
+        { number: '4.9 ★', label: 'Rating' },
+        { number: '98%', label: 'Freshness' },
+        { number: '500+', label: 'Delivered' },
+      ],
+      phone: '+91 98470 34567',
+    },
+    similar: {
+      id: 'list_veg_combo',
+      image: '/images/h4.png',
+      price: '₹ 499',
+      negotiable: false,
+      title: 'Organic Vegetables Combo Pack',
+      location: 'Kakkanad',
+      sellerType: 'Farm Direct',
+      time: 'Today',
+    },
+  },
 };
 
 /**
@@ -626,6 +772,12 @@ export function getMarketplaceItemById(id) {
   }
 
   // Fallbacks by ID pattern
+  if (id.includes('veg') || id.includes('groc') || id.includes('fruit') || id.includes('produce') || id.includes('farm') || id.includes('organic')) {
+    return {
+      ...MARKETPLACE_ITEMS['list_veg_combo'],
+      id,
+    };
+  }
   if (id.includes('apt') || id.includes('property') || id.includes('house')) {
     return {
       ...MARKETPLACE_ITEMS['list_apt_kakkanad_3bhk'],

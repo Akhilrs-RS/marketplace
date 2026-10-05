@@ -39,6 +39,7 @@ export default function ListingsPage({ favorites = [], onToggleFavorite }) {
   const [bedroomFilter, setBedroomFilter] = useState('All');
   const [workModeFilter, setWorkModeFilter] = useState('All');
   const [brandFilter, setBrandFilter] = useState('All');
+  const [produceFilter, setProduceFilter] = useState('All');
   const [sortBy, setSortBy] = useState('newest');
   const [searchQuery, setSearchQuery] = useState(currentQuery);
   const [maxPrice, setMaxPrice] = useState(50000000);
@@ -82,11 +83,16 @@ export default function ListingsPage({ favorites = [], onToggleFavorite }) {
         }
       });
 
-      // Filter by category if specified
+      // Filter by category if specified (with alias support for Vegetables <-> Groceries)
       if (currentCategory !== 'All') {
-        combined = combined.filter(
-          (item) => item.category?.toLowerCase() === currentCategory.toLowerCase()
-        );
+        const catLower = currentCategory.toLowerCase();
+        combined = combined.filter((item) => {
+          const itemCat = item.category?.toLowerCase() || '';
+          if (catLower === 'vegetables' || catLower === 'groceries') {
+            return itemCat === 'groceries' || itemCat === 'vegetables';
+          }
+          return itemCat === catLower;
+        });
       }
 
       setListings(combined);
@@ -128,6 +134,12 @@ export default function ListingsPage({ favorites = [], onToggleFavorite }) {
     if ((item.category === 'Electronics' || item.category === 'Mobiles') && brandFilter !== 'All') {
       const brand = item.specifications?.brand || '';
       if (!brand.toLowerCase().includes(brandFilter.toLowerCase())) return false;
+    }
+
+    // Groceries & Produce filters
+    if (item.category === 'Groceries' && produceFilter !== 'All') {
+      const sub = item.subcategory || '';
+      if (!sub.toLowerCase().includes(produceFilter.toLowerCase())) return false;
     }
 
     // Keyword search
@@ -187,6 +199,8 @@ export default function ListingsPage({ favorites = [], onToggleFavorite }) {
                   ? 'Verified flagship smartphones, tablets, and mobile accessories.'
                   : currentCategory === 'Furniture'
                   ? 'Solid wood dining sets, living room sofas, and home decor.'
+                  : currentCategory === 'Groceries' || currentCategory === 'Vegetables'
+                  ? 'Farm-fresh vegetables, crisp greens, seasonal fruits, and certified organic produce.'
                   : 'Verified items, products, and services across South India.'}
               </p>
             </div>
@@ -351,6 +365,25 @@ export default function ListingsPage({ favorites = [], onToggleFavorite }) {
               </div>
             )}
 
+            {/* Groceries & Vegetables Specific Filters */}
+            {(currentCategory === 'Groceries' || currentCategory === 'Vegetables') && (
+              <div className="filter-group">
+                <label className="filter-label">Produce Type</label>
+                <div className="filter-pills-row">
+                  {['All', 'Vegetables', 'Leafy Greens', 'Fruits'].map((ptype) => (
+                    <button
+                      key={ptype}
+                      type="button"
+                      className={`filter-pill ${produceFilter === ptype ? 'active' : ''}`}
+                      onClick={() => setProduceFilter(ptype)}
+                    >
+                      {ptype}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
             {/* Price Range */}
             <div className="filter-group">
               <div className="price-slider-label">
@@ -404,6 +437,7 @@ export default function ListingsPage({ favorites = [], onToggleFavorite }) {
                   setBedroomFilter('All');
                   setWorkModeFilter('All');
                   setBrandFilter('All');
+                  setProduceFilter('All');
                   setSearchQuery('');
                   setMaxPrice(50000000);
                 }}
@@ -532,6 +566,23 @@ export default function ListingsPage({ favorites = [], onToggleFavorite }) {
                         {specs.seating && (
                           <span className="spec-chip">
                             {specs.seating}
+                          </span>
+                        )}
+
+                        {/* Groceries & Fresh Produce Specs */}
+                        {specs.weight && (
+                          <span className="spec-chip">
+                            {specs.weight}
+                          </span>
+                        )}
+                        {specs.farming && (
+                          <span className="spec-chip">
+                            {specs.farming}
+                          </span>
+                        )}
+                        {specs.harvest_date && (
+                          <span className="spec-chip">
+                            {specs.harvest_date}
                           </span>
                         )}
                       </div>

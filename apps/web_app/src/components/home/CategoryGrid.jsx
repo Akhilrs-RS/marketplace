@@ -31,7 +31,7 @@ export default function CategoryGrid() {
       id: 'cat_groceries',
       imagePath: '/images/h4.png',
       title: 'Groceries',
-      subtitle: 'Fresh essentials & produce',
+      subtitle: 'Fresh vegetables & produce',
       route: '/listings?category=Groceries',
     },
     {

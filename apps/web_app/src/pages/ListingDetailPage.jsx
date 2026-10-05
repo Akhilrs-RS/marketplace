@@ -15,7 +15,9 @@ import {
   ExternalLink, 
   ShieldCheck,
   Send,
-  Briefcase
+  Briefcase,
+  ShoppingBag,
+  Leaf
 } from 'lucide-react';
 import HeroSearch from '../components/home/HeroSearch';
 import { getMarketplaceItemById } from '../data/marketplaceData';
@@ -62,6 +64,8 @@ export default function ListingDetailPage({
         return 'Explore Apartments & Properties';
       case 'Jobs':
         return 'Explore Tech & Design Jobs';
+      case 'Groceries':
+        return 'Explore Fresh Organic Vegetables & Groceries';
       case 'Electronics':
         return 'Explore Laptops & Apple Tech';
       case 'Mobiles':
@@ -252,7 +256,11 @@ export default function ListingDetailPage({
             {/* Contact Seller / Action Card */}
             <div className="detail-card-panel contact-card-panel">
               <h3 className="panel-subhead-bold">
-                {item.category === 'Jobs' ? 'Apply for Position' : 'Contact Seller'}
+                {item.category === 'Jobs'
+                  ? 'Apply for Position'
+                  : item.category === 'Groceries'
+                  ? 'Order Fresh Farm Produce'
+                  : 'Contact Seller'}
               </h3>
 
               <div className="contact-buttons-stack">
@@ -283,6 +291,46 @@ export default function ListingDetailPage({
                     >
                       <MessageSquare size={15} />
                       <span>Message Recruiter</span>
+                    </button>
+                  </>
+                ) : item.category === 'Groceries' ? (
+                  <>
+                    <button 
+                      type="button"
+                      onClick={() => alert(`Placing same-day delivery order for ${item.title} (${item.formatted_price}). Farm fresh delivery guaranteed within 2 hours!`)}
+                      className="btn-chat-orange"
+                    >
+                      <ShoppingBag size={16} />
+                      <span>Order Fresh Produce</span>
+                    </button>
+
+                    <button 
+                      type="button"
+                      onClick={() => {
+                        if (onOpenContact) {
+                          onOpenContact({
+                            title: item.title,
+                            formatted_price: item.formatted_price,
+                            seller_name: item.seller.name,
+                            seller_phone: item.seller.phone,
+                          });
+                        } else {
+                          alert(`Opening direct chat with ${item.seller.name}...`);
+                        }
+                      }}
+                      className="btn-outline-white"
+                    >
+                      <MessageSquare size={15} />
+                      <span>Chat with Farm Producer</span>
+                    </button>
+
+                    <button 
+                      type="button"
+                      onClick={() => alert(`Calling farm helpline for ${item.seller.name} at ${item.seller.phone}`)}
+                      className="btn-outline-white"
+                    >
+                      <Phone size={15} />
+                      <span>Call Farm</span>
                     </button>
                   </>
                 ) : (
@@ -357,12 +405,18 @@ export default function ListingDetailPage({
               </button>
             </div>
 
-            {/* Safety Notice Box */}
+            {/* Safety / Freshness Notice Box */}
             <div className="safety-notice-banner">
-              <ShieldCheck size={16} className="safety-shield-icon" />
+              {item.category === 'Groceries' ? (
+                <Leaf size={16} className="safety-shield-icon" style={{ color: '#16A34A' }} />
+              ) : (
+                <ShieldCheck size={16} className="safety-shield-icon" />
+              )}
               <p className="safety-notice-text">
                 {item.category === 'Jobs'
                   ? 'Galletrix ensures employer identity and salary transparency. Never pay any fee for interview or job offers.'
+                  : item.category === 'Groceries'
+                  ? 'Galletrix Fresh Guarantee: 100% farm-picked with zero chemical pesticides. Quality checked & delivered under temperature-controlled logistics.'
                   : 'Meet in a safe public place for transactions. Report any suspicious behavior to keep the community safe.'}
               </p>
             </div>
