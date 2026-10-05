@@ -47,8 +47,8 @@ export default function TrendingSection({ favorites = [], onToggleFavorite }) {
     {
       id: 'list_apt_near_2',
       imagePath: '/images/h2.png',
-      price: '₹ 7,25,000',
-      title: '2021 Hyundai Creta SX',
+      price: '₹ 80,00,000',
+      title: '2BHK Apartment Seaside',
       location: 'Thiruvananthapuram',
     },
     {
@@ -59,10 +59,10 @@ export default function TrendingSection({ favorites = [], onToggleFavorite }) {
       location: 'Remote',
     },
     {
-      id: 'list_creta_near_4',
-      imagePath: '/images/h1.png',
-      price: '₹ 7,25,000',
-      title: '2021 Hyundai Creta SX',
+      id: 'list_oak_dining_1',
+      imagePath: '/images/h8.png',
+      price: '₹ 48,000',
+      title: 'Solid Oak Dining Table',
       location: 'Thiruvananthapuram',
     },
   ];
@@ -76,6 +76,7 @@ export default function TrendingSection({ favorites = [], onToggleFavorite }) {
       categoryLocation: 'Property • Thiruvananthapuram',
       rating: '4.8',
       listingsCount: '58 listings',
+      route: '/listings?category=Property&query=Greenfield',
     },
     {
       id: 'biz_2',
@@ -84,6 +85,7 @@ export default function TrendingSection({ favorites = [], onToggleFavorite }) {
       categoryLocation: 'Jobs • Remote',
       rating: '4.6',
       listingsCount: '12 listings',
+      route: '/listings?category=Jobs&query=Lumen',
     },
     {
       id: 'biz_3',
@@ -92,6 +94,7 @@ export default function TrendingSection({ favorites = [], onToggleFavorite }) {
       categoryLocation: 'Electronics • Remote',
       rating: '4.7',
       listingsCount: '142 listings',
+      route: '/listings?category=Electronics&query=TechZone',
     },
   ];
 
@@ -208,7 +211,7 @@ export default function TrendingSection({ favorites = [], onToggleFavorite }) {
                     </div>
                   </div>
                 </div>
-                <Link to="/shops" className="biz-view-shop-btn">
+                <Link to={biz.route || "/shops"} className="biz-view-shop-btn">
                   View Shop
                 </Link>
               </div>

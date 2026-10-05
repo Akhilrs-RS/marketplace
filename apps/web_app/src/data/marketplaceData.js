@@ -1,0 +1,662 @@
+/**
+ * Curated Multi-Category Marketplace Registry
+ * Provides rich metadata, category-specific specifications, and galleries
+ * for Vehicles, Property, Jobs, Electronics, Mobiles, Furniture, Groceries, and Services.
+ */
+
+export const MARKETPLACE_ITEMS = {
+  // ── VEHICLES ─────────────────────────────────────────────────────────────
+  'list_creta_2022': {
+    id: 'list_creta_2022',
+    category: 'Vehicles',
+    subcategory: 'Car',
+    title: '2022 Hyundai Creta SX',
+    price: 725000,
+    formatted_price: '₹ 7,25,000',
+    negotiable: true,
+    location: 'Thiruvananthapuram',
+    posted_time: 'Posted 2d ago',
+    views: '1,148 views',
+    showcase_image: '/images/creta_main.png',
+    is_car_layout: true,
+    thumbnails: [
+      { id: 0, label: 'White', thumb: '/images/creta_thumb_white.png', main: '/images/creta_main.png' },
+      { id: 1, label: 'Red', thumb: '/images/creta_thumb_red.png', main: '/images/creta_thumb_red.png' },
+      { id: 2, label: 'Green', thumb: '/images/creta_thumb_green.png', main: '/images/creta_thumb_green.png' },
+      { id: 3, label: 'Black', thumb: '/images/creta_thumb_black.png', main: '/images/creta_thumb_black.png' },
+    ],
+    description: 'Single owner, well-maintained, full service history, Sunroof, leather seats, reverse camera.',
+    specs: [
+      { label: 'Brand', value: 'Hyundai' },
+      { label: 'Model', value: 'Creta SX' },
+      { label: 'Year', value: '2022' },
+      { label: 'Fuel', value: 'Petrol' },
+      { label: 'Transmission', value: 'Manual' },
+      { label: 'KM', value: '18400' },
+      { label: 'Ownership', value: '1st' },
+    ],
+    seller: {
+      initial: 'A',
+      name: 'Arjun Menon',
+      role: 'Individual Seller (Member Since 2024)',
+      stats: [
+        { number: '12', label: 'Active' },
+        { number: '98%', label: 'Response' },
+        { number: '12', label: 'Sold' },
+      ],
+      phone: '+91 98470 54321',
+    },
+    similar: {
+      id: 'list_i20_sportz',
+      image: '/images/i20_sportz.png',
+      price: '₹ 7,80,000',
+      negotiable: true,
+      title: 'Hyundai i20 Sportz',
+      location: 'Kollam',
+      sellerType: 'Individual',
+      time: '2w ago',
+    },
+  },
+
+  'list_creta_sx_2024': {
+    id: 'list_creta_sx_2024',
+    category: 'Vehicles',
+    subcategory: 'Car',
+    title: '2024 Hyundai Creta SX',
+    price: 1650000,
+    formatted_price: '₹ 16.5 Lakh',
+    negotiable: true,
+    location: 'Kochi',
+    posted_time: 'Posted today',
+    views: '2,410 views',
+    showcase_image: '/images/creta_main.png',
+    is_car_layout: true,
+    thumbnails: [
+      { id: 0, label: 'White', thumb: '/images/creta_thumb_white.png', main: '/images/creta_main.png' },
+      { id: 1, label: 'Red', thumb: '/images/creta_thumb_red.png', main: '/images/creta_thumb_red.png' },
+      { id: 2, label: 'Green', thumb: '/images/creta_thumb_green.png', main: '/images/creta_thumb_green.png' },
+      { id: 3, label: 'Black', thumb: '/images/creta_thumb_black.png', main: '/images/creta_thumb_black.png' },
+    ],
+    description: 'Top-tier 2024 model with ADAS Level 2, panoramic sunroof, ventilated front seats, and Bose audio.',
+    specs: [
+      { label: 'Brand', value: 'Hyundai' },
+      { label: 'Model', value: 'Creta SX(O)' },
+      { label: 'Year', value: '2024' },
+      { label: 'Fuel', value: 'Petrol' },
+      { label: 'Transmission', value: 'Automatic' },
+      { label: 'KM', value: '4200' },
+      { label: 'Ownership', value: '1st' },
+    ],
+    seller: {
+      initial: 'H',
+      name: 'Hyundai Auto Hub',
+      role: 'Certified Dealership',
+      stats: [
+        { number: '24', label: 'In Stock' },
+        { number: '99%', label: 'Response' },
+        { number: '140+', label: 'Delivered' },
+      ],
+      phone: '+91 98470 54321',
+    },
+    similar: {
+      id: 'list_i20_sportz',
+      image: '/images/i20_sportz.png',
+      price: '₹ 7,80,000',
+      negotiable: true,
+      title: 'Hyundai i20 Sportz',
+      location: 'Kollam',
+      sellerType: 'Individual',
+      time: '2w ago',
+    },
+  },
+
+  'list_creta_near_1': {
+    id: 'list_creta_near_1',
+    category: 'Vehicles',
+    subcategory: 'Car',
+    title: '2021 Hyundai Creta SX',
+    price: 725000,
+    formatted_price: '₹ 7,25,000',
+    negotiable: true,
+    location: 'Thiruvananthapuram',
+    posted_time: 'Posted yesterday',
+    views: '890 views',
+    showcase_image: '/images/creta_main.png',
+    is_car_layout: true,
+    thumbnails: [
+      { id: 0, label: 'White', thumb: '/images/creta_thumb_white.png', main: '/images/creta_main.png' },
+      { id: 1, label: 'Red', thumb: '/images/creta_thumb_red.png', main: '/images/creta_thumb_red.png' },
+      { id: 2, label: 'Green', thumb: '/images/creta_thumb_green.png', main: '/images/creta_thumb_green.png' },
+      { id: 3, label: 'Black', thumb: '/images/creta_thumb_black.png', main: '/images/creta_thumb_black.png' },
+    ],
+    description: 'Immaculately maintained single-owner vehicle with complete service records from authorized center.',
+    specs: [
+      { label: 'Brand', value: 'Hyundai' },
+      { label: 'Model', value: 'Creta SX' },
+      { label: 'Year', value: '2021' },
+      { label: 'Fuel', value: 'Diesel' },
+      { label: 'Transmission', value: 'Manual' },
+      { label: 'KM', value: '24000' },
+      { label: 'Ownership', value: '1st' },
+    ],
+    seller: {
+      initial: 'A',
+      name: 'Arjun Menon',
+      role: 'Individual Seller',
+      stats: [
+        { number: '12', label: 'Active' },
+        { number: '98%', label: 'Response' },
+        { number: '12', label: 'Sold' },
+      ],
+      phone: '+91 98470 54321',
+    },
+    similar: {
+      id: 'list_i20_sportz',
+      image: '/images/i20_sportz.png',
+      price: '₹ 7,80,000',
+      negotiable: true,
+      title: 'Hyundai i20 Sportz',
+      location: 'Kollam',
+      sellerType: 'Individual',
+      time: '2w ago',
+    },
+  },
+
+  'list_i20_sportz': {
+    id: 'list_i20_sportz',
+    category: 'Vehicles',
+    subcategory: 'Car',
+    title: 'Hyundai i20 Sportz',
+    price: 780000,
+    formatted_price: '₹ 7,80,000',
+    negotiable: true,
+    location: 'Kollam',
+    posted_time: 'Posted 2w ago',
+    views: '640 views',
+    showcase_image: '/images/i20_sportz.png',
+    is_car_layout: true,
+    thumbnails: [
+      { id: 0, label: 'Titan Gray', thumb: '/images/i20_sportz.png', main: '/images/i20_sportz.png' },
+      { id: 1, label: 'Front', thumb: '/images/i20_sportz.png', main: '/images/i20_sportz.png' },
+    ],
+    description: 'Hyundai i20 Sportz 1.2 Kappa Petrol. Excellent mileage, touchscreen display with Android Auto & Apple CarPlay.',
+    specs: [
+      { label: 'Brand', value: 'Hyundai' },
+      { label: 'Model', value: 'i20 Sportz' },
+      { label: 'Year', value: '2023' },
+      { label: 'Fuel', value: 'Petrol' },
+      { label: 'Transmission', value: 'Manual' },
+      { label: 'KM', value: '11200' },
+      { label: 'Ownership', value: '1st' },
+    ],
+    seller: {
+      initial: 'R',
+      name: 'Rahul Varma',
+      role: 'Individual Seller',
+      stats: [
+        { number: '3', label: 'Active' },
+        { number: '95%', label: 'Response' },
+        { number: '5', label: 'Sold' },
+      ],
+      phone: '+91 98470 65432',
+    },
+    similar: {
+      id: 'list_creta_2022',
+      image: '/images/creta_main.png',
+      price: '₹ 7,25,000',
+      negotiable: true,
+      title: '2022 Hyundai Creta SX',
+      location: 'Thiruvananthapuram',
+      sellerType: 'Individual',
+      time: '2d ago',
+    },
+  },
+
+  // ── PROPERTY ─────────────────────────────────────────────────────────────
+  'list_apt_kakkanad_3bhk': {
+    id: 'list_apt_kakkanad_3bhk',
+    category: 'Property',
+    subcategory: 'Apartment',
+    title: '3BHK Apartment in Kakkanad',
+    price: 12500000,
+    formatted_price: '₹ 1.25 Crore',
+    negotiable: true,
+    location: 'Kochi, Kakkanad',
+    posted_time: 'Posted 3d ago',
+    views: '1,920 views',
+    showcase_image: '/images/h2.png',
+    is_car_layout: false,
+    thumbnails: [
+      { id: 0, label: 'Building', thumb: '/images/h2.png', main: '/images/h2.png' },
+      { id: 1, label: 'Living Room', thumb: '/images/h8.png', main: '/images/h8.png' },
+      { id: 2, label: 'Exterior', thumb: '/images/h2.png', main: '/images/h2.png' },
+      { id: 3, label: 'Balcony View', thumb: '/images/h8.png', main: '/images/h8.png' },
+    ],
+    description: 'Overlooking Infopark with premium clubhouse amenities, Olympic-sized swimming pool, landscape gardens, and 24x7 security.',
+    specs: [
+      { label: 'Property Type', value: 'Apartment' },
+      { label: 'Bedrooms', value: '3 BHK' },
+      { label: 'Super Area', value: '1,850 sqft' },
+      { label: 'Bathrooms', value: '3 Baths' },
+      { label: 'Furnishing', value: 'Semi-Furnished' },
+      { label: 'Floor', value: '8th of 14' },
+      { label: 'Parking', value: 'Covered' },
+    ],
+    seller: {
+      initial: 'G',
+      name: 'Greenfield Realtors',
+      role: 'Verified Property Partner',
+      stats: [
+        { number: '58', label: 'Properties' },
+        { number: '99%', label: 'Response' },
+        { number: '4.8 ★', label: 'Rating' },
+      ],
+      phone: '+91 98470 11223',
+    },
+    similar: {
+      id: 'list_apt_near_2',
+      image: '/images/h2.png',
+      price: '₹ 80,00,000',
+      negotiable: true,
+      title: '2BHK Apartment Seaside',
+      location: 'Thiruvananthapuram',
+      sellerType: 'Builder',
+      time: '1w ago',
+    },
+  },
+
+  'list_apt_near_2': {
+    id: 'list_apt_near_2',
+    category: 'Property',
+    subcategory: 'Apartment',
+    title: '2BHK Apartment Seaside',
+    price: 8000000,
+    formatted_price: '₹ 80,00,000',
+    negotiable: true,
+    location: 'Thiruvananthapuram',
+    posted_time: 'Posted 4d ago',
+    views: '760 views',
+    showcase_image: '/images/h2.png',
+    is_car_layout: false,
+    thumbnails: [
+      { id: 0, label: 'Seaside Highrise', thumb: '/images/h2.png', main: '/images/h2.png' },
+      { id: 1, label: 'Living', thumb: '/images/h8.png', main: '/images/h8.png' },
+    ],
+    description: 'Scenic sea-facing 2BHK residence with expansive balcony, branded sanitary fittings, and power backup.',
+    specs: [
+      { label: 'Property Type', value: 'Apartment' },
+      { label: 'Bedrooms', value: '2 BHK' },
+      { label: 'Super Area', value: '1,280 sqft' },
+      { label: 'Bathrooms', value: '2 Baths' },
+      { label: 'Furnishing', value: 'Fully-Furnished' },
+      { label: 'Floor', value: '11th of 18' },
+      { label: 'Parking', value: 'Covered' },
+    ],
+    seller: {
+      initial: 'S',
+      name: 'Skyline Prime Realty',
+      role: 'Certified Broker',
+      stats: [
+        { number: '34', label: 'Properties' },
+        { number: '97%', label: 'Response' },
+        { number: '4.9 ★', label: 'Rating' },
+      ],
+      phone: '+91 98470 33445',
+    },
+    similar: {
+      id: 'list_apt_kakkanad_3bhk',
+      image: '/images/h2.png',
+      price: '₹ 1.25 Crore',
+      negotiable: true,
+      title: '3BHK Apartment in Kakkanad',
+      location: 'Kochi',
+      sellerType: 'Agency',
+      time: '3d ago',
+    },
+  },
+
+  // ── JOBS ─────────────────────────────────────────────────────────────────
+  'list_job_senior_fe': {
+    id: 'list_job_senior_fe',
+    category: 'Jobs',
+    subcategory: 'Engineering',
+    title: 'Senior Frontend Engineer',
+    price: 2400000,
+    formatted_price: '₹ 18 - 24 LPA',
+    negotiable: false,
+    location: 'Bengaluru / Hybrid',
+    posted_time: 'Posted 1d ago',
+    views: '3,100 views',
+    showcase_image: '/images/h3.png',
+    is_car_layout: false,
+    thumbnails: [
+      { id: 0, label: 'Engineering', thumb: '/images/h3.png', main: '/images/h3.png' },
+      { id: 1, label: 'Workspace', thumb: '/images/h4.png', main: '/images/h4.png' },
+    ],
+    description: 'Join a high-growth tech venture building cross-platform web and mobile marketplace platforms. Seeking deep hands-on expertise in React, TypeScript, state management, and modern CSS architecture.',
+    specs: [
+      { label: 'Role', value: 'Frontend Engineer' },
+      { label: 'Experience', value: '3 - 5 Years' },
+      { label: 'Employment', value: 'Full-time' },
+      { label: 'Work Mode', value: 'Hybrid / Remote' },
+      { label: 'Department', value: 'Engineering' },
+      { label: 'Openings', value: '2' },
+      { label: 'Notice Period', value: 'Immediate - 30D' },
+    ],
+    seller: {
+      initial: 'L',
+      name: 'Lumen Labs',
+      role: 'Direct Employer • Hiring',
+      stats: [
+        { number: '12', label: 'Jobs Active' },
+        { number: '96%', label: 'Response' },
+        { number: '4.6 ★', label: 'Glassdoor' },
+      ],
+      phone: '+91 80 4123 4567',
+    },
+    similar: {
+      id: 'list_designer_remote_3',
+      image: '/images/h3.png',
+      price: '₹ 8.5 LPA',
+      negotiable: false,
+      title: 'Senior UI/UX Designer',
+      location: 'Remote',
+      sellerType: 'Direct Employer',
+      time: '3d ago',
+    },
+  },
+
+  'list_designer_remote_3': {
+    id: 'list_designer_remote_3',
+    category: 'Jobs',
+    subcategory: 'Design',
+    title: 'Senior UI/UX Designer',
+    price: 850000,
+    formatted_price: '₹ 8,50,000 / yr',
+    negotiable: false,
+    location: 'Remote',
+    posted_time: 'Posted 3d ago',
+    views: '1,450 views',
+    showcase_image: '/images/h3.png',
+    is_car_layout: false,
+    thumbnails: [
+      { id: 0, label: 'Design Team', thumb: '/images/h3.png', main: '/images/h3.png' },
+    ],
+    description: 'Create world-class user experiences, design systems, and fluid micro-interactions for next-gen consumer applications.',
+    specs: [
+      { label: 'Role', value: 'Product Designer' },
+      { label: 'Experience', value: '4+ Years' },
+      { label: 'Employment', value: 'Full-time' },
+      { label: 'Work Mode', value: '100% Remote' },
+      { label: 'Core Tools', value: 'Figma, Tokens' },
+      { label: 'Openings', value: '1' },
+      { label: 'Timezone', value: 'IST (Flexible)' },
+    ],
+    seller: {
+      initial: 'G',
+      name: 'Galletrix Design Labs',
+      role: 'Direct Employer',
+      stats: [
+        { number: '4', label: 'Design Roles' },
+        { number: '98%', label: 'Response' },
+        { number: '4.9 ★', label: 'Glassdoor' },
+      ],
+      phone: '+91 80 4987 6543',
+    },
+    similar: {
+      id: 'list_job_senior_fe',
+      image: '/images/h3.png',
+      price: '₹ 18 - 24 LPA',
+      negotiable: false,
+      title: 'Senior Frontend Engineer',
+      location: 'Bengaluru',
+      sellerType: 'Direct Employer',
+      time: '1d ago',
+    },
+  },
+
+  // ── ELECTRONICS & MOBILES ────────────────────────────────────────────────
+  'list_macbook_m3': {
+    id: 'list_macbook_m3',
+    category: 'Electronics',
+    subcategory: 'Laptops',
+    title: 'MacBook Pro 14" M3',
+    price: 105000,
+    formatted_price: '₹ 1,05,000',
+    negotiable: true,
+    location: 'Thiruvananthapuram',
+    posted_time: 'Posted 1d ago',
+    views: '1,280 views',
+    showcase_image: '/images/h5.png',
+    is_car_layout: false,
+    thumbnails: [
+      { id: 0, label: 'MacBook Display', thumb: '/images/h5.png', main: '/images/h5.png' },
+      { id: 1, label: 'Top Lid', thumb: '/images/h5.png', main: '/images/h5.png' },
+    ],
+    description: 'Apple MacBook Pro 14-inch with M3 chip, 16GB unified memory, 512GB SSD storage. Space Gray finish, 100% battery health, original 70W USB-C power adapter and box included.',
+    specs: [
+      { label: 'Brand', value: 'Apple' },
+      { label: 'Processor', value: 'Apple M3 Chip' },
+      { label: 'RAM', value: '16 GB Unified' },
+      { label: 'Storage', value: '512 GB SSD' },
+      { label: 'Display', value: '14.2" Liquid Retina' },
+      { label: 'Condition', value: 'Like New (99%)' },
+      { label: 'Warranty', value: 'AppleCare+ Active' },
+    ],
+    seller: {
+      initial: 'K',
+      name: 'Kiran Nair',
+      role: 'Individual Seller',
+      stats: [
+        { number: '4', label: 'Gadgets Sold' },
+        { number: '100%', label: 'Response' },
+        { number: '5.0 ★', label: 'Rating' },
+      ],
+      phone: '+91 98470 77889',
+    },
+    similar: {
+      id: 'list_iphone_15_pro',
+      image: '/images/h6.png',
+      price: '₹ 1,34,900',
+      negotiable: true,
+      title: 'iPhone 15 Pro Max 256GB',
+      location: 'Bengaluru',
+      sellerType: 'Retailer',
+      time: '2d ago',
+    },
+  },
+
+  'list_iphone_15_pro': {
+    id: 'list_iphone_15_pro',
+    category: 'Mobiles',
+    subcategory: 'Smartphones',
+    title: 'iPhone 15 Pro Max 256GB',
+    price: 134900,
+    formatted_price: '₹ 1,34,900',
+    negotiable: true,
+    location: 'Bengaluru',
+    posted_time: 'Posted 2d ago',
+    views: '2,100 views',
+    showcase_image: '/images/h6.png',
+    is_car_layout: false,
+    thumbnails: [
+      { id: 0, label: 'Front & Back', thumb: '/images/h6.png', main: '/images/h6.png' },
+    ],
+    description: 'Natural Titanium 256GB, immaculate condition with Apple warranty till December. Tempered glass and MagSafe cover included.',
+    specs: [
+      { label: 'Brand', value: 'Apple' },
+      { label: 'Model', value: 'iPhone 15 Pro Max' },
+      { label: 'Storage', value: '256 GB' },
+      { label: 'Battery', value: '100% Health' },
+      { label: 'Color', value: 'Natural Titanium' },
+      { label: 'Condition', value: 'Pristine' },
+      { label: 'Warranty', value: 'Valid Dec 2026' },
+    ],
+    seller: {
+      initial: 'T',
+      name: 'TechZone Electronics',
+      role: 'Verified Gadget Reseller',
+      stats: [
+        { number: '142', label: 'Listings' },
+        { number: '98%', label: 'Response' },
+        { number: '4.7 ★', label: 'Rating' },
+      ],
+      phone: '+91 80 4321 8765',
+    },
+    similar: {
+      id: 'list_macbook_m3',
+      image: '/images/h5.png',
+      price: '₹ 1,05,000',
+      negotiable: true,
+      title: 'MacBook Pro 14" M3',
+      location: 'Thiruvananthapuram',
+      sellerType: 'Individual',
+      time: '1d ago',
+    },
+  },
+
+  // ── FURNITURE ────────────────────────────────────────────────────────────
+  'list_teak_sofa': {
+    id: 'list_teak_sofa',
+    category: 'Furniture',
+    subcategory: 'Living Room',
+    title: 'Teakwood 5 - Seater Sofa Set',
+    price: 30000,
+    formatted_price: '₹ 30,000',
+    negotiable: true,
+    location: 'Thiruvananthapuram',
+    posted_time: 'Posted 3d ago',
+    views: '840 views',
+    showcase_image: '/images/h8.png',
+    is_car_layout: false,
+    thumbnails: [
+      { id: 0, label: 'Full Sofa Set', thumb: '/images/h8.png', main: '/images/h8.png' },
+    ],
+    description: 'Handcrafted solid teakwood 5-seater sofa set (3+1+1) with high density foam cushions and washable premium upholstery.',
+    specs: [
+      { label: 'Material', value: 'Solid Teak Wood' },
+      { label: 'Seating', value: '5 Seater (3+1+1)' },
+      { label: 'Cushions', value: 'High Density Foam' },
+      { label: 'Finish', value: 'Natural Honey Teak' },
+      { label: 'Condition', value: 'Brand New' },
+      { label: 'Warranty', value: '5 Years Wood' },
+      { label: 'Assembly', value: 'Pre-Assembled' },
+    ],
+    seller: {
+      initial: 'H',
+      name: 'Heritage Woodcraft',
+      role: 'Direct Manufacturer',
+      stats: [
+        { number: '28', label: 'Furniture Sets' },
+        { number: '95%', label: 'Response' },
+        { number: '4.8 ★', label: 'Rating' },
+      ],
+      phone: '+91 98470 88990',
+    },
+    similar: {
+      id: 'list_oak_dining_1',
+      image: '/images/h8.png',
+      price: '₹ 48,000',
+      negotiable: true,
+      title: 'Solid Oak Dining Table',
+      location: 'Thiruvananthapuram',
+      sellerType: 'Store',
+      time: '4d ago',
+    },
+  },
+
+  'list_oak_dining_1': {
+    id: 'list_oak_dining_1',
+    category: 'Furniture',
+    subcategory: 'Dining Room',
+    title: 'Solid Oak Dining Table',
+    price: 48000,
+    formatted_price: '₹ 48,000',
+    negotiable: true,
+    location: 'Thiruvananthapuram',
+    posted_time: 'Posted 4d ago',
+    views: '510 views',
+    showcase_image: '/images/h8.png',
+    is_car_layout: false,
+    thumbnails: [
+      { id: 0, label: 'Dining Table', thumb: '/images/h8.png', main: '/images/h8.png' },
+    ],
+    description: 'Handcrafted solid European oak dining table seating 6 to 8 people with smooth scratch-resistant natural wax finish.',
+    specs: [
+      { label: 'Material', value: 'Solid European Oak' },
+      { label: 'Seating', value: '6 - 8 Seater' },
+      { label: 'Dimensions', value: '6.5ft x 3.5ft' },
+      { label: 'Finish', value: 'Matte Hardwax' },
+      { label: 'Condition', value: 'Brand New' },
+      { label: 'Warranty', value: '10 Years Structural' },
+      { label: 'Assembly', value: 'Included on Delivery' },
+    ],
+    seller: {
+      initial: 'H',
+      name: 'Heritage Woodcraft',
+      role: 'Direct Manufacturer',
+      stats: [
+        { number: '28', label: 'Furniture Sets' },
+        { number: '95%', label: 'Response' },
+        { number: '4.8 ★', label: 'Rating' },
+      ],
+      phone: '+91 98470 88990',
+    },
+    similar: {
+      id: 'list_teak_sofa',
+      image: '/images/h8.png',
+      price: '₹ 30,000',
+      negotiable: true,
+      title: 'Teakwood 5 - Seater Sofa Set',
+      location: 'Thiruvananthapuram',
+      sellerType: 'Store',
+      time: '3d ago',
+    },
+  },
+};
+
+/**
+ * Helper to fetch item by ID with intelligent category fallbacks
+ */
+export function getMarketplaceItemById(id) {
+  if (!id) return MARKETPLACE_ITEMS['list_creta_2022'];
+
+  if (MARKETPLACE_ITEMS[id]) {
+    return MARKETPLACE_ITEMS[id];
+  }
+
+  // Fallbacks by ID pattern
+  if (id.includes('apt') || id.includes('property') || id.includes('house')) {
+    return {
+      ...MARKETPLACE_ITEMS['list_apt_kakkanad_3bhk'],
+      id,
+    };
+  }
+  if (id.includes('job') || id.includes('designer') || id.includes('engineer')) {
+    return {
+      ...MARKETPLACE_ITEMS['list_job_senior_fe'],
+      id,
+    };
+  }
+  if (id.includes('macbook') || id.includes('laptop') || id.includes('tech')) {
+    return {
+      ...MARKETPLACE_ITEMS['list_macbook_m3'],
+      id,
+    };
+  }
+  if (id.includes('iphone') || id.includes('phone') || id.includes('mobile') || id.includes('s24')) {
+    return {
+      ...MARKETPLACE_ITEMS['list_iphone_15_pro'],
+      id,
+    };
+  }
+  if (id.includes('sofa') || id.includes('furniture') || id.includes('oak') || id.includes('dining')) {
+    return {
+      ...MARKETPLACE_ITEMS['list_teak_sofa'],
+      id,
+    };
+  }
+
+  // Default to Creta car
+  return MARKETPLACE_ITEMS['list_creta_2022'];
+}

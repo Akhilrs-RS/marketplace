@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { 
   ChevronLeft, 
@@ -13,9 +13,12 @@ import {
   MessageSquare, 
   Phone, 
   ExternalLink, 
-  ShieldCheck 
+  ShieldCheck,
+  Send,
+  Briefcase
 } from 'lucide-react';
 import HeroSearch from '../components/home/HeroSearch';
+import { getMarketplaceItemById } from '../data/marketplaceData';
 import './ListingDetailPage.css';
 
 export default function ListingDetailPage({ 
@@ -24,35 +27,49 @@ export default function ListingDetailPage({
   onToggleFavorite 
 }) {
   const { id } = useParams();
-  const listingId = id || 'list_creta_2022';
+  const item = getMarketplaceItemById(id);
+  const listingId = item.id;
   const isFav = favorites.includes(listingId);
-
-  // Color variants / thumbnails matching Figma Desktop - 74
-  const thumbnails = [
-    { id: 0, label: 'White', thumb: '/images/creta_thumb_white.png', main: '/images/creta_main.png' },
-    { id: 1, label: 'Red', thumb: '/images/creta_thumb_red.png', main: '/images/creta_thumb_red.png' },
-    { id: 2, label: 'Green', thumb: '/images/creta_thumb_green.png', main: '/images/creta_thumb_green.png' },
-    { id: 3, label: 'Black', thumb: '/images/creta_thumb_black.png', main: '/images/creta_thumb_black.png' },
-  ];
 
   const [activeThumbIndex, setActiveThumbIndex] = useState(0);
   const [searchTerm, setSearchTerm] = useState('');
 
-  // Specs grid items matching Figma Desktop - 74
-  const specs = [
-    { label: 'Brand', value: 'Hyundai' },
-    { label: 'Model', value: 'Creta SX' },
-    { label: 'Year', value: '2022' },
-    { label: 'Fuel', value: 'Petrol' },
-    { label: 'Transmission', value: 'Manual' },
-    { label: 'KM', value: '18400' },
-    { label: 'Ownership', value: '1st' },
+  // Reset active thumbnail when item changes
+  useEffect(() => {
+    setActiveThumbIndex(0);
+    window.scrollTo(0, 0);
+  }, [id]);
+
+  const thumbnails = item.thumbnails || [
+    { id: 0, label: 'Main', thumb: item.showcase_image, main: item.showcase_image }
   ];
+
+  const currentMainImage = thumbnails[activeThumbIndex]?.main || item.showcase_image;
 
   const handleShare = () => {
     if (navigator.clipboard) {
       navigator.clipboard.writeText(window.location.href);
       alert('Listing link copied to clipboard!');
+    }
+  };
+
+  // Dynamic search placeholder based on category
+  const getSearchPlaceholder = () => {
+    switch (item.category) {
+      case 'Vehicles':
+        return 'Explore Hyundai Creta Vehicles';
+      case 'Property':
+        return 'Explore Apartments & Properties';
+      case 'Jobs':
+        return 'Explore Tech & Design Jobs';
+      case 'Electronics':
+        return 'Explore Laptops & Apple Tech';
+      case 'Mobiles':
+        return 'Explore Smartphones & Tablets';
+      case 'Furniture':
+        return 'Explore Living & Home Decor';
+      default:
+        return 'Explore Marketplace Listings';
     }
   };
 
@@ -77,7 +94,7 @@ export default function ListingDetailPage({
             <Search size={15} className="detail-search-icon" />
             <input 
               type="text" 
-              placeholder="Explore Hyundai Creta Vehicles" 
+              placeholder={getSearchPlaceholder()}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="detail-search-input"
@@ -93,34 +110,36 @@ export default function ListingDetailPage({
         <div className="listing-detail-grid">
           {/* ── Left Column: Showcase, Thumbnails, Specs, Similar ── */}
           <div className="detail-left-col">
-            {/* Main Showcase Image Card (Dark slate container) */}
-            <div className="detail-main-showcase-box">
+            {/* Main Showcase Image Card */}
+            <div className={`detail-main-showcase-box ${item.is_car_layout ? 'car-dark-bg' : 'generic-clean-bg'}`}>
               <img 
-                src={thumbnails[activeThumbIndex].main} 
-                alt="2022 Hyundai Creta SX" 
+                src={currentMainImage} 
+                alt={item.title} 
                 className="detail-main-img" 
               />
             </div>
 
             {/* Thumbnails Row */}
-            <div className="detail-thumbnails-row">
-              {thumbnails.map((t, idx) => (
-                <button
-                  key={t.id}
-                  type="button"
-                  onClick={() => setActiveThumbIndex(idx)}
-                  className={`detail-thumb-box ${activeThumbIndex === idx ? 'active' : ''}`}
-                >
-                  <img src={t.thumb} alt={t.label} className="detail-thumb-img" />
-                </button>
-              ))}
-            </div>
+            {thumbnails.length > 1 && (
+              <div className="detail-thumbnails-row">
+                {thumbnails.map((t, idx) => (
+                  <button
+                    key={t.id}
+                    type="button"
+                    onClick={() => setActiveThumbIndex(idx)}
+                    className={`detail-thumb-box ${activeThumbIndex === idx ? 'active' : ''}`}
+                  >
+                    <img src={t.thumb} alt={t.label} className="detail-thumb-img" />
+                  </button>
+                ))}
+              </div>
+            )}
 
             {/* Description Section */}
             <div className="detail-content-block">
               <h2 className="detail-block-title">Description</h2>
               <p className="detail-description-p">
-                Single owner, well-maintained, full service history, Sunroof, leather seats, reverse camera.
+                {item.description}
               </p>
             </div>
 
@@ -128,46 +147,54 @@ export default function ListingDetailPage({
             <div className="detail-content-block">
               <h2 className="detail-block-title">Details</h2>
               <div className="detail-specs-grid">
-                {specs.map((item, idx) => (
+                {item.specs.map((s, idx) => (
                   <div key={idx} className="spec-card-pill">
-                    <span className="spec-label-sub">{item.label}</span>
-                    <strong className="spec-value-main">{item.value}</strong>
+                    <span className="spec-label-sub">{s.label}</span>
+                    <strong className="spec-value-main">{s.value}</strong>
                   </div>
                 ))}
               </div>
             </div>
 
             {/* Similar Listings Section */}
-            <div className="detail-content-block">
-              <h2 className="detail-block-title">Similar Listings</h2>
-              <Link to="/listings/list_i20_sportz" className="similar-listing-card">
-                <div className="similar-car-img-wrap">
-                  <img src="/images/i20_sportz.png" alt="Hyundai i20 Sportz" className="similar-car-img" />
-                </div>
-                <div className="similar-car-info">
-                  <div className="similar-price-row">
-                    <strong className="similar-price-text">₹ 7,80,000</strong>
-                    <span className="similar-negotiable-badge">Negotiable</span>
+            {item.similar && (
+              <div className="detail-content-block">
+                <h2 className="detail-block-title">Similar Listings</h2>
+                <Link to={`/listings/${item.similar.id}`} className="similar-listing-card">
+                  <div className="similar-car-img-wrap">
+                    <img src={item.similar.image} alt={item.similar.title} className="similar-car-img" />
                   </div>
-                  <h3 className="similar-title-text">Hyundai i20 Sportz</h3>
-                  <div className="similar-meta-row">
-                    <span className="similar-location">Kollam</span>
-                    <span className="similar-seller-dot">• Individual</span>
-                    <span className="similar-time">2w ago</span>
+                  <div className="similar-car-info">
+                    <div className="similar-price-row">
+                      <strong className="similar-price-text">{item.similar.price}</strong>
+                      {item.similar.negotiable && (
+                        <span className="similar-negotiable-badge">Negotiable</span>
+                      )}
+                    </div>
+                    <h3 className="similar-title-text">{item.similar.title}</h3>
+                    <div className="similar-meta-row">
+                      <span className="similar-location">{item.similar.location}</span>
+                      <span className="similar-seller-dot">• {item.similar.sellerType}</span>
+                      <span className="similar-time">{item.similar.time}</span>
+                    </div>
                   </div>
-                </div>
-              </Link>
-            </div>
+                </Link>
+              </div>
+            )}
           </div>
 
           {/* ── Right Column: Sticky Price, Contact & Seller Profile ── */}
           <div className="detail-right-col">
-            {/* Price & Vehicle Title Card */}
+            {/* Price & Vehicle / Item Title Card */}
             <div className="detail-card-panel price-card-panel">
               <div className="price-top-header-row">
                 <div className="price-tag-col">
-                  <div className="price-bold-amount">₹ 7,25,000</div>
-                  <span className="price-negotiable-tag">Negotiable</span>
+                  <div className="price-bold-amount">{item.formatted_price}</div>
+                  {item.negotiable ? (
+                    <span className="price-negotiable-tag">Negotiable</span>
+                  ) : (
+                    <span className="price-fixed-tag">Fixed Price</span>
+                  )}
                 </div>
 
                 <div className="price-actions-icons-row">
@@ -204,97 +231,126 @@ export default function ListingDetailPage({
                 </div>
               </div>
 
-              <h1 className="detail-vehicle-name">2022 Hyundai Creta SX</h1>
+              <h1 className="detail-vehicle-name">{item.title}</h1>
 
               <div className="vehicle-meta-tags-list">
                 <div className="vehicle-meta-item">
                   <MapPin size={14} className="meta-icon" />
-                  <span>Thiruvananthapuram</span>
+                  <span>{item.location}</span>
                 </div>
                 <div className="vehicle-meta-item">
                   <Clock size={14} className="meta-icon" />
-                  <span>Posted 2d ago</span>
+                  <span>{item.posted_time}</span>
                 </div>
                 <div className="vehicle-meta-item">
                   <Eye size={14} className="meta-icon" />
-                  <span>1,148 views</span>
+                  <span>{item.views}</span>
                 </div>
               </div>
             </div>
 
-            {/* Contact Seller Card */}
+            {/* Contact Seller / Action Card */}
             <div className="detail-card-panel contact-card-panel">
-              <h3 className="panel-subhead-bold">Contact Seller</h3>
+              <h3 className="panel-subhead-bold">
+                {item.category === 'Jobs' ? 'Apply for Position' : 'Contact Seller'}
+              </h3>
 
               <div className="contact-buttons-stack">
-                <button 
-                  type="button"
-                  onClick={() => {
-                    if (onOpenContact) {
-                      onOpenContact({
-                        title: '2022 Hyundai Creta SX',
-                        formatted_price: '₹ 7,25,000',
-                        seller_name: 'Arjun Menon',
-                        seller_phone: '+91 98470 54321',
-                      });
-                    } else {
-                      alert('Opening chat with Arjun Menon...');
-                    }
-                  }}
-                  className="btn-chat-orange"
-                >
-                  <MessageSquare size={16} />
-                  <span>Chat with Seller</span>
-                </button>
+                {item.category === 'Jobs' ? (
+                  <>
+                    <button 
+                      type="button"
+                      onClick={() => alert(`Submitting application for ${item.title} at ${item.seller.name}...`)}
+                      className="btn-chat-orange"
+                    >
+                      <Briefcase size={16} />
+                      <span>Apply Now</span>
+                    </button>
 
-                <button 
-                  type="button"
-                  onClick={() => alert('Requesting verified inspection with seller...')}
-                  className="btn-outline-white"
-                >
-                  <ExternalLink size={15} />
-                  <span>View with seller</span>
-                </button>
+                    <button 
+                      type="button"
+                      onClick={() => {
+                        if (onOpenContact) {
+                          onOpenContact({
+                            title: item.title,
+                            formatted_price: item.formatted_price,
+                            seller_name: item.seller.name,
+                            seller_phone: item.seller.phone,
+                          });
+                        }
+                      }}
+                      className="btn-outline-white"
+                    >
+                      <MessageSquare size={15} />
+                      <span>Message Recruiter</span>
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <button 
+                      type="button"
+                      onClick={() => {
+                        if (onOpenContact) {
+                          onOpenContact({
+                            title: item.title,
+                            formatted_price: item.formatted_price,
+                            seller_name: item.seller.name,
+                            seller_phone: item.seller.phone,
+                          });
+                        } else {
+                          alert(`Opening chat with ${item.seller.name}...`);
+                        }
+                      }}
+                      className="btn-chat-orange"
+                    >
+                      <MessageSquare size={16} />
+                      <span>Chat with Seller</span>
+                    </button>
 
-                <button 
-                  type="button"
-                  onClick={() => alert('Calling seller at +91 98470 54321')}
-                  className="btn-outline-white"
-                >
-                  <Phone size={15} />
-                  <span>Call</span>
-                </button>
+                    <button 
+                      type="button"
+                      onClick={() => alert(`Requesting inspection appointment for ${item.title}...`)}
+                      className="btn-outline-white"
+                    >
+                      <ExternalLink size={15} />
+                      <span>View with seller</span>
+                    </button>
+
+                    <button 
+                      type="button"
+                      onClick={() => alert(`Calling ${item.seller.name} at ${item.seller.phone}`)}
+                      className="btn-outline-white"
+                    >
+                      <Phone size={15} />
+                      <span>Call</span>
+                    </button>
+                  </>
+                )}
               </div>
             </div>
 
             {/* Seller Profile Card */}
             <div className="detail-card-panel seller-profile-panel">
               <div className="seller-header-flex">
-                <div className="seller-avatar-initial">A</div>
+                <div className="seller-avatar-initial">{item.seller.initial}</div>
                 <div className="seller-name-col">
-                  <h4 className="seller-full-name">Arjun Menon</h4>
-                  <span className="seller-sub-meta">Individual Seller (Member Since 2024)</span>
+                  <h4 className="seller-full-name">{item.seller.name}</h4>
+                  <span className="seller-sub-meta">{item.seller.role}</span>
                 </div>
               </div>
 
               <div className="seller-stats-three-boxes">
-                <div className="seller-stat-box">
-                  <strong className="stat-number">12</strong>
-                  <span className="stat-label">Active</span>
-                </div>
-                <div className="seller-stat-box">
-                  <strong className="stat-number">98%</strong>
-                  <span className="stat-label">Response</span>
-                </div>
-                <div className="seller-stat-box">
-                  <strong className="stat-number">12</strong>
-                  <span className="stat-label">Sold</span>
-                </div>
+                {item.seller.stats.map((st, idx) => (
+                  <div key={idx} className="seller-stat-box">
+                    <strong className="stat-number">{st.number}</strong>
+                    <span className="stat-label">{st.label}</span>
+                  </div>
+                ))}
               </div>
 
               <button 
                 type="button" 
-                onClick={() => alert('Viewing profile of Arjun Menon...')}
+                onClick={() => alert(`Viewing profile of ${item.seller.name}...`)}
                 className="btn-view-profile-white"
               >
                 View Profile
@@ -305,7 +361,9 @@ export default function ListingDetailPage({
             <div className="safety-notice-banner">
               <ShieldCheck size={16} className="safety-shield-icon" />
               <p className="safety-notice-text">
-                Meet in a safe public place for transactions. Report any suspicious behavior to keep the community safe.
+                {item.category === 'Jobs'
+                  ? 'Galletrix ensures employer identity and salary transparency. Never pay any fee for interview or job offers.'
+                  : 'Meet in a safe public place for transactions. Report any suspicious behavior to keep the community safe.'}
               </p>
             </div>
           </div>
