@@ -759,6 +759,152 @@ export const MARKETPLACE_ITEMS = {
       time: 'Today',
     },
   },
+
+  // ── PROFESSIONAL SERVICES ───────────────────────────────────────────────
+  'list_clean_service': {
+    id: 'list_clean_service',
+    category: 'Services',
+    subcategory: 'Cleaning',
+    title: 'Home Deep Cleaning & Sanitization Service',
+    price: 2500,
+    formatted_price: '₹ 2,500',
+    negotiable: false,
+    location: 'Kakkanad, Kochi',
+    posted_time: 'Available Today',
+    views: '1,890 views',
+    showcase_image: '/images/h7.png',
+    is_car_layout: false,
+    thumbnails: [
+      { id: 0, label: 'Cleaning Pro', thumb: '/images/h7.png', main: '/images/h7.png' },
+    ],
+    description: 'Comprehensive 4 to 5 hour full home deep cleaning and hospital-grade sanitization by verified background-checked professionals. Includes acid-free bathroom descaling, kitchen grease removal, sofa vacuuming, floor machine buffing, and balcony high-pressure wash.',
+    specs: [
+      { label: 'Duration', value: '4 - 5 Hours' },
+      { label: 'Team Size', value: '3 Verified Specialists' },
+      { label: 'Chemicals', value: 'Eco-Friendly Non-Toxic' },
+      { label: 'Equipment', value: 'Industrial Vacuum & Steam' },
+      { label: 'Guarantee', value: '100% Re-clean Guarantee' },
+      { label: 'Insurance', value: 'Up to ₹10,000 Damage Cover' },
+      { label: 'Coverage', value: 'All Kochi & Ernakulam' },
+    ],
+    seller: {
+      initial: 'U',
+      name: 'Urban Clean Pros',
+      role: 'Verified Service Partner',
+      stats: [
+        { number: '4.9 ★', label: 'Rating' },
+        { number: '480+', label: 'Jobs Done' },
+        { number: '98%', label: 'On-Time' },
+      ],
+      phone: '+91 98470 55667',
+    },
+    similar: {
+      id: 'list_ac_service',
+      image: '/images/h7.png',
+      price: '₹ 699',
+      negotiable: false,
+      title: 'Split AC Deep Jet Cleaning & Gas Check',
+      location: 'Ernakulam',
+      sellerType: 'Verified Partner',
+      time: 'Available Today',
+    },
+  },
+
+  'list_ac_service': {
+    id: 'list_ac_service',
+    category: 'Services',
+    subcategory: 'Appliance Repair',
+    title: 'Split AC Deep Jet Cleaning & Gas Check',
+    price: 699,
+    formatted_price: '₹ 699',
+    negotiable: false,
+    location: 'Ernakulam, Kochi',
+    posted_time: 'Slot: 2 hrs',
+    views: '940 views',
+    showcase_image: '/images/h7.png',
+    is_car_layout: false,
+    thumbnails: [
+      { id: 0, label: 'AC Service', thumb: '/images/h7.png', main: '/images/h7.png' },
+    ],
+    description: 'Complete indoor and outdoor unit jet cleaning with anti-microbial foam wash, filter replacement check, drain tray unclogging, and gas level pressure diagnostic by certified HVAC technicians.',
+    specs: [
+      { label: 'Duration', value: '45 - 60 Minutes' },
+      { label: 'Warranty', value: '30-Day Service Warranty' },
+      { label: 'Technicians', value: 'Certified HVAC Engineers' },
+      { label: 'Includes', value: 'Indoor & Outdoor Jet Wash' },
+      { label: 'Gas Check', value: 'Free Diagnostic Included' },
+      { label: 'Response', value: 'Within 90 Minutes' },
+    ],
+    seller: {
+      initial: 'C',
+      name: 'CoolTech AC Solutions',
+      role: 'Authorized Service Center',
+      stats: [
+        { number: '4.8 ★', label: 'Rating' },
+        { number: '320+', label: 'ACs Serviced' },
+        { number: '100%', label: 'Warranty' },
+      ],
+      phone: '+91 98470 66778',
+    },
+    similar: {
+      id: 'list_plumbing_service',
+      image: '/images/h7.png',
+      price: '₹ 399',
+      negotiable: false,
+      title: 'Professional Home Plumbing & Leak Repair',
+      location: 'Thiruvananthapuram',
+      sellerType: 'Verified Partner',
+      time: 'Within 60 Mins',
+    },
+  },
+
+  'list_plumbing_service': {
+    id: 'list_plumbing_service',
+    category: 'Services',
+    subcategory: 'Plumbing',
+    title: 'Professional Home Plumbing & Leak Repair',
+    price: 399,
+    formatted_price: '₹ 399',
+    negotiable: false,
+    location: 'Thiruvananthapuram',
+    posted_time: 'Available 24/7',
+    views: '730 views',
+    showcase_image: '/images/h7.png',
+    is_car_layout: false,
+    thumbnails: [
+      { id: 0, label: 'Plumbing Service', thumb: '/images/h7.png', main: '/images/h7.png' },
+    ],
+    description: 'Fast response plumbing inspection and repair for bathroom leaks, tap fittings, pipe blockages, water tank overflow, and pump installations. Transparent pricing with 30-day warranty on workmanship.',
+    specs: [
+      { label: 'Arrival Time', value: 'Within 60 Minutes' },
+      { label: 'Warranty', value: '30-Day Workmanship Warranty' },
+      { label: 'Technicians', value: 'Background-Checked Plumbers' },
+      { label: 'Spares', value: 'Genuine Spares at MRP' },
+      { label: 'Pricing', value: 'Standard Rate Card' },
+      { label: 'Coverage', value: 'Citywide Thiruvananthapuram' },
+    ],
+    seller: {
+      initial: 'Q',
+      name: 'QuickFix Home Services',
+      role: 'Certified On-Demand Pro',
+      stats: [
+        { number: '4.7 ★', label: 'Rating' },
+        { number: '250+', label: 'Jobs Done' },
+        { number: '96%', label: 'First-Visit Fix' },
+      ],
+      phone: '+91 98470 77889',
+    },
+    similar: {
+      id: 'list_clean_service',
+      image: '/images/h7.png',
+      price: '₹ 2,500',
+      negotiable: false,
+      title: 'Home Deep Cleaning & Sanitization Service',
+      location: 'Kakkanad',
+      sellerType: 'Verified Partner',
+      time: 'Available Today',
+    },
+  },
 };
 
 /**
@@ -772,6 +918,12 @@ export function getMarketplaceItemById(id) {
   }
 
   // Fallbacks by ID pattern
+  if (id.includes('service') || id.includes('clean') || id.includes('repair') || id.includes('plumb') || id.includes('electric') || id.includes('ac_')) {
+    return {
+      ...MARKETPLACE_ITEMS['list_clean_service'],
+      id,
+    };
+  }
   if (id.includes('veg') || id.includes('groc') || id.includes('fruit') || id.includes('produce') || id.includes('farm') || id.includes('organic')) {
     return {
       ...MARKETPLACE_ITEMS['list_veg_combo'],

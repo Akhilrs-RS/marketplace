@@ -40,6 +40,7 @@ export default function ListingsPage({ favorites = [], onToggleFavorite }) {
   const [workModeFilter, setWorkModeFilter] = useState('All');
   const [brandFilter, setBrandFilter] = useState('All');
   const [produceFilter, setProduceFilter] = useState('All');
+  const [serviceFilter, setServiceFilter] = useState('All');
   const [sortBy, setSortBy] = useState('newest');
   const [searchQuery, setSearchQuery] = useState(currentQuery);
   const [maxPrice, setMaxPrice] = useState(50000000);
@@ -142,6 +143,12 @@ export default function ListingsPage({ favorites = [], onToggleFavorite }) {
       if (!sub.toLowerCase().includes(produceFilter.toLowerCase())) return false;
     }
 
+    // Services filters
+    if (item.category === 'Services' && serviceFilter !== 'All') {
+      const sub = item.subcategory || '';
+      if (!sub.toLowerCase().includes(serviceFilter.toLowerCase())) return false;
+    }
+
     // Keyword search
     if (searchQuery.trim()) {
       const q = searchQuery.toLowerCase();
@@ -201,6 +208,8 @@ export default function ListingsPage({ favorites = [], onToggleFavorite }) {
                   ? 'Solid wood dining sets, living room sofas, and home decor.'
                   : currentCategory === 'Groceries' || currentCategory === 'Vegetables'
                   ? 'Farm-fresh vegetables, crisp greens, seasonal fruits, and certified organic produce.'
+                  : currentCategory === 'Services'
+                  ? 'Verified home maintenance, deep cleaning, appliance repair, and professional services.'
                   : 'Verified items, products, and services across South India.'}
               </p>
             </div>
@@ -384,6 +393,25 @@ export default function ListingsPage({ favorites = [], onToggleFavorite }) {
               </div>
             )}
 
+            {/* Services Specific Filters */}
+            {currentCategory === 'Services' && (
+              <div className="filter-group">
+                <label className="filter-label">Service Type</label>
+                <div className="filter-pills-row">
+                  {['All', 'Cleaning', 'Appliance Repair', 'Plumbing'].map((stype) => (
+                    <button
+                      key={stype}
+                      type="button"
+                      className={`filter-pill ${serviceFilter === stype ? 'active' : ''}`}
+                      onClick={() => setServiceFilter(stype)}
+                    >
+                      {stype}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
             {/* Price Range */}
             <div className="filter-group">
               <div className="price-slider-label">
@@ -438,6 +466,7 @@ export default function ListingsPage({ favorites = [], onToggleFavorite }) {
                   setWorkModeFilter('All');
                   setBrandFilter('All');
                   setProduceFilter('All');
+                  setServiceFilter('All');
                   setSearchQuery('');
                   setMaxPrice(50000000);
                 }}
@@ -583,6 +612,23 @@ export default function ListingsPage({ favorites = [], onToggleFavorite }) {
                         {specs.harvest_date && (
                           <span className="spec-chip">
                             {specs.harvest_date}
+                          </span>
+                        )}
+
+                        {/* Professional Services Specs */}
+                        {specs.duration && (
+                          <span className="spec-chip">
+                            {specs.duration}
+                          </span>
+                        )}
+                        {specs.team_size && (
+                          <span className="spec-chip">
+                            {specs.team_size}
+                          </span>
+                        )}
+                        {specs.warranty && (
+                          <span className="spec-chip">
+                            {specs.warranty}
                           </span>
                         )}
                       </div>

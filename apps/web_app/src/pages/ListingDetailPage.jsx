@@ -17,7 +17,8 @@ import {
   Send,
   Briefcase,
   ShoppingBag,
-  Leaf
+  Leaf,
+  Wrench
 } from 'lucide-react';
 import HeroSearch from '../components/home/HeroSearch';
 import { getMarketplaceItemById } from '../data/marketplaceData';
@@ -66,6 +67,8 @@ export default function ListingDetailPage({
         return 'Explore Tech & Design Jobs';
       case 'Groceries':
         return 'Explore Fresh Organic Vegetables & Groceries';
+      case 'Services':
+        return 'Explore Verified Home Services & Repairs';
       case 'Electronics':
         return 'Explore Laptops & Apple Tech';
       case 'Mobiles':
@@ -260,6 +263,8 @@ export default function ListingDetailPage({
                   ? 'Apply for Position'
                   : item.category === 'Groceries'
                   ? 'Order Fresh Farm Produce'
+                  : item.category === 'Services'
+                  ? 'Book Verified Service'
                   : 'Contact Seller'}
               </h3>
 
@@ -331,6 +336,46 @@ export default function ListingDetailPage({
                     >
                       <Phone size={15} />
                       <span>Call Farm</span>
+                    </button>
+                  </>
+                ) : item.category === 'Services' ? (
+                  <>
+                    <button 
+                      type="button"
+                      onClick={() => alert(`Booking confirmed for ${item.title} (${item.formatted_price}). A verified specialist from ${item.seller.name} will arrive at your scheduled address.`)}
+                      className="btn-chat-orange"
+                    >
+                      <Wrench size={16} />
+                      <span>Book Service Now</span>
+                    </button>
+
+                    <button 
+                      type="button"
+                      onClick={() => {
+                        if (onOpenContact) {
+                          onOpenContact({
+                            title: item.title,
+                            formatted_price: item.formatted_price,
+                            seller_name: item.seller.name,
+                            seller_phone: item.seller.phone,
+                          });
+                        } else {
+                          alert(`Opening direct chat with ${item.seller.name}...`);
+                        }
+                      }}
+                      className="btn-outline-white"
+                    >
+                      <MessageSquare size={15} />
+                      <span>Chat with Service Pro</span>
+                    </button>
+
+                    <button 
+                      type="button"
+                      onClick={() => alert(`Calling service support for ${item.seller.name} at ${item.seller.phone}`)}
+                      className="btn-outline-white"
+                    >
+                      <Phone size={15} />
+                      <span>Call Support</span>
                     </button>
                   </>
                 ) : (
@@ -409,6 +454,8 @@ export default function ListingDetailPage({
             <div className="safety-notice-banner">
               {item.category === 'Groceries' ? (
                 <Leaf size={16} className="safety-shield-icon" style={{ color: '#16A34A' }} />
+              ) : item.category === 'Services' ? (
+                <ShieldCheck size={16} className="safety-shield-icon" style={{ color: '#2563EB' }} />
               ) : (
                 <ShieldCheck size={16} className="safety-shield-icon" />
               )}
@@ -417,6 +464,8 @@ export default function ListingDetailPage({
                   ? 'Galletrix ensures employer identity and salary transparency. Never pay any fee for interview or job offers.'
                   : item.category === 'Groceries'
                   ? 'Galletrix Fresh Guarantee: 100% farm-picked with zero chemical pesticides. Quality checked & delivered under temperature-controlled logistics.'
+                  : item.category === 'Services'
+                  ? 'Galletrix Service Guarantee: 100% background-checked professionals, upfront transparent rate cards, and 30-day service warranty.'
                   : 'Meet in a safe public place for transactions. Report any suspicious behavior to keep the community safe.'}
               </p>
             </div>
