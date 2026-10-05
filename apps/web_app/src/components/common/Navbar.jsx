@@ -1,15 +1,27 @@
-import React, { useState } from 'react';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { Search, Heart, MessageSquare, Menu, X, Building2 } from 'lucide-react';
 import './Navbar.css';
 
 export default function Navbar({ onOpenPostAd, favoritesCount = 0 }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
-  const isHeroPage = location.pathname === '/' || location.pathname === '/shops' || location.pathname.startsWith('/listings');
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 40) {
+        setScrolled(true);
+      } else {
+        setScrolled(false);
+      }
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   return (
-    <header className={`navbar-root ${isHeroPage ? 'navbar-transparent' : 'navbar-solid'}`}>
+    <header className={`navbar-root ${scrolled ? 'navbar-scrolled' : 'navbar-transparent'}`}>
       <div className="container navbar-container">
         {/* Brand Logo matching Figma Desktop - 71 */}
         <Link to="/" className="figma-navbar-brand">

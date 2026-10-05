@@ -1,25 +1,43 @@
 .navbar-root {
   width: 100%;
-  z-index: 100;
-  transition: background-color 0.2s ease;
+  z-index: 1000;
+  transition: all 0.25s ease;
 }
 
-/* On Home page: Transparent directly over the hero image */
+/* On Hero header: Transparent directly over the dark hero image */
 .navbar-transparent {
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   background: transparent;
-  border-bottom: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 
-/* On other pages: sleek dark background */
+/* When scrolled down or on solid pages: sleek dark glassmorphic fixed header */
+.navbar-scrolled,
 .navbar-solid {
-  position: sticky;
+  position: fixed;
   top: 0;
-  background: #111317;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  left: 0;
+  right: 0;
+  background: rgba(15, 23, 42, 0.95);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.35);
+  animation: navbarSlideDown 0.25s ease-out;
+}
+
+@keyframes navbarSlideDown {
+  from {
+    transform: translateY(-8px);
+    opacity: 0.85;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
 
 .navbar-container {

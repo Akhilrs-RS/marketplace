@@ -21,6 +21,7 @@ import {
 } from 'lucide-react';
 import { fetchListings, resolveImageUrl } from '../api/client';
 import { MARKETPLACE_ITEMS } from '../data/marketplaceData';
+import HeroSearch from '../components/home/HeroSearch';
 import './ListingsPage.css';
 
 export default function ListingsPage({ favorites = [], onToggleFavorite }) {
@@ -177,7 +178,10 @@ export default function ListingsPage({ favorites = [], onToggleFavorite }) {
 
   return (
     <div className="listings-page">
-      {/* Top Breadcrumb & Catalog Header */}
+      {/* 1. Hero Search Header Banner matching Figma Desktop - 73 */}
+      <HeroSearch />
+
+      {/* 2. Top Breadcrumb & Catalog Header */}
       <section className="catalog-header-bar">
         <div className="container">
           <div className="breadcrumbs">
