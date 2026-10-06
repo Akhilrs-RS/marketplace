@@ -43,6 +43,7 @@ export async function fetchListings(params = {}) {
     const query = new URLSearchParams();
     if (params.category && params.category !== 'All') query.append('category', params.category);
     if (params.query) query.append('query', params.query);
+    if (params.location && params.location !== 'All') query.append('location', params.location);
     if (params.featured) query.append('featured', 'true');
     if (params.sort) query.append('sort', params.sort);
 

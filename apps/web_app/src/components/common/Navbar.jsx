@@ -1,12 +1,26 @@
-import React, { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { Search, Heart, MessageSquare, Menu, X, Building2 } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Search, Heart, MessageSquare, Menu, X, Building2, MapPin, ChevronDown } from 'lucide-react';
 import './Navbar.css';
 
 export default function Navbar({ onOpenPostAd, favoritesCount = 0, unreadMessagesCount = 2 }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [navLocMenuOpen, setNavLocMenuOpen] = useState(false);
+  const navLocRef = useRef(null);
   const location = useLocation();
+  const navigate = useNavigate();
+
+  const currentNavLocation = new URLSearchParams(location.search).get('location') || '';
+
+  const quickCities = [
+    { label: 'All Locations', value: '' },
+    { label: 'Thiruvananthapuram', value: 'Thiruvananthapuram' },
+    { label: 'Kochi', value: 'Kochi' },
+    { label: 'Kollam', value: 'Kollam' },
+    { label: 'Bengaluru', value: 'Bengaluru' },
+    { label: 'Remote', value: 'Remote' },
+  ];
 
   useEffect(() => {
     const handleScroll = () => {
@@ -20,17 +34,80 @@ export default function Navbar({ onOpenPostAd, favoritesCount = 0, unreadMessage
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  useEffect(() => {
+    function handleOutside(e) {
+      if (navLocRef.current && !navLocRef.current.contains(e.target)) {
+        setNavLocMenuOpen(false);
+      }
+    }
+    document.addEventListener('mousedown', handleOutside);
+    return () => document.removeEventListener('mousedown', handleOutside);
+  }, []);
+
+  const handleSelectNavCity = (cityVal) => {
+    setNavLocMenuOpen(false);
+    setMobileMenuOpen(false);
+    const params = new URLSearchParams(location.search);
+    if (!cityVal) {
+      params.delete('location');
+    } else {
+      params.set('location', cityVal);
+    }
+    const targetPath = location.pathname.startsWith('/shops') ? '/shops' : '/listings';
+    navigate(`${targetPath}?${params.toString()}`);
+  };
+
   const isSolidPage = location.pathname.startsWith('/messages');
 
   return (
     <header className={`navbar-root ${scrolled || isSolidPage ? 'navbar-scrolled' : 'navbar-transparent'}`}>
       <div className="container navbar-container">
-        {/* Brand Logo matching Figma Desktop - 71 */}
-        <Link to="/" className="figma-navbar-brand">
-          <span className="figma-brand-text">Marketplace</span>
-        </Link>
+        {/* Brand Logo & Location Pill */}
+        <div className="figma-navbar-left-group">
+          <Link to="/" className="figma-navbar-brand">
+            <span className="figma-brand-text">Marketplace</span>
+          </Link>
 
-        {/* Desktop Navigation Links matching Figma Desktop - 71: Browse, Shops, Favorites, Message, Post an Ad */}
+          {/* Global Location Selector Pill */}
+          <div className="figma-nav-location-picker" ref={navLocRef}>
+            <button
+              type="button"
+              className={`figma-nav-loc-btn ${currentNavLocation ? 'has-location' : ''}`}
+              onClick={() => setNavLocMenuOpen(!navLocMenuOpen)}
+              title="Select browsing city"
+            >
+              <MapPin size={13} className="nav-loc-icon" />
+              <span className="nav-loc-label">{currentNavLocation || 'All Locations'}</span>
+              <ChevronDown size={12} className={`nav-loc-chevron ${navLocMenuOpen ? 'open' : ''}`} />
+            </button>
+
+            {navLocMenuOpen && (
+              <div className="figma-nav-loc-popover">
+                <div className="nav-loc-popover-title">
+                  <MapPin size={13} />
+                  <span>Choose Location</span>
+                </div>
+                <div className="nav-loc-popover-list">
+                  {quickCities.map((c) => (
+                    <button
+                      key={c.label}
+                      type="button"
+                      className={`nav-loc-popover-item ${(currentNavLocation === c.value || (!currentNavLocation && !c.value)) ? 'active' : ''}`}
+                      onClick={() => handleSelectNavCity(c.value)}
+                    >
+                      <span>{c.label}</span>
+                      {(currentNavLocation === c.value || (!currentNavLocation && !c.value)) && (
+                        <span className="nav-loc-check-dot" />
+                      )}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Desktop Navigation Links matching Figma Desktop - 71 */}
         <nav className="figma-desktop-nav">
           <Link to="/listings" className="figma-nav-item">
             <Search size={16} className="nav-item-icon" />
@@ -77,6 +154,26 @@ export default function Navbar({ onOpenPostAd, favoritesCount = 0, unreadMessage
       {/* Mobile Menu Drawer */}
       {mobileMenuOpen && (
         <div className="figma-mobile-drawer">
+          {/* Mobile Location Selector */}
+          <div className="mobile-loc-section">
+            <div className="mobile-loc-label-row">
+              <MapPin size={14} />
+              <span>Browsing Location:</span>
+            </div>
+            <div className="mobile-loc-pills-row">
+              {quickCities.map((c) => (
+                <button
+                  key={c.label}
+                  type="button"
+                  className={`mobile-loc-pill ${(currentNavLocation === c.value || (!currentNavLocation && !c.value)) ? 'active' : ''}`}
+                  onClick={() => handleSelectNavCity(c.value)}
+                >
+                  {c.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
           <Link to="/listings" onClick={() => setMobileMenuOpen(false)}>
             <Search size={16} />
             <span>Browse</span>
@@ -86,6 +183,7 @@ export default function Navbar({ onOpenPostAd, favoritesCount = 0, unreadMessage
             <span>Favorites</span>
           </Link>
           <Link to="/shops" onClick={() => setMobileMenuOpen(false)}>
+            <Building2 size={16} />
             <span>Vehicle Shops</span>
           </Link>
           <Link to="/messages" onClick={() => setMobileMenuOpen(false)}>
@@ -94,7 +192,7 @@ export default function Navbar({ onOpenPostAd, favoritesCount = 0, unreadMessage
             {unreadMessagesCount > 0 && <span className="nav-fav-pill" style={{ marginLeft: 'auto' }}>{unreadMessagesCount}</span>}
           </Link>
           <button 
-            type="button"
+            type="button" 
             onClick={() => { setMobileMenuOpen(false); onOpenPostAd(); }}
             className="figma-post-btn-black"
             style={{ width: '100%', marginTop: '10px' }}

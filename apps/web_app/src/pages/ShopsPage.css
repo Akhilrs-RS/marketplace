@@ -367,3 +367,46 @@
     justify-content: center;
   }
 }
+
+/* Quick Location Pills in ShopsPage */
+.shops-quick-city-pills {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 24px;
+}
+
+.shops-loc-pill-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #64748B;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.shops-city-pill {
+  background: #ffffff;
+  border: 1px solid #E2E8F0;
+  border-radius: 9999px;
+  padding: 5px 14px;
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: #334155;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.shops-city-pill:hover {
+  background: #F1F5F9;
+  border-color: #CBD5E1;
+  color: #0F172A;
+}
+
+.shops-city-pill.active {
+  background: #2563EB;
+  border-color: #2563EB;
+  color: #ffffff;
+  font-weight: 600;
+}
+

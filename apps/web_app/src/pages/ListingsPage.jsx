@@ -24,6 +24,56 @@ import { MARKETPLACE_ITEMS } from '../data/marketplaceData';
 import HeroSearch from '../components/home/HeroSearch';
 import './ListingsPage.css';
 
+function matchLocation(itemLocation, filterQuery) {
+  if (!filterQuery || filterQuery === 'All') return true;
+  if (!itemLocation) return false;
+
+  const loc = itemLocation.toLowerCase();
+  const q = filterQuery.toLowerCase().trim();
+  if (!q) return true;
+
+  // Direct substring match
+  if (loc.includes(q)) return true;
+
+  // City clusters / aliases
+  if (q === 'thiruvananthapuram' || q === 'trivandrum' || q === 'tvm') {
+    return (
+      loc.includes('thiruvananthapuram') || 
+      loc.includes('trivandrum') || 
+      loc.includes('kazhakkoottam') || 
+      loc.includes('kowdiar')
+    );
+  }
+
+  if (q === 'kochi' || q === 'cochin' || q === 'ernakulam') {
+    return (
+      loc.includes('kochi') || 
+      loc.includes('cochin') || 
+      loc.includes('kakkanad') || 
+      loc.includes('ernakulam') || 
+      loc.includes('aluva')
+    );
+  }
+
+  if (q === 'bengaluru' || q === 'bangalore') {
+    return (
+      loc.includes('bengaluru') || 
+      loc.includes('bangalore') || 
+      loc.includes('hsr')
+    );
+  }
+
+  if (q === 'kollam' || q === 'quilon') {
+    return loc.includes('kollam') || loc.includes('quilon');
+  }
+
+  if (q === 'remote') {
+    return loc.includes('remote') || loc.includes('hybrid');
+  }
+
+  return false;
+}
+
 export default function ListingsPage({ favorites = [], onToggleFavorite }) {
   const [searchParams, setSearchParams] = useSearchParams();
   const [listings, setListings] = useState([]);
@@ -32,6 +82,7 @@ export default function ListingsPage({ favorites = [], onToggleFavorite }) {
   // Filter States from URL
   const currentCategory = searchParams.get('category') || 'All';
   const currentQuery = searchParams.get('query') || '';
+  const currentLocation = searchParams.get('location') || '';
   const isFavoritesOnly = searchParams.get('favorites') === 'true';
 
   // Sub-filter states
@@ -44,12 +95,42 @@ export default function ListingsPage({ favorites = [], onToggleFavorite }) {
   const [serviceFilter, setServiceFilter] = useState('All');
   const [sortBy, setSortBy] = useState('newest');
   const [searchQuery, setSearchQuery] = useState(currentQuery);
+  const [locationFilter, setLocationFilter] = useState(currentLocation || 'All');
   const [maxPrice, setMaxPrice] = useState(50000000);
 
-  // Synchronize internal search query when URL changes
+  // Synchronize internal query and location when URL changes
   useEffect(() => {
     setSearchQuery(currentQuery);
   }, [currentQuery]);
+
+  useEffect(() => {
+    setLocationFilter(currentLocation || 'All');
+  }, [currentLocation]);
+
+  const handleSelectLocation = (loc) => {
+    const val = loc || 'All';
+    setLocationFilter(val);
+    const newParams = new URLSearchParams(searchParams);
+    if (!val || val === 'All') {
+      newParams.delete('location');
+    } else {
+      newParams.set('location', val);
+    }
+    setSearchParams(newParams);
+  };
+
+  const handleResetFilters = () => {
+    setFuelFilter('All');
+    setTransmissionFilter('All');
+    setBedroomFilter('All');
+    setWorkModeFilter('All');
+    setBrandFilter('All');
+    setProduceFilter('All');
+    setServiceFilter('All');
+    setSearchQuery('');
+    setMaxPrice(50000000);
+    handleSelectLocation('All');
+  };
 
   useEffect(() => {
     async function loadData() {
@@ -57,6 +138,7 @@ export default function ListingsPage({ favorites = [], onToggleFavorite }) {
       const apiData = await fetchListings({
         category: currentCategory === 'All' ? undefined : currentCategory,
         query: currentQuery,
+        location: currentLocation && currentLocation !== 'All' ? currentLocation : undefined,
         sort: sortBy,
       });
 
@@ -102,11 +184,14 @@ export default function ListingsPage({ favorites = [], onToggleFavorite }) {
     }
 
     loadData();
-  }, [currentCategory, currentQuery, sortBy]);
+  }, [currentCategory, currentQuery, currentLocation, sortBy]);
 
   // Client-side filtering
   const filteredListings = listings.filter((item) => {
     if (isFavoritesOnly && !favorites.includes(item.id)) return false;
+
+    // Location filter
+    if (!matchLocation(item.location, locationFilter)) return false;
 
     // Vehicle filters
     if (item.category === 'Vehicles') {
@@ -255,19 +340,71 @@ export default function ListingsPage({ favorites = [], onToggleFavorite }) {
               </div>
               <button 
                 type="button" 
-                onClick={() => {
-                  setFuelFilter('All');
-                  setTransmissionFilter('All');
-                  setBedroomFilter('All');
-                  setWorkModeFilter('All');
-                  setBrandFilter('All');
-                  setMaxPrice(50000000);
-                  setSearchQuery('');
-                }}
+                onClick={handleResetFilters}
                 className="filter-reset-btn"
               >
                 Reset
               </button>
+            </div>
+
+            {/* Location Filter Section */}
+            <div className="filter-group">
+              <div className="filter-group-header">
+                <label className="filter-label">Location</label>
+                {locationFilter !== 'All' && locationFilter !== '' && (
+                  <button 
+                    type="button" 
+                    className="filter-clear-sub-btn"
+                    onClick={() => handleSelectLocation('All')}
+                  >
+                    Clear
+                  </button>
+                )}
+              </div>
+
+              <div className="filter-search-box filter-loc-box">
+                <MapPin size={16} className="filter-loc-icon" />
+                <input 
+                  type="text" 
+                  placeholder="City or area (e.g. Kochi, Kowdiar)..."
+                  value={locationFilter === 'All' ? '' : locationFilter}
+                  onChange={(e) => handleSelectLocation(e.target.value)}
+                />
+                {locationFilter && locationFilter !== 'All' && (
+                  <button 
+                    type="button" 
+                    className="filter-loc-clear-icon-btn" 
+                    onClick={() => handleSelectLocation('All')}
+                    title="Clear location"
+                  >
+                    <X size={14} />
+                  </button>
+                )}
+              </div>
+
+              <div className="filter-pills-row">
+                {[
+                  { label: 'All', value: 'All' },
+                  { label: 'Thiruvananthapuram', value: 'Thiruvananthapuram' },
+                  { label: 'Kochi', value: 'Kochi' },
+                  { label: 'Kollam', value: 'Kollam' },
+                  { label: 'Bengaluru', value: 'Bengaluru' },
+                  { label: 'Remote', value: 'Remote' },
+                ].map((loc) => (
+                  <button
+                    key={loc.value}
+                    type="button"
+                    className={`filter-pill ${
+                      (locationFilter === loc.value || (loc.value === 'All' && (!locationFilter || locationFilter === 'All')))
+                        ? 'active' 
+                        : ''
+                    }`}
+                    onClick={() => handleSelectLocation(loc.value)}
+                  >
+                    {loc.label}
+                  </button>
+                ))}
+              </div>
             </div>
 
             {/* Keyword Search */}
@@ -452,6 +589,64 @@ export default function ListingsPage({ favorites = [], onToggleFavorite }) {
 
         {/* Listings Grid */}
         <main className="catalog-grid-main">
+          {/* Catalog Results Header Bar with Active Filter Pills */}
+          <div className="catalog-results-header">
+            <div className="results-count-title">
+              <span>Showing <strong>{filteredListings.length}</strong> {filteredListings.length === 1 ? 'listing' : 'listings'}</span>
+              {locationFilter && locationFilter !== 'All' && (
+                <span className="results-location-tag"> in {locationFilter}</span>
+              )}
+            </div>
+
+            {/* Active Filter Chips */}
+            <div className="active-filters-chips-wrap">
+              {locationFilter && locationFilter !== 'All' && (
+                <span className="active-filter-badge">
+                  <MapPin size={12} />
+                  <span>{locationFilter}</span>
+                  <button 
+                    type="button" 
+                    onClick={() => handleSelectLocation('All')} 
+                    title="Remove location filter"
+                  >
+                    <X size={12} />
+                  </button>
+                </span>
+              )}
+
+              {searchQuery && (
+                <span className="active-filter-badge">
+                  <Search size={12} />
+                  <span>"{searchQuery}"</span>
+                  <button 
+                    type="button" 
+                    onClick={() => setSearchQuery('')} 
+                    title="Remove search query"
+                  >
+                    <X size={12} />
+                  </button>
+                </span>
+              )}
+
+              {currentCategory && currentCategory !== 'All' && (
+                <span className="active-filter-badge">
+                  <span>{currentCategory}</span>
+                  <button 
+                    type="button" 
+                    onClick={() => {
+                      const newParams = new URLSearchParams(searchParams);
+                      newParams.delete('category');
+                      setSearchParams(newParams);
+                    }} 
+                    title="Clear category"
+                  >
+                    <X size={12} />
+                  </button>
+                </span>
+              )}
+            </div>
+          </div>
+
           {loading ? (
             <div className="loading-state">
               <div className="spinner"></div>
@@ -459,25 +654,28 @@ export default function ListingsPage({ favorites = [], onToggleFavorite }) {
             </div>
           ) : filteredListings.length === 0 ? (
             <div className="empty-state">
-              <Search size={40} className="empty-icon" />
-              <h3>No listings match your filter criteria</h3>
-              <p>Try resetting filters or exploring other categories</p>
-              <button 
-                onClick={() => {
-                  setFuelFilter('All');
-                  setTransmissionFilter('All');
-                  setBedroomFilter('All');
-                  setWorkModeFilter('All');
-                  setBrandFilter('All');
-                  setProduceFilter('All');
-                  setServiceFilter('All');
-                  setSearchQuery('');
-                  setMaxPrice(50000000);
-                }}
-                className="btn-primary"
-              >
-                Clear All Filters
-              </button>
+              <MapPin size={40} className="empty-icon" />
+              <h3>No listings found {locationFilter !== 'All' ? `in "${locationFilter}"` : 'matching your filter criteria'}</h3>
+              <p>{locationFilter !== 'All' ? 'Try exploring all locations or searching for another area.' : 'Try resetting filters or exploring other categories.'}</p>
+              <div className="empty-state-actions">
+                {locationFilter !== 'All' && (
+                  <button 
+                    type="button"
+                    onClick={() => handleSelectLocation('All')} 
+                    className="filter-pill active"
+                    style={{ padding: '8px 18px', fontSize: '0.85rem' }}
+                  >
+                    Explore All Locations
+                  </button>
+                )}
+                <button 
+                  type="button"
+                  onClick={handleResetFilters}
+                  className="btn-primary"
+                >
+                  Clear All Filters
+                </button>
+              </div>
             </div>
           ) : (
             <div className="listings-cards-grid">

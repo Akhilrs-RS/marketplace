@@ -154,3 +154,187 @@
     font-size: 0.95rem;
   }
 }
+
+/* ── Brand and Location Left Group ── */
+.figma-navbar-left-group {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+/* Global Location Picker in Navbar */
+.figma-nav-location-picker {
+  position: relative;
+}
+
+.figma-nav-loc-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 9999px;
+  padding: 5px 12px;
+  color: #ffffff;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  backdrop-filter: blur(8px);
+}
+
+.figma-nav-loc-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.35);
+}
+
+.figma-nav-loc-btn.has-location {
+  background: rgba(37, 99, 235, 0.25);
+  border-color: rgba(59, 130, 246, 0.5);
+  color: #93C5FD;
+}
+
+.nav-loc-icon {
+  color: #60A5FA;
+  flex-shrink: 0;
+}
+
+.nav-loc-label {
+  max-width: 140px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.nav-loc-chevron {
+  opacity: 0.7;
+  transition: transform 0.2s ease;
+}
+
+.nav-loc-chevron.open {
+  transform: rotate(180deg);
+}
+
+/* Location Popover Menu */
+.figma-nav-loc-popover {
+  position: absolute;
+  top: calc(100% + 10px);
+  left: 0;
+  width: 220px;
+  background: #0F172A;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 12px;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.45);
+  padding: 6px 0;
+  z-index: 1100;
+  animation: navPopoverFade 0.18s ease-out;
+}
+
+@keyframes navPopoverFade {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.nav-loc-popover-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px 6px 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #94A3B8;
+}
+
+.nav-loc-popover-list {
+  display: flex;
+  flex-direction: column;
+  padding: 4px 0;
+}
+
+.nav-loc-popover-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 8px 14px;
+  background: transparent;
+  border: none;
+  color: #E2E8F0;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 500;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.nav-loc-popover-item:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: #ffffff;
+}
+
+.nav-loc-popover-item.active {
+  color: #60A5FA;
+  font-weight: 600;
+  background: rgba(37, 99, 235, 0.15);
+}
+
+.nav-loc-check-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #60A5FA;
+}
+
+/* Mobile Drawer Location Section */
+.mobile-loc-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  margin-bottom: 4px;
+}
+
+.mobile-loc-label-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #94A3B8;
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.mobile-loc-pills-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.mobile-loc-pill {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 9999px;
+  padding: 4px 10px;
+  color: #ffffff;
+  font-size: 0.75rem;
+  cursor: pointer;
+}
+
+.mobile-loc-pill.active {
+  background: #2563EB;
+  border-color: #2563EB;
+  font-weight: 600;
+}
+

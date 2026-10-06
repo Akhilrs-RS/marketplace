@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useSearchParams } from 'react-router-dom';
 import { 
   ChevronLeft, 
   Search, 
@@ -8,14 +8,64 @@ import {
   Bike, 
   Star, 
   Heart, 
-  ArrowRight 
+  ArrowRight,
+  X
 } from 'lucide-react';
 import HeroSearch from '../components/home/HeroSearch';
 import './ShopsPage.css';
 
+function matchLocation(itemLocation, filterQuery) {
+  if (!filterQuery || filterQuery === 'All') return true;
+  if (!itemLocation) return false;
+
+  const loc = itemLocation.toLowerCase();
+  const q = filterQuery.toLowerCase().trim();
+  if (!q) return true;
+
+  if (loc.includes(q)) return true;
+
+  if (q === 'thiruvananthapuram' || q === 'trivandrum' || q === 'tvm') {
+    return (
+      loc.includes('thiruvananthapuram') || 
+      loc.includes('trivandrum') || 
+      loc.includes('kazhakkoottam') || 
+      loc.includes('kowdiar')
+    );
+  }
+
+  if (q === 'kochi' || q === 'cochin' || q === 'ernakulam') {
+    return (
+      loc.includes('kochi') || 
+      loc.includes('cochin') || 
+      loc.includes('kakkanad') || 
+      loc.includes('ernakulam') || 
+      loc.includes('aluva')
+    );
+  }
+
+  return false;
+}
+
 export default function ShopsPage({ onOpenContact, favorites = [], onToggleFavorite }) {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const urlLoc = searchParams.get('location') || '';
   const [searchTerm, setSearchTerm] = useState('');
-  const [locationTerm, setLocationTerm] = useState('');
+  const [locationTerm, setLocationTerm] = useState(urlLoc);
+
+  useEffect(() => {
+    setLocationTerm(urlLoc);
+  }, [urlLoc]);
+
+  const handleLocationChange = (val) => {
+    setLocationTerm(val);
+    const p = new URLSearchParams(searchParams);
+    if (!val || val === 'All') {
+      p.delete('location');
+    } else {
+      p.set('location', val);
+    }
+    setSearchParams(p);
+  };
 
   // 9 Dealership Cards exactly matching Figma Screenshot (Desktop - 72)
   const allDealerships = [
@@ -131,11 +181,10 @@ export default function ShopsPage({ onOpenContact, favorites = [], onToggleFavor
 
   const filteredShops = allDealerships.filter((shop) => {
     const qName = searchTerm.trim().toLowerCase();
-    const qLoc = locationTerm.trim().toLowerCase();
     const matchesName = !qName || 
       shop.name.toLowerCase().includes(qName) || 
       shop.category.toLowerCase().includes(qName);
-    const matchesLoc = !qLoc || shop.location.toLowerCase().includes(qLoc);
+    const matchesLoc = matchLocation(shop.location, locationTerm);
     return matchesName && matchesLoc;
   });
 
@@ -187,9 +236,19 @@ export default function ShopsPage({ onOpenContact, favorites = [], onToggleFavor
                   type="text" 
                   placeholder="Location"
                   value={locationTerm}
-                  onChange={(e) => setLocationTerm(e.target.value)}
+                  onChange={(e) => handleLocationChange(e.target.value)}
                   className="search-pill-input search-pill-location"
                 />
+                {locationTerm && (
+                  <button 
+                    type="button" 
+                    onClick={() => handleLocationChange('')}
+                    style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#94A3B8', display: 'flex', alignItems: 'center', padding: '0 4px' }}
+                    title="Clear location"
+                  >
+                    <X size={14} />
+                  </button>
+                )}
               </div>
 
               <button type="submit" className="search-pill-submit-btn">
@@ -199,8 +258,37 @@ export default function ShopsPage({ onOpenContact, favorites = [], onToggleFavor
             </form>
           </div>
 
-          {/* 3x3 Grid of 9 Vehicle Shop Cards */}
-          <div className="vehicle-shops-grid">
+          {/* Quick Location Pills */}
+          <div className="shops-quick-city-pills">
+            <span className="shops-loc-pill-label">Filter by City:</span>
+            {['All', 'Kazhakkoottam', 'Kowdiar', 'Thiruvananthapuram'].map((c) => (
+              <button
+                key={c}
+                type="button"
+                className={`shops-city-pill ${(locationTerm === c || (c === 'All' && !locationTerm)) ? 'active' : ''}`}
+                onClick={() => handleLocationChange(c === 'All' ? '' : c)}
+              >
+                {c}
+              </button>
+            ))}
+          </div>
+
+          {/* 3x3 Grid of 9 Vehicle Shop Cards or Empty State */}
+          {filteredShops.length === 0 ? (
+            <div className="empty-state" style={{ margin: '40px 0' }}>
+              <MapPin size={40} className="empty-icon" />
+              <h3>No vehicle showrooms found in "{locationTerm}"</h3>
+              <p>Explore all dealerships across Kerala & South India.</p>
+              <button
+                type="button"
+                className="btn-primary"
+                onClick={() => handleLocationChange('')}
+              >
+                View All Dealerships
+              </button>
+            </div>
+          ) : (
+            <div className="vehicle-shops-grid">
             {filteredShops.map((shop) => {
               const isFav = favorites.includes(shop.id);
               return (
@@ -290,6 +378,7 @@ export default function ShopsPage({ onOpenContact, favorites = [], onToggleFavor
               );
             })}
           </div>
+        )}
         </div>
       </section>
     </div>
