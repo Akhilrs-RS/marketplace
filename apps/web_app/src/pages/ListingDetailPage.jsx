@@ -60,6 +60,9 @@ export default function ListingDetailPage({
   const getSearchPlaceholder = () => {
     switch (item.category) {
       case 'Vehicles':
+        if (item.title && !item.title.toLowerCase().includes('creta')) {
+          return `Explore ${item.title} Listings`;
+        }
         return 'Explore Hyundai Creta Vehicles';
       case 'Property':
         return 'Explore Apartments & Properties';

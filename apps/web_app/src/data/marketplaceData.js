@@ -212,6 +212,353 @@ export const MARKETPLACE_ITEMS = {
     },
   },
 
+  'list_bike_re_hunter': {
+    id: 'list_bike_re_hunter',
+    category: 'Vehicles',
+    subcategory: 'Bike',
+    title: 'Royal Enfield Hunter 350',
+    price: 175000,
+    formatted_price: '₹ 1,75,000',
+    negotiable: true,
+    location: 'Thiruvananthapuram',
+    posted_time: 'Posted 3d ago',
+    views: '890 views',
+    showcase_image: '/images/bike_hunter.png',
+    is_car_layout: false,
+    thumbnails: [
+      { id: 0, label: 'Hunter 350', thumb: '/images/bike_hunter.png', main: '/images/bike_hunter.png' },
+      { id: 1, label: 'Yamaha R15', thumb: '/images/bike_r15.png', main: '/images/bike_r15.png' },
+    ],
+    description: 'Single owner Royal Enfield Hunter 350 in immaculate condition. Periodic authorized service records available, zero accident history, dual channel ABS, smooth J-Series engine.',
+    specs: [
+      { label: 'Brand', value: 'Royal Enfield' },
+      { label: 'Model', value: 'Hunter 350' },
+      { label: 'Year', value: '2023' },
+      { label: 'Fuel', value: 'Petrol' },
+      { label: 'Transmission', value: 'Manual 5-Speed' },
+      { label: 'KM', value: '4,200' },
+      { label: 'Ownership', value: '1st' },
+    ],
+    seller: {
+      initial: 'M',
+      name: 'Moto World Verified',
+      role: 'Certified Two-Wheeler Showroom',
+      stats: [
+        { number: '24', label: 'In Stock' },
+        { number: '98%', label: 'Response' },
+        { number: '85', label: 'Delivered' },
+      ],
+      phone: '+91 98470 77889',
+    },
+    similar: {
+      id: 'list_scooter_activa',
+      image: '/images/scooter_activa.png',
+      price: '₹ 78,000',
+      negotiable: true,
+      title: 'Honda Activa 6G Premium',
+      location: 'Thiruvananthapuram',
+      sellerType: 'Showroom',
+      time: '1d ago',
+    },
+  },
+
+  'list_scooter_activa': {
+    id: 'list_scooter_activa',
+    category: 'Vehicles',
+    subcategory: 'Scooter',
+    title: 'Honda Activa 6G Premium DLX',
+    price: 78000,
+    formatted_price: '₹ 78,000',
+    negotiable: false,
+    location: 'Kazhakkoottam',
+    posted_time: 'Posted 1d ago',
+    views: '1,420 views',
+    showcase_image: '/images/scooter_activa.png',
+    is_car_layout: false,
+    thumbnails: [
+      { id: 0, label: 'Activa 6G', thumb: '/images/scooter_activa.png', main: '/images/scooter_activa.png' },
+    ],
+    description: 'Honda Activa 6G DLX Alloy with PGM-FI HET engine, silent start system, pristine condition with 5-year extended warranty.',
+    specs: [
+      { label: 'Brand', value: 'Honda' },
+      { label: 'Model', value: 'Activa 6G DLX' },
+      { label: 'Year', value: '2023' },
+      { label: 'Fuel', value: 'Petrol' },
+      { label: 'Transmission', value: 'Automatic CVT' },
+      { label: 'KM', value: '6,800' },
+      { label: 'Ownership', value: '1st' },
+    ],
+    seller: {
+      initial: 'H',
+      name: 'Honda 2 Wheelers Showroom',
+      role: 'Authorized Dealer',
+      stats: [
+        { number: '30', label: 'In Stock' },
+        { number: '99%', label: 'Response' },
+        { number: '120', label: 'Delivered' },
+      ],
+      phone: '+91 98470 11223',
+    },
+    similar: {
+      id: 'list_bike_re_hunter',
+      image: '/images/bike_hunter.png',
+      price: '₹ 1,75,000',
+      negotiable: true,
+      title: 'Royal Enfield Hunter 350',
+      location: 'Thiruvananthapuram',
+      sellerType: 'Showroom',
+      time: '3d ago',
+    },
+  },
+
+  'list_honda_cb350': {
+    id: 'list_honda_cb350',
+    category: 'Vehicles',
+    subcategory: 'Bike',
+    title: "Honda CB350 H'ness DLX Pro",
+    price: 205000,
+    formatted_price: '₹ 2,05,000',
+    negotiable: true,
+    location: 'Kazhakkoottam',
+    posted_time: 'Posted 4d ago',
+    views: '760 views',
+    showcase_image: '/images/bike_cb350.png',
+    is_car_layout: false,
+    thumbnails: [
+      { id: 0, label: 'CB350 DLX', thumb: '/images/bike_cb350.png', main: '/images/bike_cb350.png' },
+    ],
+    description: 'Honda CB350 Hness DLX Pro featuring Selectable Torque Control (HSTC), assist and slipper clutch, chrome styling and rich exhaust note.',
+    specs: [
+      { label: 'Brand', value: 'Honda' },
+      { label: 'Model', value: "CB350 H'ness" },
+      { label: 'Year', value: '2023' },
+      { label: 'Fuel', value: 'Petrol' },
+      { label: 'Transmission', value: 'Manual 5-Speed' },
+      { label: 'KM', value: '5,100' },
+      { label: 'Ownership', value: '1st' },
+    ],
+    seller: {
+      initial: 'H',
+      name: 'Honda 2 Wheelers Hub',
+      role: 'Authorized Dealer',
+      stats: [
+        { number: '18', label: 'In Stock' },
+        { number: '97%', label: 'Response' },
+        { number: '64', label: 'Sold' },
+      ],
+      phone: '+91 98470 11223',
+    },
+    similar: {
+      id: 'list_scooter_activa',
+      image: '/images/scooter_activa.png',
+      price: '₹ 78,000',
+      negotiable: false,
+      title: 'Honda Activa 6G Premium',
+      location: 'Kazhakkoottam',
+      sellerType: 'Showroom',
+      time: '1d ago',
+    },
+  },
+
+  'list_maruti_swift': {
+    id: 'list_maruti_swift',
+    category: 'Vehicles',
+    subcategory: 'Car',
+    title: 'Maruti Suzuki Swift ZXi',
+    price: 680000,
+    formatted_price: '₹ 6,80,000',
+    negotiable: true,
+    location: 'Kowdiar',
+    posted_time: 'Posted 2d ago',
+    views: '1,280 views',
+    showcase_image: '/images/car_swift.png',
+    is_car_layout: true,
+    thumbnails: [
+      { id: 0, label: 'Swift Red', thumb: '/images/car_swift.png', main: '/images/car_swift.png' },
+      { id: 1, label: 'Brezza Silver', thumb: '/images/car_brezza.png', main: '/images/car_brezza.png' },
+    ],
+    description: 'Maruti Suzuki Swift ZXi top-end hatchback. Features 1.2L Z-Series DualJet engine, SmartPlay Studio infotainment, alloy wheels, auto climate control.',
+    specs: [
+      { label: 'Brand', value: 'Maruti Suzuki' },
+      { label: 'Model', value: 'Swift ZXi' },
+      { label: 'Year', value: '2023' },
+      { label: 'Fuel', value: 'Petrol' },
+      { label: 'Transmission', value: 'Manual' },
+      { label: 'KM', value: '12,500' },
+      { label: 'Ownership', value: '1st' },
+    ],
+    seller: {
+      initial: 'M',
+      name: 'Maruti Car Point',
+      role: 'Trusted Car Dealer',
+      stats: [
+        { number: '16', label: 'In Stock' },
+        { number: '98%', label: 'Response' },
+        { number: '94', label: 'Delivered' },
+      ],
+      phone: '+91 98470 33445',
+    },
+    similar: {
+      id: 'list_maruti_brezza',
+      image: '/images/car_brezza.png',
+      price: '₹ 9,90,000',
+      negotiable: true,
+      title: 'Maruti Suzuki Brezza ZXi+',
+      location: 'Kowdiar',
+      sellerType: 'Dealer',
+      time: '3d ago',
+    },
+  },
+
+  'list_maruti_brezza': {
+    id: 'list_maruti_brezza',
+    category: 'Vehicles',
+    subcategory: 'Car',
+    title: 'Maruti Suzuki Brezza ZXi+',
+    price: 990000,
+    formatted_price: '₹ 9,90,000',
+    negotiable: true,
+    location: 'Kowdiar',
+    posted_time: 'Posted 3d ago',
+    views: '1,105 views',
+    showcase_image: '/images/car_brezza.png',
+    is_car_layout: true,
+    thumbnails: [
+      { id: 0, label: 'Brezza Silver', thumb: '/images/car_brezza.png', main: '/images/car_brezza.png' },
+    ],
+    description: 'Maruti Brezza ZXi+ with electric sunroof, 360-degree camera, wireless Android Auto/Apple CarPlay, dual-tone roof.',
+    specs: [
+      { label: 'Brand', value: 'Maruti Suzuki' },
+      { label: 'Model', value: 'Brezza ZXi+' },
+      { label: 'Year', value: '2023' },
+      { label: 'Fuel', value: 'Petrol' },
+      { label: 'Transmission', value: 'Automatic' },
+      { label: 'KM', value: '14,000' },
+      { label: 'Ownership', value: '1st' },
+    ],
+    seller: {
+      initial: 'M',
+      name: 'Maruti Car Point',
+      role: 'Trusted Car Dealer',
+      stats: [
+        { number: '16', label: 'In Stock' },
+        { number: '98%', label: 'Response' },
+        { number: '94', label: 'Delivered' },
+      ],
+      phone: '+91 98470 33445',
+    },
+    similar: {
+      id: 'list_maruti_swift',
+      image: '/images/car_swift.png',
+      price: '₹ 6,80,000',
+      negotiable: true,
+      title: 'Maruti Suzuki Swift ZXi',
+      location: 'Kowdiar',
+      sellerType: 'Dealer',
+      time: '2d ago',
+    },
+  },
+
+  'list_tata_ace': {
+    id: 'list_tata_ace',
+    category: 'Vehicles',
+    subcategory: 'Commercial',
+    title: 'Tata Ace Gold Diesel Plus',
+    price: 495000,
+    formatted_price: '₹ 4,95,000',
+    negotiable: true,
+    location: 'Kazhakkoottam',
+    posted_time: 'Posted 2d ago',
+    views: '840 views',
+    showcase_image: '/images/truck_tata_ace.png',
+    is_car_layout: false,
+    thumbnails: [
+      { id: 0, label: 'Tata Ace Gold', thumb: '/images/truck_tata_ace.png', main: '/images/truck_tata_ace.png' },
+    ],
+    description: 'Tata Ace Gold Diesel Plus commercial mini truck. Heavy duty chassis, 750 kg payload capacity, fuel-efficient 2-cylinder engine.',
+    specs: [
+      { label: 'Brand', value: 'Tata Motors' },
+      { label: 'Model', value: 'Ace Gold Diesel' },
+      { label: 'Year', value: '2023' },
+      { label: 'Payload', value: '750 kg' },
+      { label: 'Fuel', value: 'Diesel' },
+      { label: 'Transmission', value: 'Manual' },
+      { label: 'KM', value: '19,800' },
+      { label: 'Ownership', value: '1st' },
+    ],
+    seller: {
+      initial: 'K',
+      name: 'Kerala Commercial Motor',
+      role: 'Commercial Vehicle Dealer',
+      stats: [
+        { number: '24', label: 'In Stock' },
+        { number: '96%', label: 'Response' },
+        { number: '72', label: 'Delivered' },
+      ],
+      phone: '+91 98470 88990',
+    },
+    similar: {
+      id: 'list_bolero_truck',
+      image: '/images/truck_bolero.png',
+      price: '₹ 6,85,000',
+      negotiable: true,
+      title: 'Mahindra Bolero Maxi Truck',
+      location: 'Kazhakkoottam',
+      sellerType: 'Dealer',
+      time: '5d ago',
+    },
+  },
+
+  'list_bolero_truck': {
+    id: 'list_bolero_truck',
+    category: 'Vehicles',
+    subcategory: 'Commercial',
+    title: 'Mahindra Bolero Maxi Truck Plus',
+    price: 685000,
+    formatted_price: '₹ 6,85,000',
+    negotiable: true,
+    location: 'Kazhakkoottam',
+    posted_time: 'Posted 5d ago',
+    views: '920 views',
+    showcase_image: '/images/truck_bolero.png',
+    is_car_layout: false,
+    thumbnails: [
+      { id: 0, label: 'Bolero Maxi', thumb: '/images/truck_bolero.png', main: '/images/truck_bolero.png' },
+    ],
+    description: 'Mahindra Bolero Maxi Truck Plus commercial pickup. Proven m2DiCR diesel engine, 1.2 Ton payload capacity, power steering and reinforced suspension.',
+    specs: [
+      { label: 'Brand', value: 'Mahindra' },
+      { label: 'Model', value: 'Bolero Maxi Truck' },
+      { label: 'Year', value: '2023' },
+      { label: 'Payload', value: '1,200 kg' },
+      { label: 'Fuel', value: 'Diesel' },
+      { label: 'Transmission', value: 'Manual' },
+      { label: 'KM', value: '22,400' },
+      { label: 'Ownership', value: '1st' },
+    ],
+    seller: {
+      initial: 'K',
+      name: 'Kerala Commercial Motor',
+      role: 'Commercial Vehicle Dealer',
+      stats: [
+        { number: '24', label: 'In Stock' },
+        { number: '96%', label: 'Response' },
+        { number: '72', label: 'Delivered' },
+      ],
+      phone: '+91 98470 88990',
+    },
+    similar: {
+      id: 'list_tata_ace',
+      image: '/images/truck_tata_ace.png',
+      price: '₹ 4,95,000',
+      negotiable: true,
+      title: 'Tata Ace Gold Diesel Plus',
+      location: 'Kazhakkoottam',
+      sellerType: 'Dealer',
+      time: '2d ago',
+    },
+  },
+
   // ── PROPERTY ─────────────────────────────────────────────────────────────
   'list_apt_kakkanad_3bhk': {
     id: 'list_apt_kakkanad_3bhk',
@@ -957,6 +1304,56 @@ export function getMarketplaceItemById(id) {
   if (id.includes('sofa') || id.includes('furniture') || id.includes('oak') || id.includes('dining')) {
     return {
       ...MARKETPLACE_ITEMS['list_teak_sofa'],
+      id,
+    };
+  }
+
+  // Vehicle pattern fallbacks
+  if (id.includes('hunter') || id.includes('r15') || id.includes('bike')) {
+    return {
+      ...MARKETPLACE_ITEMS['list_bike_re_hunter'],
+      id,
+    };
+  }
+  if (id.includes('activa') || id.includes('scooter')) {
+    return {
+      ...MARKETPLACE_ITEMS['list_scooter_activa'],
+      id,
+    };
+  }
+  if (id.includes('cb350') || id.includes('honda')) {
+    return {
+      ...MARKETPLACE_ITEMS['list_honda_cb350'],
+      id,
+    };
+  }
+  if (id.includes('brezza')) {
+    return {
+      ...MARKETPLACE_ITEMS['list_maruti_brezza'],
+      id,
+    };
+  }
+  if (id.includes('swift') || id.includes('maruti')) {
+    return {
+      ...MARKETPLACE_ITEMS['list_maruti_swift'],
+      id,
+    };
+  }
+  if (id.includes('tata_ace') || id.includes('intra')) {
+    return {
+      ...MARKETPLACE_ITEMS['list_tata_ace'],
+      id,
+    };
+  }
+  if (id.includes('bolero') || id.includes('truck') || id.includes('commercial')) {
+    return {
+      ...MARKETPLACE_ITEMS['list_bolero_truck'],
+      id,
+    };
+  }
+  if (id.includes('i20')) {
+    return {
+      ...MARKETPLACE_ITEMS['list_i20_sportz'],
       id,
     };
   }

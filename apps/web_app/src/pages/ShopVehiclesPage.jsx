@@ -2,191 +2,17 @@ import React, { useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { ChevronLeft, Search, Star, Heart, ArrowRight, Fuel } from 'lucide-react';
 import HeroSearch from '../components/home/HeroSearch';
+import { getDealershipInventory } from '../data/dealershipInventoryData';
 import './ShopVehiclesPage.css';
 
 export default function ShopVehiclesPage({ favorites = [], onToggleFavorite }) {
   const { id } = useParams();
   const [searchTerm, setSearchTerm] = useState('');
 
-  // 15 Vehicle inventory cards exactly matching Figma Desktop - 73
-  const initialVehicles = [
-    // Row 1
-    {
-      id: 'hyundai_creta_sx_1',
-      title: 'Hyundai Creta SX',
-      rating: '4.8',
-      originalPrice: '₹ 7,80,000',
-      price: '₹ 7,25,000',
-      specs: 'SUV . Petrol . Automatic . 1.5L CRDi',
-      fuelMileage: '21.8 kmpl (Petrol)',
-      image: '/images/hyundai_creta_card.png',
-      listingId: 'list_creta_2022',
-    },
-    {
-      id: 'hyundai_aura_1',
-      title: 'Hyundai Aura',
-      rating: '4.8',
-      originalPrice: '₹ 8,00,000',
-      price: '₹ 7,00,000',
-      specs: 'Sedan . CNG . Manual . 1.2L Kappa',
-      fuelMileage: '28 km/pl (CNG)',
-      image: '/images/hyundai_aura.png',
-      listingId: 'list_creta_2022',
-    },
-    {
-      id: 'hyundai_tucson_1',
-      title: 'Hyundai Tucson 2021',
-      rating: '4.8',
-      originalPrice: '₹ 12,80,000',
-      price: '₹ 12,37,000',
-      specs: 'SUV . Petrol . Automatic . 1.5L CRDi',
-      fuelMileage: '21.8 kmpl (Petrol)',
-      image: '/images/hyundai_tucson.png',
-      listingId: 'list_creta_2022',
-    },
+  const dealership = getDealershipInventory(id);
+  const vehicles = dealership.vehicles || [];
 
-    // Row 2
-    {
-      id: 'hyundai_i20_1',
-      title: 'Hyundai i20 Sportz',
-      rating: '4.8',
-      originalPrice: '₹ 8,00,000',
-      price: '₹ 7,80,000',
-      specs: 'Sedan . CNG . Manual . 1.2L Kappa',
-      fuelMileage: '21.8 kmpl (Petrol)',
-      image: '/images/i20_sportz.png',
-      listingId: 'list_creta_2022',
-    },
-    {
-      id: 'hyundai_santafe_1',
-      title: 'Hyundai Santa Fe Active X',
-      rating: '4.8',
-      originalPrice: '₹ 8,00,000',
-      price: '₹ 7,80,000',
-      specs: 'Sedan . CNG . Manual . 1.2L Kappa',
-      fuelMileage: '21.8 kmpl (Petrol)',
-      image: '/images/hyundai_santafe.png',
-      listingId: 'list_creta_2022',
-    },
-    {
-      id: 'hyundai_santafe_2',
-      title: 'Hyundai Santa Fe Active X',
-      rating: '4.8',
-      originalPrice: '₹ 8,00,000',
-      price: '₹ 7,80,000',
-      specs: 'Sedan . CNG . Manual . 1.2L Kappa',
-      fuelMileage: '21.8 kmpl (Petrol)',
-      image: '/images/hyundai_santafe.png',
-      listingId: 'list_creta_2022',
-    },
-
-    // Row 3
-    {
-      id: 'hyundai_creta_sx_2',
-      title: 'Hyundai Creta SX',
-      rating: '4.8',
-      originalPrice: '₹ 7,80,000',
-      price: '₹ 7,25,000',
-      specs: 'SUV . Petrol . Automatic . 1.5L CRDi',
-      fuelMileage: '21.8 kmpl (Petrol)',
-      image: '/images/hyundai_creta_card.png',
-      listingId: 'list_creta_2022',
-    },
-    {
-      id: 'hyundai_aura_2',
-      title: 'Hyundai Aura',
-      rating: '4.8',
-      originalPrice: '₹ 8,00,000',
-      price: '₹ 7,00,000',
-      specs: 'Sedan . CNG . Manual . 1.2L Kappa',
-      fuelMileage: '28 km/pl (CNG)',
-      image: '/images/hyundai_aura.png',
-      listingId: 'list_creta_2022',
-    },
-    {
-      id: 'hyundai_tucson_2',
-      title: 'Hyundai Tucson 2021',
-      rating: '4.8',
-      originalPrice: '₹ 12,80,000',
-      price: '₹ 12,37,000',
-      specs: 'SUV . Petrol . Automatic . 1.5L CRDi',
-      fuelMileage: '21.8 kmpl (Petrol)',
-      image: '/images/hyundai_tucson.png',
-      listingId: 'list_creta_2022',
-    },
-
-    // Row 4
-    {
-      id: 'hyundai_creta_sx_3',
-      title: 'Hyundai Creta SX',
-      rating: '4.8',
-      originalPrice: '₹ 7,80,000',
-      price: '₹ 7,25,000',
-      specs: 'SUV . Petrol . Automatic . 1.5L CRDi',
-      fuelMileage: '21.8 kmpl (Petrol)',
-      image: '/images/hyundai_creta_card.png',
-      listingId: 'list_creta_2022',
-    },
-    {
-      id: 'hyundai_aura_3',
-      title: 'Hyundai Aura',
-      rating: '4.8',
-      originalPrice: '₹ 8,00,000',
-      price: '₹ 7,00,000',
-      specs: 'Sedan . CNG . Manual . 1.2L Kappa',
-      fuelMileage: '28 km/pl (CNG)',
-      image: '/images/hyundai_aura.png',
-      listingId: 'list_creta_2022',
-    },
-    {
-      id: 'hyundai_tucson_3',
-      title: 'Hyundai Tucson 2021',
-      rating: '4.8',
-      originalPrice: '₹ 12,80,000',
-      price: '₹ 12,37,000',
-      specs: 'SUV . Petrol . Automatic . 1.5L CRDi',
-      fuelMileage: '21.8 kmpl (Petrol)',
-      image: '/images/hyundai_tucson.png',
-      listingId: 'list_creta_2022',
-    },
-
-    // Row 5
-    {
-      id: 'hyundai_creta_sx_4',
-      title: 'Hyundai Creta SX',
-      rating: '4.8',
-      originalPrice: '₹ 7,80,000',
-      price: '₹ 7,25,000',
-      specs: 'SUV . Petrol . Automatic . 1.5L CRDi',
-      fuelMileage: '21.8 kmpl (Petrol)',
-      image: '/images/hyundai_creta_card.png',
-      listingId: 'list_creta_2022',
-    },
-    {
-      id: 'hyundai_aura_4',
-      title: 'Hyundai Aura',
-      rating: '4.8',
-      originalPrice: '₹ 8,00,000',
-      price: '₹ 7,00,000',
-      specs: 'Sedan . CNG . Manual . 1.2L Kappa',
-      fuelMileage: '28 km/pl (CNG)',
-      image: '/images/hyundai_aura.png',
-      listingId: 'list_creta_2022',
-    },
-    {
-      id: 'hyundai_tucson_4',
-      title: 'Hyundai Tucson 2021',
-      rating: '4.8',
-      originalPrice: '₹ 12,80,000',
-      price: '₹ 12,37,000',
-      specs: 'SUV . Petrol . Automatic . 1.5L CRDi',
-      fuelMileage: '21.8 kmpl (Petrol)',
-      image: '/images/hyundai_tucson.png',
-      listingId: 'list_creta_2022',
-    },
-  ];
-
-  const filteredVehicles = initialVehicles.filter((v) => {
+  const filteredVehicles = vehicles.filter((v) => {
     const q = searchTerm.trim().toLowerCase();
     if (!q) return true;
     return (
@@ -218,7 +44,7 @@ export default function ShopVehiclesPage({ favorites = [], onToggleFavorite }) {
               <Search size={16} className="inventory-search-icon" />
               <input
                 type="text"
-                placeholder="Explore Hyundai Vehicle"
+                placeholder={`Explore ${dealership.searchKeyword || dealership.name}`}
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="inventory-search-input"
@@ -230,7 +56,7 @@ export default function ShopVehiclesPage({ favorites = [], onToggleFavorite }) {
             </form>
           </div>
 
-          {/* 3-column Grid of 15 Vehicles matching Figma Desktop - 73 */}
+          {/* 3-column Grid of Vehicles matching Figma Desktop - 73 */}
           <div className="shop-vehicles-grid">
             {filteredVehicles.map((car) => {
               const isFav = favorites.includes(car.id);
@@ -260,7 +86,7 @@ export default function ShopVehiclesPage({ favorites = [], onToggleFavorite }) {
                     </button>
                   </div>
 
-                  {/* Centered Car Image */}
+                  {/* Centered Vehicle Image */}
                   <div className="car-card-image-wrap">
                     <img
                       src={car.image}
