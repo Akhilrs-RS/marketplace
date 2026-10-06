@@ -204,7 +204,11 @@ export default function ShopsPage({ onOpenContact, favorites = [], onToggleFavor
             {filteredShops.map((shop) => {
               const isFav = favorites.includes(shop.id);
               return (
-                <div key={shop.id} className="vehicle-shop-card">
+                <Link 
+                  key={shop.id} 
+                  to={`/shops/${shop.id}`}
+                  className="vehicle-shop-card"
+                >
                   {/* Image Wrap with count badge and action button */}
                   <div className="shop-card-image-wrap">
                     <img 
@@ -242,13 +246,12 @@ export default function ShopsPage({ onOpenContact, favorites = [], onToggleFavor
                     )}
 
                     {shop.actionType === 'arrow' && (
-                      <Link 
-                        to={`/listings?query=${encodeURIComponent(shop.name)}`}
+                      <div 
                         className="shop-action-btn-circle"
                         title="View showroom"
                       >
                         <ArrowRight size={16} color="#475569" />
-                      </Link>
+                      </div>
                     )}
                   </div>
 
@@ -283,7 +286,7 @@ export default function ShopsPage({ onOpenContact, favorites = [], onToggleFavor
                       <span className="shop-trust-badge">{shop.badge}</span>
                     </div>
                   </div>
-                </div>
+                </Link>
               );
             })}
           </div>

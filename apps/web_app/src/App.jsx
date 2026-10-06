@@ -8,6 +8,7 @@ import HomePage from './pages/HomePage';
 import ShopsPage from './pages/ShopsPage';
 import ListingsPage from './pages/ListingsPage';
 import ListingDetailPage from './pages/ListingDetailPage';
+import ShopVehiclesPage from './pages/ShopVehiclesPage';
 
 // Scroll to top helper
 function ScrollToTop() {
@@ -77,6 +78,24 @@ export default function App() {
             element={
               <ShopsPage 
                 onOpenContact={(shopData) => setContactModalData(shopData)}
+                favorites={favorites}
+                onToggleFavorite={handleToggleFavorite}
+              />
+            } 
+          />
+          <Route 
+            path="/shops/:id" 
+            element={
+              <ShopVehiclesPage 
+                favorites={favorites}
+                onToggleFavorite={handleToggleFavorite}
+              />
+            } 
+          />
+          <Route 
+            path="/shop-listings" 
+            element={
+              <ShopVehiclesPage 
                 favorites={favorites}
                 onToggleFavorite={handleToggleFavorite}
               />
