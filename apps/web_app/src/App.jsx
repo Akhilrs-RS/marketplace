@@ -9,6 +9,7 @@ import ShopsPage from './pages/ShopsPage';
 import ListingsPage from './pages/ListingsPage';
 import ListingDetailPage from './pages/ListingDetailPage';
 import ShopVehiclesPage from './pages/ShopVehiclesPage';
+import MessagesPage from './pages/MessagesPage';
 
 // Scroll to top helper
 function ScrollToTop() {
@@ -119,6 +120,10 @@ export default function App() {
                 onToggleFavorite={handleToggleFavorite}
               />
             } 
+          />
+          <Route 
+            path="/messages" 
+            element={<MessagesPage />} 
           />
           <Route 
             path="*" 

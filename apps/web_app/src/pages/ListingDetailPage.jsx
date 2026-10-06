@@ -395,19 +395,8 @@ export default function ListingDetailPage({
                 ) : (
                   <>
                     <button 
-                      type="button"
-                      onClick={() => {
-                        if (onOpenContact) {
-                          onOpenContact({
-                            title: item.title,
-                            formatted_price: item.formatted_price,
-                            seller_name: item.seller.name,
-                            seller_phone: item.seller.phone,
-                          });
-                        } else {
-                          alert(`Opening chat with ${item.seller.name}...`);
-                        }
-                      }}
+                      type="button" 
+                      onClick={() => navigate(`/messages?listing=${item.id}`)}
                       className="btn-chat-orange"
                     >
                       <MessageSquare size={16} />

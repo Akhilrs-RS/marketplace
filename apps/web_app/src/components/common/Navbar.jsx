@@ -3,7 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { Search, Heart, MessageSquare, Menu, X, Building2 } from 'lucide-react';
 import './Navbar.css';
 
-export default function Navbar({ onOpenPostAd, favoritesCount = 0 }) {
+export default function Navbar({ onOpenPostAd, favoritesCount = 0, unreadMessagesCount = 2 }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
@@ -20,8 +20,10 @@ export default function Navbar({ onOpenPostAd, favoritesCount = 0 }) {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  const isSolidPage = location.pathname.startsWith('/messages');
+
   return (
-    <header className={`navbar-root ${scrolled ? 'navbar-scrolled' : 'navbar-transparent'}`}>
+    <header className={`navbar-root ${scrolled || isSolidPage ? 'navbar-scrolled' : 'navbar-transparent'}`}>
       <div className="container navbar-container">
         {/* Brand Logo matching Figma Desktop - 71 */}
         <Link to="/" className="figma-navbar-brand">
@@ -46,14 +48,11 @@ export default function Navbar({ onOpenPostAd, favoritesCount = 0 }) {
             {favoritesCount > 0 && <span className="nav-fav-pill">{favoritesCount}</span>}
           </Link>
 
-          <button 
-            type="button" 
-            onClick={() => alert("Opening messages with verified sellers...")}
-            className="figma-nav-item"
-          >
+          <Link to="/messages" className="figma-nav-item">
             <MessageSquare size={16} className="nav-item-icon" />
             <span>Message</span>
-          </button>
+            {unreadMessagesCount > 0 && <span className="nav-fav-pill">{unreadMessagesCount}</span>}
+          </Link>
 
           {/* Black Pill Button: "Post an Ad" matching Figma Desktop - 71 */}
           <button 
@@ -88,6 +87,11 @@ export default function Navbar({ onOpenPostAd, favoritesCount = 0 }) {
           </Link>
           <Link to="/shops" onClick={() => setMobileMenuOpen(false)}>
             <span>Vehicle Shops</span>
+          </Link>
+          <Link to="/messages" onClick={() => setMobileMenuOpen(false)}>
+            <MessageSquare size={16} />
+            <span>Messages</span>
+            {unreadMessagesCount > 0 && <span className="nav-fav-pill" style={{ marginLeft: 'auto' }}>{unreadMessagesCount}</span>}
           </Link>
           <button 
             type="button"
