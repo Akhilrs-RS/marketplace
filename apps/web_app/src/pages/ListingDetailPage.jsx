@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { 
   ChevronLeft, 
   Search, 
@@ -30,6 +30,7 @@ export default function ListingDetailPage({
   onToggleFavorite 
 }) {
   const { id } = useParams();
+  const navigate = useNavigate();
   const item = getMarketplaceItemById(id);
   const listingId = item.id;
   const isFav = favorites.includes(listingId);
@@ -92,10 +93,20 @@ export default function ListingDetailPage({
       <div className="container listing-detail-container">
         {/* Top Control Bar: Back Button on Left, Secondary Search on Right */}
         <div className="detail-top-bar">
-          <Link to="/listings" className="detail-back-btn">
+          <button 
+            type="button" 
+            onClick={() => {
+              if (window.history.length > 1) {
+                navigate(-1);
+              } else {
+                navigate('/listings');
+              }
+            }} 
+            className="detail-back-btn"
+          >
             <ChevronLeft size={15} />
             <span>Back</span>
-          </Link>
+          </button>
 
           <form 
             className="detail-search-pill" 

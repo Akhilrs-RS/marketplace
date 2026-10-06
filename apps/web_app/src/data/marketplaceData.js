@@ -212,6 +212,163 @@ export const MARKETPLACE_ITEMS = {
     },
   },
 
+  'list_hyundai_tucson_2021': {
+    id: 'list_hyundai_tucson_2021',
+    category: 'Vehicles',
+    subcategory: 'Car',
+    title: '2021 Hyundai Tucson GLS 2.0 CRDi AWD',
+    price: 1237000,
+    formatted_price: '₹ 12,37,000',
+    negotiable: true,
+    location: 'Kazhakkoottam, Thiruvananthapuram',
+    posted_time: 'Posted 1d ago',
+    views: '1,840 views',
+    showcase_image: '/images/tucson_main.png',
+    is_car_layout: true,
+    thumbnails: [
+      { id: 0, label: 'Starry Silver', thumb: '/images/tucson_thumb_silver.png', main: '/images/tucson_main_silver.png' },
+      { id: 1, label: 'Polar White', thumb: '/images/tucson_thumb_white.png', main: '/images/tucson_main_white.png' },
+      { id: 2, label: 'Phantom Black', thumb: '/images/tucson_thumb_black.png', main: '/images/tucson_main_black.png' },
+      { id: 3, label: 'Cockpit & Sunroof', thumb: '/images/tucson_thumb_interior.png', main: '/images/tucson_main_interior.png' },
+    ],
+    description: 'Single owner Hyundai Tucson 2021 GLS flagship SUV. Powered by a refined 2.0L CRDi turbo-diesel engine with 8-speed automatic transmission. Features panoramic electric sunroof, ventilated 10-way power leather seats, Infinity 8-speaker audio system, hands-free smart power tailgate, dual-zone climate control, electronic parking brake with auto-hold, and 6 airbags. Full periodic service records from Hyundai Auto Hub.',
+    specs: [
+      { label: 'Brand', value: 'Hyundai' },
+      { label: 'Model', value: 'Tucson GLS AWD' },
+      { label: 'Year', value: '2021' },
+      { label: 'Fuel', value: 'Diesel (2.0L CRDi)' },
+      { label: 'Transmission', value: '8-Speed Automatic' },
+      { label: 'KM', value: '28,500' },
+      { label: 'Ownership', value: '1st Owner' },
+      { label: 'Drivetrain', value: 'HTRAC AWD' },
+      { label: 'Seating', value: '5 Seater' },
+    ],
+    seller: {
+      initial: 'H',
+      name: 'Hyundai Auto Hub Verified Showroom',
+      role: 'Authorized Dealer (Member Since 2022)',
+      stats: [
+        { number: '15', label: 'In Stock' },
+        { number: '99%', label: 'Response' },
+        { number: '140+', label: 'Delivered' },
+      ],
+      phone: '+91 98470 44556',
+    },
+    similar: {
+      id: 'list_creta_2022',
+      image: '/images/hyundai_creta_card.png',
+      price: '₹ 7,25,000',
+      negotiable: true,
+      title: '2022 Hyundai Creta SX',
+      location: 'Kazhakkoottam',
+      sellerType: 'Dealership',
+      time: '2d ago',
+    },
+  },
+
+  'list_hyundai_aura': {
+    id: 'list_hyundai_aura',
+    category: 'Vehicles',
+    subcategory: 'Car',
+    title: '2023 Hyundai Aura SX 1.2 Bi-Fuel CNG',
+    price: 700000,
+    formatted_price: '₹ 7,00,000',
+    negotiable: true,
+    location: 'Kazhakkoottam, Thiruvananthapuram',
+    posted_time: 'Posted 3d ago',
+    views: '920 views',
+    showcase_image: '/images/aura_main.png',
+    is_car_layout: true,
+    thumbnails: [
+      { id: 0, label: 'Typhoon Silver', thumb: '/images/aura_thumb_silver.png', main: '/images/aura_main.png' },
+      { id: 1, label: 'Showroom Stock', thumb: '/images/hyundai_aura.png', main: '/images/aura_main.png' },
+    ],
+    description: 'Hyundai Aura SX with factory-fitted dual-cylinder CNG. Delivers outstanding fuel efficiency of 28 km/kg. Features 8-inch touchscreen infotainment with Apple CarPlay & Android Auto, wireless phone charger, cooled glovebox, rear AC vents, and diamond-cut alloy wheels. Pristine showroom condition with active manufacturer warranty.',
+    specs: [
+      { label: 'Brand', value: 'Hyundai' },
+      { label: 'Model', value: 'Aura SX CNG' },
+      { label: 'Year', value: '2023' },
+      { label: 'Fuel', value: 'CNG & Petrol' },
+      { label: 'Transmission', value: 'Manual 5-Speed' },
+      { label: 'KM', value: '14,200' },
+      { label: 'Ownership', value: '1st Owner' },
+      { label: 'Mileage', value: '28.0 km/kg' },
+    ],
+    seller: {
+      initial: 'H',
+      name: 'Hyundai Auto Hub Verified Showroom',
+      role: 'Authorized Dealer (Member Since 2022)',
+      stats: [
+        { number: '15', label: 'In Stock' },
+        { number: '99%', label: 'Response' },
+        { number: '140+', label: 'Delivered' },
+      ],
+      phone: '+91 98470 44556',
+    },
+    similar: {
+      id: 'list_hyundai_tucson_2021',
+      image: '/images/hyundai_tucson.png',
+      price: '₹ 12,37,000',
+      negotiable: true,
+      title: '2021 Hyundai Tucson GLS',
+      location: 'Kazhakkoottam',
+      sellerType: 'Dealership',
+      time: '1d ago',
+    },
+  },
+
+  'list_hyundai_santafe': {
+    id: 'list_hyundai_santafe',
+    category: 'Vehicles',
+    subcategory: 'Car',
+    title: 'Hyundai Santa Fe Active X 2.2 CRDi 4WD',
+    price: 780000,
+    formatted_price: '₹ 7,80,000',
+    negotiable: true,
+    location: 'Kazhakkoottam, Thiruvananthapuram',
+    posted_time: 'Posted 4d ago',
+    views: '1,050 views',
+    showcase_image: '/images/santafe_main.png',
+    is_car_layout: true,
+    thumbnails: [
+      { id: 0, label: 'Magnetic Gray', thumb: '/images/santafe_thumb.png', main: '/images/santafe_main.png' },
+      { id: 1, label: 'Front Angle', thumb: '/images/hyundai_santafe.png', main: '/images/santafe_main.png' },
+    ],
+    description: 'Hyundai Santa Fe Active X spacious 7-seater premium SUV with all-wheel drive. Equipped with a powerful 2.2L CRDi diesel engine, premium leather upholstery, dual-zone automatic climate control, cruise control, 18-inch alloy wheels, and comprehensive safety suite.',
+    specs: [
+      { label: 'Brand', value: 'Hyundai' },
+      { label: 'Model', value: 'Santa Fe Active X' },
+      { label: 'Year', value: '2020' },
+      { label: 'Fuel', value: 'Diesel (2.2L CRDi)' },
+      { label: 'Transmission', value: 'Automatic' },
+      { label: 'KM', value: '36,000' },
+      { label: 'Ownership', value: '1st Owner' },
+      { label: 'Drivetrain', value: '4WD' },
+      { label: 'Seating', value: '7 Seater' },
+    ],
+    seller: {
+      initial: 'H',
+      name: 'Hyundai Auto Hub Verified Showroom',
+      role: 'Authorized Dealer (Member Since 2022)',
+      stats: [
+        { number: '15', label: 'In Stock' },
+        { number: '99%', label: 'Response' },
+        { number: '140+', label: 'Delivered' },
+      ],
+      phone: '+91 98470 44556',
+    },
+    similar: {
+      id: 'list_hyundai_tucson_2021',
+      image: '/images/hyundai_tucson.png',
+      price: '₹ 12,37,000',
+      negotiable: true,
+      title: '2021 Hyundai Tucson GLS',
+      location: 'Kazhakkoottam',
+      sellerType: 'Dealership',
+      time: '1d ago',
+    },
+  },
+
   'list_bike_re_hunter': {
     id: 'list_bike_re_hunter',
     category: 'Vehicles',
@@ -1354,6 +1511,24 @@ export function getMarketplaceItemById(id) {
   if (id.includes('i20')) {
     return {
       ...MARKETPLACE_ITEMS['list_i20_sportz'],
+      id,
+    };
+  }
+  if (id.includes('tucson')) {
+    return {
+      ...MARKETPLACE_ITEMS['list_hyundai_tucson_2021'],
+      id,
+    };
+  }
+  if (id.includes('aura')) {
+    return {
+      ...MARKETPLACE_ITEMS['list_hyundai_aura'],
+      id,
+    };
+  }
+  if (id.includes('santafe') || id.includes('santa_fe')) {
+    return {
+      ...MARKETPLACE_ITEMS['list_hyundai_santafe'],
       id,
     };
   }
