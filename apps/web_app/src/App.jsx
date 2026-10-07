@@ -4,6 +4,7 @@ import Navbar from './components/common/Navbar';
 import Footer from './components/common/Footer';
 import PostAdModal from './components/common/PostAdModal';
 import ContactSellerModal from './components/common/ContactSellerModal';
+import LoginModal from './components/common/LoginModal';
 import HomePage from './pages/HomePage';
 import ShopsPage from './pages/ShopsPage';
 import ListingsPage from './pages/ListingsPage';
@@ -11,6 +12,8 @@ import ListingDetailPage from './pages/ListingDetailPage';
 import ShopVehiclesPage from './pages/ShopVehiclesPage';
 import MessagesPage from './pages/MessagesPage';
 import PostAdPage from './pages/PostAdPage';
+import MyAdsPage from './pages/MyAdsPage';
+import { AuthProvider, useAuth } from './context/AuthContext';
 
 // Scroll to top helper
 function ScrollToTop() {
@@ -21,7 +24,8 @@ function ScrollToTop() {
   return null;
 }
 
-export default function App() {
+function AppContent() {
+  const { loginModalOpen, closeLoginModal } = useAuth();
   const [postAdOpen, setPostAdOpen] = useState(false);
   const [contactModalData, setContactModalData] = useState(null);
   
@@ -53,7 +57,7 @@ export default function App() {
   };
 
   return (
-    <BrowserRouter>
+    <>
       <ScrollToTop />
       
       {/* Top Navbar */}
@@ -123,6 +127,10 @@ export default function App() {
             } 
           />
           <Route 
+            path="/my-ads" 
+            element={<MyAdsPage />} 
+          />
+          <Route 
             path="/messages" 
             element={<MessagesPage />} 
           />
@@ -147,6 +155,11 @@ export default function App() {
       <Footer />
 
       {/* Global Interactive Modals */}
+      <LoginModal
+        isOpen={loginModalOpen}
+        onClose={closeLoginModal}
+      />
+
       <PostAdModal 
         isOpen={postAdOpen} 
         onClose={() => setPostAdOpen(false)}
@@ -160,6 +173,16 @@ export default function App() {
         listing={contactModalData}
         onClose={() => setContactModalData(null)}
       />
-    </BrowserRouter>
+    </>
+  );
+}
+
+export default function App() {
+  return (
+    <AuthProvider>
+      <BrowserRouter>
+        <AppContent />
+      </BrowserRouter>
+    </AuthProvider>
   );
 }

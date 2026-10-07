@@ -1,26 +1,18 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Search, Heart, MessageSquare, Menu, X, Building2, MapPin, ChevronDown } from 'lucide-react';
+import { Search, Heart, MessageSquare, Menu, X, Building2, ChevronDown, User, PlusCircle, LogOut, Package } from 'lucide-react';
+import { useAuth } from '../../context/AuthContext';
 import './Navbar.css';
 
 export default function Navbar({ onOpenPostAd, favoritesCount = 0, unreadMessagesCount = 2 }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [navLocMenuOpen, setNavLocMenuOpen] = useState(false);
-  const navLocRef = useRef(null);
+  const [userMenuOpen, setUserMenuOpen] = useState(false);
+  const userMenuRef = useRef(null);
+
+  const { currentUser, isLoggedIn, logout, openLoginModal } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
-
-  const currentNavLocation = new URLSearchParams(location.search).get('location') || '';
-
-  const quickCities = [
-    { label: 'All Locations', value: '' },
-    { label: 'Thiruvananthapuram', value: 'Thiruvananthapuram' },
-    { label: 'Kochi', value: 'Kochi' },
-    { label: 'Kollam', value: 'Kollam' },
-    { label: 'Bengaluru', value: 'Bengaluru' },
-    { label: 'Remote', value: 'Remote' },
-  ];
 
   useEffect(() => {
     const handleScroll = () => {
@@ -34,85 +26,36 @@ export default function Navbar({ onOpenPostAd, favoritesCount = 0, unreadMessage
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // Close user dropdown on outside click
   useEffect(() => {
     function handleOutside(e) {
-      if (navLocRef.current && !navLocRef.current.contains(e.target)) {
-        setNavLocMenuOpen(false);
+      if (userMenuRef.current && !userMenuRef.current.contains(e.target)) {
+        setUserMenuOpen(false);
       }
     }
     document.addEventListener('mousedown', handleOutside);
     return () => document.removeEventListener('mousedown', handleOutside);
   }, []);
 
-  const handleSelectNavCity = (cityVal) => {
-    setNavLocMenuOpen(false);
-    setMobileMenuOpen(false);
-    const params = new URLSearchParams(location.search);
-    if (!cityVal) {
-      params.delete('location');
-    } else {
-      params.set('location', cityVal);
-    }
-    const targetPath = location.pathname.startsWith('/shops') ? '/shops' : '/listings';
-    navigate(`${targetPath}?${params.toString()}`);
-  };
-
   // On dedicated, distraction-free flows like /post-ad, do not render global navbar
   if (location.pathname === '/post-ad') {
     return null;
   }
 
-  const isSolidPage = location.pathname.startsWith('/messages');
+  const isSolidPage = location.pathname.startsWith('/messages') || location.pathname.startsWith('/my-ads');
 
   return (
     <header className={`navbar-root ${scrolled || isSolidPage ? 'navbar-scrolled' : 'navbar-transparent'}`}>
       <div className="container navbar-container">
-        {/* Brand Logo & Location Pill */}
+        {/* Brand Logo matching reference screenshot: All in One Today */}
         <div className="figma-navbar-left-group">
           <Link to="/" className="figma-navbar-brand">
-            <span className="figma-brand-text">Marketplace</span>
+            <span className="figma-brand-text">All in One Today</span>
           </Link>
-
-          {/* Global Location Selector Pill */}
-          <div className="figma-nav-location-picker" ref={navLocRef}>
-            <button
-              type="button"
-              className={`figma-nav-loc-btn ${currentNavLocation ? 'has-location' : ''}`}
-              onClick={() => setNavLocMenuOpen(!navLocMenuOpen)}
-              title="Select browsing city"
-            >
-              <MapPin size={13} className="nav-loc-icon" />
-              <span className="nav-loc-label">{currentNavLocation || 'All Locations'}</span>
-              <ChevronDown size={12} className={`nav-loc-chevron ${navLocMenuOpen ? 'open' : ''}`} />
-            </button>
-
-            {navLocMenuOpen && (
-              <div className="figma-nav-loc-popover">
-                <div className="nav-loc-popover-title">
-                  <MapPin size={13} />
-                  <span>Choose Location</span>
-                </div>
-                <div className="nav-loc-popover-list">
-                  {quickCities.map((c) => (
-                    <button
-                      key={c.label}
-                      type="button"
-                      className={`nav-loc-popover-item ${(currentNavLocation === c.value || (!currentNavLocation && !c.value)) ? 'active' : ''}`}
-                      onClick={() => handleSelectNavCity(c.value)}
-                    >
-                      <span>{c.label}</span>
-                      {(currentNavLocation === c.value || (!currentNavLocation && !c.value)) && (
-                        <span className="nav-loc-check-dot" />
-                      )}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
-          </div>
         </div>
 
-        {/* Desktop Navigation Links matching Figma Desktop - 71 */}
+        {/* Desktop Navigation Links matching reference screenshot exactly:
+            Browse | Shops | Favorites | Message | Login (or Logged-in User menu) */}
         <nav className="figma-desktop-nav">
           <Link to="/listings" className="figma-nav-item">
             <Search size={16} className="nav-item-icon" />
@@ -136,13 +79,93 @@ export default function Navbar({ onOpenPostAd, favoritesCount = 0, unreadMessage
             {unreadMessagesCount > 0 && <span className="nav-fav-pill">{unreadMessagesCount}</span>}
           </Link>
 
-          {/* Black Pill Button: "Post an Ad" linking to full page /post-ad */}
-          <Link 
-            to="/post-ad"
-            className="figma-post-btn-black"
-          >
-            Post an Ad
-          </Link>
+          {/* Authentication State:
+              - Normal / Logged Out: clean "Login" text action
+              - Logged In: User Profile pill with dropdown (My Ads, Post Ad, Logout) */}
+          {!isLoggedIn ? (
+            <button
+              type="button"
+              className="figma-nav-login-btn"
+              onClick={openLoginModal}
+            >
+              Login
+            </button>
+          ) : (
+            <div className="figma-nav-user-dropdown" ref={userMenuRef}>
+              <button
+                type="button"
+                className="figma-nav-user-pill"
+                onClick={() => setUserMenuOpen(!userMenuOpen)}
+              >
+                <div className="nav-user-avatar">
+                  {currentUser?.name ? currentUser.name[0].toUpperCase() : 'U'}
+                </div>
+                <span className="nav-user-name">{currentUser?.name || 'My Account'}</span>
+                <ChevronDown size={14} className={`nav-user-chevron ${userMenuOpen ? 'open' : ''}`} />
+              </button>
+
+              {userMenuOpen && (
+                <div className="figma-user-popover">
+                  <div className="user-popover-header">
+                    <strong className="user-popover-name">{currentUser?.name}</strong>
+                    <span className="user-popover-role">{currentUser?.role || 'Verified User'}</span>
+                  </div>
+
+                  <div className="user-popover-menu">
+                    <Link
+                      to="/my-ads"
+                      className="user-popover-item active-highlight"
+                      onClick={() => setUserMenuOpen(false)}
+                    >
+                      <Package size={15} />
+                      <span>My Ads (View Existing)</span>
+                    </Link>
+
+                    <Link
+                      to="/post-ad"
+                      className="user-popover-item"
+                      onClick={() => setUserMenuOpen(false)}
+                    >
+                      <PlusCircle size={15} />
+                      <span>Post a New Ad</span>
+                    </Link>
+
+                    <Link
+                      to="/messages"
+                      className="user-popover-item"
+                      onClick={() => setUserMenuOpen(false)}
+                    >
+                      <MessageSquare size={15} />
+                      <span>Messages</span>
+                    </Link>
+
+                    <Link
+                      to="/listings?favorites=true"
+                      className="user-popover-item"
+                      onClick={() => setUserMenuOpen(false)}
+                    >
+                      <Heart size={15} />
+                      <span>Saved Favorites</span>
+                    </Link>
+
+                    <div className="user-popover-divider" />
+
+                    <button
+                      type="button"
+                      className="user-popover-item logout-item"
+                      onClick={() => {
+                        setUserMenuOpen(false);
+                        logout();
+                      }}
+                    >
+                      <LogOut size={15} />
+                      <span>Log Out</span>
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
         </nav>
 
         {/* Mobile Toggle */}
@@ -158,51 +181,66 @@ export default function Navbar({ onOpenPostAd, favoritesCount = 0, unreadMessage
       {/* Mobile Menu Drawer */}
       {mobileMenuOpen && (
         <div className="figma-mobile-drawer">
-          {/* Mobile Location Selector */}
-          <div className="mobile-loc-section">
-            <div className="mobile-loc-label-row">
-              <MapPin size={14} />
-              <span>Browsing Location:</span>
-            </div>
-            <div className="mobile-loc-pills-row">
-              {quickCities.map((c) => (
-                <button
-                  key={c.label}
-                  type="button"
-                  className={`mobile-loc-pill ${(currentNavLocation === c.value || (!currentNavLocation && !c.value)) ? 'active' : ''}`}
-                  onClick={() => handleSelectNavCity(c.value)}
-                >
-                  {c.label}
-                </button>
-              ))}
-            </div>
-          </div>
-
           <Link to="/listings" onClick={() => setMobileMenuOpen(false)}>
             <Search size={16} />
             <span>Browse</span>
           </Link>
+          <Link to="/shops" onClick={() => setMobileMenuOpen(false)}>
+            <Building2 size={16} />
+            <span>Shops</span>
+          </Link>
           <Link to="/listings?favorites=true" onClick={() => setMobileMenuOpen(false)}>
             <Heart size={16} />
             <span>Favorites</span>
-          </Link>
-          <Link to="/shops" onClick={() => setMobileMenuOpen(false)}>
-            <Building2 size={16} />
-            <span>Vehicle Shops</span>
+            {favoritesCount > 0 && <span className="nav-fav-pill" style={{ marginLeft: 'auto' }}>{favoritesCount}</span>}
           </Link>
           <Link to="/messages" onClick={() => setMobileMenuOpen(false)}>
             <MessageSquare size={16} />
-            <span>Messages</span>
+            <span>Message</span>
             {unreadMessagesCount > 0 && <span className="nav-fav-pill" style={{ marginLeft: 'auto' }}>{unreadMessagesCount}</span>}
           </Link>
-          <Link 
-            to="/post-ad"
-            onClick={() => setMobileMenuOpen(false)}
-            className="figma-post-btn-black"
-            style={{ width: '100%', marginTop: '10px', textAlign: 'center' }}
-          >
-            Post an Ad
-          </Link>
+
+          {!isLoggedIn ? (
+            <button
+              type="button"
+              className="mobile-login-btn"
+              onClick={() => {
+                setMobileMenuOpen(false);
+                openLoginModal();
+              }}
+            >
+              <User size={16} />
+              <span>Login to Account</span>
+            </button>
+          ) : (
+            <div className="mobile-user-actions">
+              <div className="mobile-user-info">
+                <div className="nav-user-avatar">
+                  {currentUser?.name ? currentUser.name[0].toUpperCase() : 'U'}
+                </div>
+                <span>{currentUser?.name}</span>
+              </div>
+              <Link to="/my-ads" onClick={() => setMobileMenuOpen(false)} className="mobile-user-link">
+                <Package size={16} />
+                <span>My Ads (View Existing)</span>
+              </Link>
+              <Link to="/post-ad" onClick={() => setMobileMenuOpen(false)} className="mobile-user-link">
+                <PlusCircle size={16} />
+                <span>Post a New Ad</span>
+              </Link>
+              <button
+                type="button"
+                className="mobile-logout-btn"
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  logout();
+                }}
+              >
+                <LogOut size={16} />
+                <span>Log Out</span>
+              </button>
+            </div>
+          )}
         </div>
       )}
     </header>
