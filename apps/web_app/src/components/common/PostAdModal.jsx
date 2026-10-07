@@ -87,8 +87,9 @@ export default function PostAdModal({ isOpen, onClose, onListingCreated }) {
       specifications.warranty = 'Available / Verified';
     }
 
+    const catPrefix = (category || 'item').toLowerCase().replace(/\s+/g, '_');
     const payload = {
-      id: `list_${Date.now()}`,
+      id: `list_${catPrefix}_${Date.now()}`,
       title: title.trim(),
       price: parsedPrice,
       formatted_price: `₹ ${parsedPrice.toLocaleString('en-IN')}`,

@@ -1,4 +1,4 @@
-import { getPublishedListingById, formatPublishedListingForDetailPage } from './userListingsData';
+import { getPublishedListingById, formatPublishedListingForDetailPage, getSimilarListingForCategory, getCategoryDefaultImage } from './userListingsData.js';
 
 export const MARKETPLACE_ITEMS = {
   // ── VEHICLES ─────────────────────────────────────────────────────────────
@@ -1408,133 +1408,167 @@ export const MARKETPLACE_ITEMS = {
 };
 
 /**
- * Helper to fetch item by ID with intelligent category fallbacks
+ * Helper to fetch item by ID with intelligent category-safe fallbacks
  */
 export function getMarketplaceItemById(id) {
-  if (!id) return MARKETPLACE_ITEMS['list_creta_2022'];
+  if (!id) return null;
 
+  // 1. Direct static dictionary hit
   if (MARKETPLACE_ITEMS[id]) {
     return MARKETPLACE_ITEMS[id];
   }
 
-  // Check user-published listings
+  // 2. Check runtime memory & localStorage user-published listings
   const published = getPublishedListingById(id);
   if (published) {
     return formatPublishedListingForDetailPage(published);
   }
 
-  // Fallbacks by ID pattern
-  if (id.includes('service') || id.includes('clean') || id.includes('repair') || id.includes('plumb') || id.includes('electric') || id.includes('ac_')) {
-    return {
-      ...MARKETPLACE_ITEMS['list_clean_service'],
-      id,
-    };
-  }
-  if (id.includes('veg') || id.includes('groc') || id.includes('fruit') || id.includes('produce') || id.includes('farm') || id.includes('organic')) {
-    return {
-      ...MARKETPLACE_ITEMS['list_veg_combo'],
-      id,
-    };
-  }
-  if (id.includes('apt') || id.includes('property') || id.includes('house')) {
-    return {
-      ...MARKETPLACE_ITEMS['list_apt_kakkanad_3bhk'],
-      id,
-    };
-  }
-  if (id.includes('job') || id.includes('designer') || id.includes('engineer')) {
-    return {
-      ...MARKETPLACE_ITEMS['list_job_senior_fe'],
-      id,
-    };
-  }
-  if (id.includes('macbook') || id.includes('laptop') || id.includes('tech')) {
-    return {
-      ...MARKETPLACE_ITEMS['list_macbook_m3'],
-      id,
-    };
-  }
-  if (id.includes('iphone') || id.includes('phone') || id.includes('mobile') || id.includes('s24')) {
+  const lowerId = String(id).toLowerCase();
+
+  // 3. Fallbacks by keyword in ID
+  if (lowerId.includes('iphone') || lowerId.includes('phone') || lowerId.includes('mobile') || lowerId.includes('s24') || lowerId.includes('pixel')) {
     return {
       ...MARKETPLACE_ITEMS['list_iphone_15_pro'],
       id,
     };
   }
-  if (id.includes('sofa') || id.includes('furniture') || id.includes('oak') || id.includes('dining')) {
+  if (lowerId.includes('macbook') || lowerId.includes('laptop') || lowerId.includes('tech') || lowerId.includes('electronics')) {
+    return {
+      ...MARKETPLACE_ITEMS['list_macbook_m3'],
+      id,
+    };
+  }
+  if (lowerId.includes('service') || lowerId.includes('clean') || lowerId.includes('repair') || lowerId.includes('plumb') || lowerId.includes('electric') || lowerId.includes('ac_')) {
+    return {
+      ...MARKETPLACE_ITEMS['list_clean_service'],
+      id,
+    };
+  }
+  if (lowerId.includes('veg') || lowerId.includes('groc') || lowerId.includes('fruit') || lowerId.includes('produce') || lowerId.includes('farm') || lowerId.includes('organic')) {
+    return {
+      ...MARKETPLACE_ITEMS['list_veg_combo'],
+      id,
+    };
+  }
+  if (lowerId.includes('apt') || lowerId.includes('property') || lowerId.includes('house') || lowerId.includes('flat')) {
+    return {
+      ...MARKETPLACE_ITEMS['list_apt_kakkanad_3bhk'],
+      id,
+    };
+  }
+  if (lowerId.includes('job') || lowerId.includes('designer') || lowerId.includes('engineer') || lowerId.includes('hiring')) {
+    return {
+      ...MARKETPLACE_ITEMS['list_job_senior_fe'],
+      id,
+    };
+  }
+  if (lowerId.includes('sofa') || lowerId.includes('furniture') || lowerId.includes('oak') || lowerId.includes('dining')) {
     return {
       ...MARKETPLACE_ITEMS['list_teak_sofa'],
       id,
     };
   }
 
-  // Vehicle pattern fallbacks
-  if (id.includes('hunter') || id.includes('r15') || id.includes('bike')) {
+  // Vehicle pattern fallbacks (only if ID specifically mentions a vehicle model)
+  if (lowerId.includes('hunter') || lowerId.includes('r15') || lowerId.includes('bike')) {
     return {
       ...MARKETPLACE_ITEMS['list_bike_re_hunter'],
       id,
     };
   }
-  if (id.includes('activa') || id.includes('scooter')) {
+  if (lowerId.includes('activa') || lowerId.includes('scooter')) {
     return {
       ...MARKETPLACE_ITEMS['list_scooter_activa'],
       id,
     };
   }
-  if (id.includes('cb350') || id.includes('honda')) {
+  if (lowerId.includes('cb350') || lowerId.includes('honda')) {
     return {
       ...MARKETPLACE_ITEMS['list_honda_cb350'],
       id,
     };
   }
-  if (id.includes('brezza')) {
+  if (lowerId.includes('brezza')) {
     return {
       ...MARKETPLACE_ITEMS['list_maruti_brezza'],
       id,
     };
   }
-  if (id.includes('swift') || id.includes('maruti')) {
+  if (lowerId.includes('swift')) {
     return {
       ...MARKETPLACE_ITEMS['list_maruti_swift'],
       id,
     };
   }
-  if (id.includes('tata_ace') || id.includes('intra')) {
+  if (lowerId.includes('tata_ace') || lowerId.includes('intra')) {
     return {
       ...MARKETPLACE_ITEMS['list_tata_ace'],
       id,
     };
   }
-  if (id.includes('bolero') || id.includes('truck') || id.includes('commercial')) {
+  if (lowerId.includes('bolero') || lowerId.includes('truck')) {
     return {
       ...MARKETPLACE_ITEMS['list_bolero_truck'],
       id,
     };
   }
-  if (id.includes('i20')) {
+  if (lowerId.includes('i20')) {
     return {
       ...MARKETPLACE_ITEMS['list_i20_sportz'],
       id,
     };
   }
-  if (id.includes('tucson')) {
+  if (lowerId.includes('tucson')) {
     return {
       ...MARKETPLACE_ITEMS['list_hyundai_tucson_2021'],
       id,
     };
   }
-  if (id.includes('aura')) {
+  if (lowerId.includes('creta')) {
     return {
-      ...MARKETPLACE_ITEMS['list_hyundai_aura'],
-      id,
-    };
-  }
-  if (id.includes('santafe') || id.includes('santa_fe')) {
-    return {
-      ...MARKETPLACE_ITEMS['list_hyundai_santafe'],
+      ...MARKETPLACE_ITEMS['list_creta_2022'],
       id,
     };
   }
 
-  // Default to Creta car
-  return MARKETPLACE_ITEMS['list_creta_2022'];
+  // 4. Default clean fallback for unknown IDs (NEVER force Creta car!)
+  // Uses clean mobile device placeholder so smartphone ads look correct immediately
+  return {
+    id,
+    category: 'Mobiles',
+    subcategory: 'Smartphones & Devices',
+    title: 'Marketplace Ad',
+    price: 0,
+    formatted_price: 'Price on Request',
+    negotiable: true,
+    location: 'Kerala',
+    posted_time: 'Recently',
+    views: '1 view',
+    is_just_posted: true,
+    showcase_image: '/images/h3.png',
+    default_image: '/images/h3.png',
+    is_car_layout: false,
+    thumbnails: [
+      { id: 0, label: 'Main', thumb: '/images/h3.png', main: '/images/h3.png' }
+    ],
+    description: 'Verified listing details on Galletrix Marketplace.',
+    specs: [
+      { label: 'Category', value: 'Mobiles' },
+      { label: 'Condition', value: 'Verified' },
+      { label: 'Status', value: 'Available' },
+    ],
+    seller: {
+      initial: 'S',
+      name: 'Verified Seller',
+      role: 'Individual Seller',
+      stats: [
+        { number: '1', label: 'Active Ad' },
+        { number: '100%', label: 'Response' },
+        { number: 'Verified', label: 'Seller' },
+      ],
+      phone: '+91 98470 54321',
+    },
+    similar: getSimilarListingForCategory('Mobiles'),
+  };
 }

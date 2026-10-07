@@ -23,6 +23,13 @@ import {
 } from 'lucide-react';
 import HeroSearch from '../components/home/HeroSearch';
 import { getMarketplaceItemById } from '../data/marketplaceData';
+import { fetchListingById } from '../api/client';
+import { 
+  formatPublishedListingForDetailPage, 
+  savePublishedListing, 
+  cacheRuntimeListing, 
+  getCategoryDefaultImage 
+} from '../data/userListingsData';
 import './ListingDetailPage.css';
 
 export default function ListingDetailPage({ 
@@ -32,18 +39,75 @@ export default function ListingDetailPage({
 }) {
   const { id } = useParams();
   const navigate = useNavigate();
-  const item = getMarketplaceItemById(id);
-  const listingId = item.id;
-  const isFav = favorites.includes(listingId);
-
+  
+  const [itemData, setItemData] = useState(() => getMarketplaceItemById(id));
+  const [isLoading, setIsLoading] = useState(!itemData);
   const [activeThumbIndex, setActiveThumbIndex] = useState(0);
   const [searchTerm, setSearchTerm] = useState('');
 
-  // Reset active thumbnail when item changes
+  // Fetch listing dynamically from Dart Frog backend API & synchronize
   useEffect(() => {
     setActiveThumbIndex(0);
     window.scrollTo(0, 0);
+
+    let isMounted = true;
+    
+    // First synchronous lookup
+    const cached = getMarketplaceItemById(id);
+    if (cached) {
+      setItemData(cached);
+    }
+
+    async function loadListing() {
+      if (!id) return;
+      try {
+        const remoteData = await fetchListingById(id);
+        if (remoteData && isMounted) {
+          const formatted = formatPublishedListingForDetailPage(remoteData);
+          if (formatted) {
+            setItemData(formatted);
+            savePublishedListing(remoteData);
+            cacheRuntimeListing(remoteData);
+          }
+        }
+      } catch (err) {
+        console.warn('Could not fetch listing from API:', err);
+      } finally {
+        if (isMounted) setIsLoading(false);
+      }
+    }
+
+    loadListing();
+
+    return () => {
+      isMounted = false;
+    };
   }, [id]);
+
+  const item = itemData || getMarketplaceItemById(id) || {
+    id: id || 'listing_default',
+    title: 'Loading listing details...',
+    category: 'Mobiles',
+    subcategory: 'Smartphones & Tablets',
+    price: 0,
+    formatted_price: 'Price on Request',
+    negotiable: true,
+    location: 'Kerala',
+    posted_time: 'Recently',
+    views: '1 view',
+    is_just_posted: true,
+    showcase_image: '/images/h3.png',
+    default_image: '/images/h3.png',
+    is_car_layout: false,
+    thumbnails: [{ id: 0, label: 'Main', thumb: '/images/h3.png', main: '/images/h3.png' }],
+    description: 'Verified listing details on Galletrix Marketplace.',
+    specs: [{ label: 'Status', value: 'Active' }, { label: 'Location', value: 'Kerala' }],
+    seller: { initial: 'S', name: 'Verified Seller', role: 'Seller', stats: [], phone: '+91 98470 54321' },
+    similar: null,
+  };
+
+  const listingId = item.id;
+  const isFav = favorites.includes(listingId);
 
   const thumbnails = item.thumbnails || [
     { id: 0, label: 'Main', thumb: item.showcase_image, main: item.showcase_image }
@@ -58,24 +122,24 @@ export default function ListingDetailPage({
     }
   };
 
-  // Dynamic search placeholder based on category
+  // Dynamic search placeholder based on title & category
   const getSearchPlaceholder = () => {
+    if (item.title && !item.title.toLowerCase().includes('loading') && !item.title.toLowerCase().includes('marketplace ad')) {
+      return `Explore ${item.title} Listings`;
+    }
     switch (item.category) {
       case 'Vehicles':
-        if (item.title && !item.title.toLowerCase().includes('creta')) {
-          return `Explore ${item.title} Listings`;
-        }
-        return 'Explore Hyundai Creta Vehicles';
+        return 'Explore Cars & Vehicles';
       case 'Property':
         return 'Explore Apartments & Properties';
       case 'Jobs':
         return 'Explore Tech & Design Jobs';
       case 'Groceries':
-        return 'Explore Fresh Organic Vegetables & Groceries';
+        return 'Explore Fresh Organic Produce';
       case 'Services':
-        return 'Explore Verified Home Services & Repairs';
+        return 'Explore Verified Home Services';
       case 'Electronics':
-        return 'Explore Laptops & Apple Tech';
+        return 'Explore Laptops & Tech';
       case 'Mobiles':
         return 'Explore Smartphones & Tablets';
       case 'Furniture':
@@ -138,6 +202,10 @@ export default function ListingDetailPage({
                 src={currentMainImage} 
                 alt={item.title} 
                 className="detail-main-img" 
+                onError={(e) => {
+                  e.target.onerror = null;
+                  e.target.src = getCategoryDefaultImage(item.category);
+                }}
               />
             </div>
 
@@ -151,7 +219,15 @@ export default function ListingDetailPage({
                     onClick={() => setActiveThumbIndex(idx)}
                     className={`detail-thumb-box ${activeThumbIndex === idx ? 'active' : ''}`}
                   >
-                    <img src={t.thumb} alt={t.label} className="detail-thumb-img" />
+                    <img 
+                      src={t.thumb} 
+                      alt={t.label} 
+                      className="detail-thumb-img" 
+                      onError={(e) => {
+                        e.target.onerror = null;
+                        e.target.src = getCategoryDefaultImage(item.category);
+                      }}
+                    />
                   </button>
                 ))}
               </div>

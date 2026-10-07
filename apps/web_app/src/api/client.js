@@ -5,8 +5,18 @@
 
 const API_BASE = '/api';
 
-export function resolveImageUrl(path) {
-  if (!path) return '/images/h1.png';
+export function resolveImageUrl(path, category) {
+  if (!path) {
+    if (category === 'Mobiles') return '/images/h3.png';
+    if (category === 'Property') return '/images/h2.png';
+    if (category === 'Jobs') return '/images/h3.png';
+    if (category === 'Groceries') return '/images/h4.png';
+    if (category === 'Electronics') return '/images/h5.png';
+    if (category === 'Services') return '/images/h7.png';
+    if (category === 'Furniture') return '/images/h8.png';
+    return '/images/h1.png';
+  }
+  if (path.startsWith('blob:')) return path;
   if (path.startsWith('http://') || path.startsWith('https://')) return path;
   if (path.startsWith('assets/images/')) {
     return '/' + path.replace('assets/', '');
@@ -55,6 +65,22 @@ export async function fetchListings(params = {}) {
   } catch (err) {
     console.warn('Falling back for listings:', err);
     return [];
+  }
+}
+
+export async function fetchListingById(id) {
+  if (!id) return null;
+  try {
+    const res = await fetch(`${API_BASE}/listings/${id}`);
+    if (!res.ok) {
+      if (res.status === 404) return null;
+      throw new Error(`HTTP ${res.status}`);
+    }
+    const json = await res.json();
+    return json.data || null;
+  } catch (err) {
+    console.warn(`Falling back for listing details (${id}):`, err);
+    return null;
   }
 }
 

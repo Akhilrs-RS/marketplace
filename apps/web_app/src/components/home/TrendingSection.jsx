@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Heart, Star, Check, ShieldCheck, Sparkles } from 'lucide-react';
-import { getPublishedListings } from '../../data/userListingsData';
+import { getPublishedListings, cacheRuntimeListing, getCategoryDefaultImage } from '../../data/userListingsData';
+import { fetchListings } from '../../api/client';
 import './TrendingSection.css';
 
 export default function TrendingSection({ favorites = [], onToggleFavorite }) {
@@ -40,12 +41,34 @@ export default function TrendingSection({ favorites = [], onToggleFavorite }) {
   const [publishedListings, setPublishedListings] = useState([]);
 
   useEffect(() => {
-    const loadPublished = () => {
-      setPublishedListings(getPublishedListings());
+    let isMounted = true;
+    const loadPublished = async () => {
+      const local = getPublishedListings();
+      if (isMounted) setPublishedListings(local);
+
+      try {
+        const apiItems = await fetchListings();
+        if (Array.isArray(apiItems) && apiItems.length > 0 && isMounted) {
+          apiItems.forEach(item => cacheRuntimeListing(item));
+          const combined = [...local];
+          apiItems.forEach(apiItem => {
+            if (!combined.some(c => c.id === apiItem.id)) {
+              combined.push(apiItem);
+            }
+          });
+          setPublishedListings(combined);
+        }
+      } catch (err) {
+        console.warn('Trending fetch warning:', err);
+      }
     };
+
     loadPublished();
     window.addEventListener('galletrix_listings_updated', loadPublished);
-    return () => window.removeEventListener('galletrix_listings_updated', loadPublished);
+    return () => {
+      isMounted = false;
+      window.removeEventListener('galletrix_listings_updated', loadPublished);
+    };
   }, []);
 
   const defaultFeaturedItems = [
@@ -81,7 +104,8 @@ export default function TrendingSection({ favorites = [], onToggleFavorite }) {
 
   const userFeaturedItems = publishedListings.map((item) => ({
     id: item.id,
-    imagePath: item.image_path || '/images/h1.png',
+    imagePath: item.image_path || getCategoryDefaultImage(item.category),
+    category: item.category || 'Mobiles',
     price: item.formatted_price || `₹ ${Number(item.price).toLocaleString('en-IN')}`,
     title: item.title,
     location: item.location || 'Kochi',
@@ -175,7 +199,15 @@ export default function TrendingSection({ favorites = [], onToggleFavorite }) {
                 <div key={item.id} className="featured-four-card-figma">
                   <div className="featured-img-wrap">
                     <Link to={`/listings/${item.id}`}>
-                      <img src={item.imagePath} alt={item.title} className="featured-img" />
+                      <img 
+                        src={item.imagePath} 
+                        alt={item.title} 
+                        className="featured-img" 
+                        onError={(e) => {
+                          e.target.onerror = null;
+                          e.target.src = getCategoryDefaultImage(item.category);
+                        }}
+                      />
                     </Link>
                     {item.isJustPosted && (
                       <span className="featured-just-posted-tag">

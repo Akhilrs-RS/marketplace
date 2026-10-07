@@ -200,8 +200,9 @@ export default function PostAdPage() {
     const allImages = uploadedImages.length > 0 ? uploadedImages : [selectedPresetImage];
     const fullLocation = locality ? `${locality}, ${city}` : city;
 
+    const catPrefix = (selectedCatId || 'item').toLowerCase().replace(/\s+/g, '_');
     const payload = {
-      id: `list_${Date.now()}`,
+      id: `list_${catPrefix}_${Date.now()}`,
       title: title.trim(),
       price: parsedPrice,
       formatted_price: priceType === 'quote' ? 'Price on Request' : `₹ ${parsedPrice.toLocaleString('en-IN')}`,

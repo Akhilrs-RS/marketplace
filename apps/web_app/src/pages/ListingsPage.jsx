@@ -21,7 +21,7 @@ import {
 } from 'lucide-react';
 import { fetchListings, resolveImageUrl } from '../api/client';
 import { MARKETPLACE_ITEMS } from '../data/marketplaceData';
-import { getPublishedListings } from '../data/userListingsData';
+import { getPublishedListings, cacheRuntimeListing, getCategoryDefaultImage } from '../data/userListingsData';
 import HeroSearch from '../components/home/HeroSearch';
 import './ListingsPage.css';
 
@@ -186,6 +186,7 @@ export default function ListingsPage({ favorites = [], onToggleFavorite }) {
       let combined = [...userList];
 
       apiData.forEach((apiItem) => {
+        cacheRuntimeListing(apiItem);
         if (!combined.some((c) => c.id === apiItem.id)) {
           combined.push({
             ...apiItem,
@@ -732,6 +733,10 @@ export default function ListingsPage({ favorites = [], onToggleFavorite }) {
                           alt={item.title} 
                           className="item-img"
                           loading="lazy"
+                          onError={(e) => {
+                            e.target.onerror = null;
+                            e.target.src = getCategoryDefaultImage(item.category);
+                          }}
                         />
                       </Link>
 
