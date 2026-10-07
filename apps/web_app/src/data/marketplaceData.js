@@ -1,8 +1,4 @@
-/**
- * Curated Multi-Category Marketplace Registry
- * Provides rich metadata, category-specific specifications, and galleries
- * for Vehicles, Property, Jobs, Electronics, Mobiles, Furniture, Groceries, and Services.
- */
+import { getPublishedListingById, formatPublishedListingForDetailPage } from './userListingsData';
 
 export const MARKETPLACE_ITEMS = {
   // ── VEHICLES ─────────────────────────────────────────────────────────────
@@ -1419,6 +1415,12 @@ export function getMarketplaceItemById(id) {
 
   if (MARKETPLACE_ITEMS[id]) {
     return MARKETPLACE_ITEMS[id];
+  }
+
+  // Check user-published listings
+  const published = getPublishedListingById(id);
+  if (published) {
+    return formatPublishedListingForDetailPage(published);
   }
 
   // Fallbacks by ID pattern

@@ -10,6 +10,7 @@ import ListingsPage from './pages/ListingsPage';
 import ListingDetailPage from './pages/ListingDetailPage';
 import ShopVehiclesPage from './pages/ShopVehiclesPage';
 import MessagesPage from './pages/MessagesPage';
+import PostAdPage from './pages/PostAdPage';
 
 // Scroll to top helper
 function ScrollToTop() {
@@ -124,6 +125,10 @@ export default function App() {
           <Route 
             path="/messages" 
             element={<MessagesPage />} 
+          />
+          <Route 
+            path="/post-ad" 
+            element={<PostAdPage />} 
           />
           <Route 
             path="*" 

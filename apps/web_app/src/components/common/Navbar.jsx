@@ -131,14 +131,13 @@ export default function Navbar({ onOpenPostAd, favoritesCount = 0, unreadMessage
             {unreadMessagesCount > 0 && <span className="nav-fav-pill">{unreadMessagesCount}</span>}
           </Link>
 
-          {/* Black Pill Button: "Post an Ad" matching Figma Desktop - 71 */}
-          <button 
-            type="button"
-            onClick={onOpenPostAd}
+          {/* Black Pill Button: "Post an Ad" linking to full page /post-ad */}
+          <Link 
+            to="/post-ad"
             className="figma-post-btn-black"
           >
             Post an Ad
-          </button>
+          </Link>
         </nav>
 
         {/* Mobile Toggle */}
@@ -191,14 +190,14 @@ export default function Navbar({ onOpenPostAd, favoritesCount = 0, unreadMessage
             <span>Messages</span>
             {unreadMessagesCount > 0 && <span className="nav-fav-pill" style={{ marginLeft: 'auto' }}>{unreadMessagesCount}</span>}
           </Link>
-          <button 
-            type="button" 
-            onClick={() => { setMobileMenuOpen(false); onOpenPostAd(); }}
+          <Link 
+            to="/post-ad"
+            onClick={() => setMobileMenuOpen(false)}
             className="figma-post-btn-black"
-            style={{ width: '100%', marginTop: '10px' }}
+            style={{ width: '100%', marginTop: '10px', textAlign: 'center' }}
           >
             Post an Ad
-          </button>
+          </Link>
         </div>
       )}
     </header>

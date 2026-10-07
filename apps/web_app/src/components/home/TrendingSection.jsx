@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Heart, Star, Check, ShieldCheck } from 'lucide-react';
+import { ArrowRight, Heart, Star, Check, ShieldCheck, Sparkles } from 'lucide-react';
+import { getPublishedListings } from '../../data/userListingsData';
 import './TrendingSection.css';
 
 export default function TrendingSection({ favorites = [], onToggleFavorite }) {
@@ -35,8 +36,19 @@ export default function TrendingSection({ favorites = [], onToggleFavorite }) {
     },
   ];
 
-  // 2. Featured Near You items matching Figma screenshot
-  const featuredNearYouItems = [
+  // 2. Featured Near You items matching Figma screenshot + user published ads
+  const [publishedListings, setPublishedListings] = useState([]);
+
+  useEffect(() => {
+    const loadPublished = () => {
+      setPublishedListings(getPublishedListings());
+    };
+    loadPublished();
+    window.addEventListener('galletrix_listings_updated', loadPublished);
+    return () => window.removeEventListener('galletrix_listings_updated', loadPublished);
+  }, []);
+
+  const defaultFeaturedItems = [
     {
       id: 'list_creta_near_1',
       imagePath: '/images/h1.png',
@@ -66,6 +78,17 @@ export default function TrendingSection({ favorites = [], onToggleFavorite }) {
       location: 'Thiruvananthapuram',
     },
   ];
+
+  const userFeaturedItems = publishedListings.map((item) => ({
+    id: item.id,
+    imagePath: item.image_path || '/images/h1.png',
+    price: item.formatted_price || `₹ ${Number(item.price).toLocaleString('en-IN')}`,
+    title: item.title,
+    location: item.location || 'Kochi',
+    isJustPosted: true,
+  }));
+
+  const featuredNearYouItems = [...userFeaturedItems, ...defaultFeaturedItems].slice(0, 4);
 
   // 3. Discover Trusted Business matching Figma screenshot
   const trustedBusinesses = [
@@ -154,6 +177,11 @@ export default function TrendingSection({ favorites = [], onToggleFavorite }) {
                     <Link to={`/listings/${item.id}`}>
                       <img src={item.imagePath} alt={item.title} className="featured-img" />
                     </Link>
+                    {item.isJustPosted && (
+                      <span className="featured-just-posted-tag">
+                        <Sparkles size={10} /> Just Posted
+                      </span>
+                    )}
                     <button 
                       type="button"
                       className={`featured-heart-btn ${isFav ? 'is-fav' : ''}`}

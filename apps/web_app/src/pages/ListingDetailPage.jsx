@@ -18,7 +18,8 @@ import {
   Briefcase,
   ShoppingBag,
   Leaf,
-  Wrench
+  Wrench,
+  Sparkles
 } from 'lucide-react';
 import HeroSearch from '../components/home/HeroSearch';
 import { getMarketplaceItemById } from '../data/marketplaceData';
@@ -251,6 +252,13 @@ export default function ListingDetailPage({
                   </button>
                 </div>
               </div>
+
+              {item.is_just_posted && (
+                <div className="detail-just-posted-banner">
+                  <Sparkles size={14} className="sparkle-pulse" />
+                  <span>Verified Ad • Live on Marketplace</span>
+                </div>
+              )}
 
               <h1 className="detail-vehicle-name">{item.title}</h1>
 

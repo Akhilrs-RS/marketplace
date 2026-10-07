@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { ArrowRight, Sparkles } from 'lucide-react';
 import './SellCtaBanner.css';
 
@@ -17,14 +18,13 @@ export default function SellCtaBanner({ onOpenPostAd }) {
           </p>
 
           <div className="cta-actions-row">
-            <button 
-              type="button"
-              onClick={onOpenPostAd}
+            <Link 
+              to="/post-ad"
               className="cta-pill-btn-white"
             >
               <span>Post a listing</span>
               <ArrowRight size={14} />
-            </button>
+            </Link>
 
             <a 
               href="#how-it-works"

@@ -21,6 +21,7 @@ import {
 } from 'lucide-react';
 import { fetchListings, resolveImageUrl } from '../api/client';
 import { MARKETPLACE_ITEMS } from '../data/marketplaceData';
+import { getPublishedListings } from '../data/userListingsData';
 import HeroSearch from '../components/home/HeroSearch';
 import './ListingsPage.css';
 
@@ -142,6 +143,27 @@ export default function ListingsPage({ favorites = [], onToggleFavorite }) {
         sort: sortBy,
       });
 
+      // Retrieve locally published listings
+      const userPublished = getPublishedListings();
+      const userList = userPublished.map((item) => ({
+        id: item.id,
+        title: item.title,
+        price: item.price,
+        formatted_price: item.formatted_price,
+        location: item.location,
+        category: item.category,
+        subcategory: item.subcategory,
+        image_path: resolveImageUrl(item.image_path),
+        specifications: {
+          fuel_type: item.specifications?.fuel_type || item.fuel_type,
+          transmission: item.specifications?.transmission || item.transmission,
+          ...item.specifications,
+        },
+        is_featured: true,
+        is_just_posted: true,
+        created_at: item.created_at,
+      }));
+
       // Transform curated items from MARKETPLACE_ITEMS
       const curatedList = Object.values(MARKETPLACE_ITEMS).map((item) => ({
         id: item.id,
@@ -159,11 +181,22 @@ export default function ListingsPage({ favorites = [], onToggleFavorite }) {
         is_featured: true,
       }));
 
-      // Combine API results with curated catalog
-      let combined = [...curatedList];
+      // Priority ordering: user-published listings FIRST (at top of catalog),
+      // then API items, then curated catalog
+      let combined = [...userList];
+
       apiData.forEach((apiItem) => {
         if (!combined.some((c) => c.id === apiItem.id)) {
-          combined.push(apiItem);
+          combined.push({
+            ...apiItem,
+            is_just_posted: apiItem.id.startsWith('list_test') || apiItem.id.startsWith('list_1'),
+          });
+        }
+      });
+
+      curatedList.forEach((cItem) => {
+        if (!combined.some((c) => c.id === cItem.id)) {
+          combined.push(cItem);
         }
       });
 
@@ -184,6 +217,11 @@ export default function ListingsPage({ favorites = [], onToggleFavorite }) {
     }
 
     loadData();
+
+    // Listen for real-time published listing additions
+    const handleUpdate = () => loadData();
+    window.addEventListener('galletrix_listings_updated', handleUpdate);
+    return () => window.removeEventListener('galletrix_listings_updated', handleUpdate);
   }, [currentCategory, currentQuery, currentLocation, sortBy]);
 
   // Client-side filtering
@@ -699,6 +737,12 @@ export default function ListingsPage({ favorites = [], onToggleFavorite }) {
 
                       {/* Top Badges */}
                       <div className="item-top-badges">
+                        {item.is_just_posted && (
+                          <span className="badge-just-posted">
+                            <Sparkles size={11} />
+                            Just Posted
+                          </span>
+                        )}
                         {item.is_featured && <span className="badge-featured">Featured</span>}
                         <span className="badge-verified">
                           <ShieldCheck size={12} />
