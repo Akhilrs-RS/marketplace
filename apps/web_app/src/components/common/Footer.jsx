@@ -1,8 +1,14 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import './Footer.css';
 
 export default function Footer() {
+  const location = useLocation();
+
+  if (location.pathname === '/post-ad') {
+    return null;
+  }
+
   return (
     <footer className="footer-root-figma">
       <div className="container footer-container-figma">

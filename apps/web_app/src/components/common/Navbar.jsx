@@ -57,6 +57,11 @@ export default function Navbar({ onOpenPostAd, favoritesCount = 0, unreadMessage
     navigate(`${targetPath}?${params.toString()}`);
   };
 
+  // On dedicated, distraction-free flows like /post-ad, do not render global navbar
+  if (location.pathname === '/post-ad') {
+    return null;
+  }
+
   const isSolidPage = location.pathname.startsWith('/messages');
 
   return (
