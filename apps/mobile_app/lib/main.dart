@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'core/services/api_service.dart';
 import 'core/theme/app_theme.dart';
+import 'features/admin/cubit/admin_auth_cubit.dart';
+import 'features/admin/cubit/admin_auth_state.dart';
+import 'features/admin/presentation/admin_hub_screen.dart';
 import 'features/cart/cubit/cart_cubit.dart';
 import 'features/explore/presentation/explore_screen.dart';
 import 'features/home/presentation/home_screen.dart';
@@ -20,8 +23,13 @@ void main() {
 
 class GalletrixMarketplaceApp extends StatelessWidget {
   final ApiService apiService;
+  final bool startAsAdmin;
 
-  const GalletrixMarketplaceApp({super.key, required this.apiService});
+  const GalletrixMarketplaceApp({
+    super.key,
+    required this.apiService,
+    this.startAsAdmin = false,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -29,6 +37,9 @@ class GalletrixMarketplaceApp extends StatelessWidget {
       value: apiService,
       child: MultiBlocProvider(
         providers: [
+          BlocProvider<AdminAuthCubit>(
+            create: (_) => AdminAuthCubit(startAsAdmin: startAsAdmin),
+          ),
           BlocProvider<ProductsCubit>(
             create: (_) => ProductsCubit(apiService)..loadInitialData(),
           ),
@@ -73,47 +84,58 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final screens = [
-      // Tab 0: Home Screen
-      HomeScreen(
-        onOpenCart: () => _goToTab(1),
-        onOpenSearch: () {
-          setState(() => _searchQueryForExplore = null);
-          _goToTab(1);
-        },
-        onOpenSearchWithQuery: _openSearchWithQuery,
-        onOpenProfile: () => _goToTab(4),
-        onStartSelling: () => _goToTab(2),
-        onOpenNotifications: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (_) => const NotificationsScreen()),
+    return BlocBuilder<AdminAuthCubit, AdminAuthState>(
+      builder: (context, authState) {
+        // If user is logged in as Admin, open MarketPlace Hub directly as requested
+        if (authState.isAdmin) {
+          return AdminHubScreen(
+            onSwitchToBuyer: () => _goToTab(0),
           );
-        },
-      ),
-      // Tab 1: Explore Screen
-      ExploreScreen(
-        initialQuery: _searchQueryForExplore,
-      ),
-      // Tab 2: Selling Page / "Your Marketplace"
-      const SellingPageScreen(),
-      // Tab 3: Messages Screen
-      const MessagesScreen(),
-      // Tab 4: Account / Profile Screen
-      const ProfileScreen(),
-    ];
+        }
 
-    return Scaffold(
-      extendBody: true,
-      body: IndexedStack(
-        index: _currentIndex,
-        children: screens,
-      ),
-      bottomNavigationBar: FigmaBottomNavBar(
-        currentIndex: _currentIndex,
-        onTabSelected: _goToTab,
-        onAddPressed: () => _goToTab(2),
-      ),
+        final screens = [
+          // Tab 0: Home Screen
+          HomeScreen(
+            onOpenCart: () => _goToTab(1),
+            onOpenSearch: () {
+              setState(() => _searchQueryForExplore = null);
+              _goToTab(1);
+            },
+            onOpenSearchWithQuery: _openSearchWithQuery,
+            onOpenProfile: () => _goToTab(4),
+            onStartSelling: () => _goToTab(2),
+            onOpenNotifications: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const NotificationsScreen()),
+              );
+            },
+          ),
+          // Tab 1: Explore Screen
+          ExploreScreen(
+            initialQuery: _searchQueryForExplore,
+          ),
+          // Tab 2: Selling Page / "Your Marketplace"
+          const SellingPageScreen(),
+          // Tab 3: Messages Screen
+          const MessagesScreen(),
+          // Tab 4: Account / Profile Screen
+          const ProfileScreen(),
+        ];
+
+        return Scaffold(
+          extendBody: true,
+          body: IndexedStack(
+            index: _currentIndex,
+            children: screens,
+          ),
+          bottomNavigationBar: FigmaBottomNavBar(
+            currentIndex: _currentIndex,
+            onTabSelected: _goToTab,
+            onAddPressed: () => _goToTab(2),
+          ),
+        );
+      },
     );
   }
 }
