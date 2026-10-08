@@ -53,12 +53,12 @@ Marketplace/
 
 ### 1. Run Backend API & Database with Docker Compose (Recommended)
 
-Run the backend and PostgreSQL 16 database with persistent storage:
+Run the backend and MySQL 8.0 database with persistent storage:
 ```bash
 docker compose up -d
 ```
-- **Database**: PostgreSQL 16 Alpine on port `5432` (persistent named volume `marketplace_pgdata`).
-- **Schema & Seeding**: Automatically initialized via `apps/backend_api/database/init.sql`.
+- **Database**: MySQL 8.0 on host port `3307` (internal `3306`, persistent named volume `marketplace_mysqldata`).
+- **Schema & Seeding**: Automatically initialized via `apps/backend_api/database/init_mysql.sql`.
 - **API Server**: Native AOT compiled Dart Frog server on `http://localhost:8080`.
 - Health check: `curl http://localhost:8080`
 - Listings API: `curl http://localhost:8080/api/listings`

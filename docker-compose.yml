@@ -1,22 +1,24 @@
 services:
   db:
-    image: postgres:16-alpine
+    image: mysql:8.0
     container_name: marketplace_db
     restart: always
+    command: --default-authentication-plugin=mysql_native_password --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
     environment:
-      POSTGRES_DB: marketplace_db
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: marketplace_secret_pw
+      MYSQL_ROOT_PASSWORD: marketplace_secret_pw
+      MYSQL_DATABASE: marketplace_db
+      MYSQL_USER: marketplace_user
+      MYSQL_PASSWORD: marketplace_secret_pw
     ports:
-      - "5432:5432"
+      - "3307:3306"
     volumes:
-      - marketplace_pgdata:/var/lib/postgresql/data
-      - ./apps/backend_api/database/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+      - marketplace_mysqldata:/var/lib/mysql
+      - ./apps/backend_api/database/init_mysql.sql:/docker-entrypoint-initdb.d/init.sql:ro
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres -d marketplace_db"]
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -u $$MYSQL_USER -p$$MYSQL_PASSWORD --silent"]
       interval: 5s
       timeout: 5s
-      retries: 5
+      retries: 10
     networks:
       - marketplace_net
 
@@ -33,9 +35,9 @@ services:
       PORT: 8080
       HOST: 0.0.0.0
       DB_HOST: db
-      DB_PORT: 5432
+      DB_PORT: 3306
       DB_NAME: marketplace_db
-      DB_USER: postgres
+      DB_USER: marketplace_user
       DB_PASSWORD: marketplace_secret_pw
     ports:
       - "8080:8080"
@@ -43,6 +45,8 @@ services:
       - marketplace_net
 
 volumes:
+  marketplace_mysqldata:
+    driver: local
   marketplace_pgdata:
     driver: local
 

@@ -8,7 +8,7 @@ environment:
 
 dependencies:
   dart_frog: ^1.1.0
-  postgres: ^3.1.2
+  mysql_client: ^0.0.27
   shared_models:
     path: ../../packages/shared_models
 
