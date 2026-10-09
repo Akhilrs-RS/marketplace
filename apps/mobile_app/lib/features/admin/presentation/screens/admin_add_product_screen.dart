@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_models/shared_models.dart';
+import '../../../../core/services/api_service.dart';
+import '../../../products/cubit/products_cubit.dart';
 
 class SpecItem {
   String label;
@@ -23,10 +27,14 @@ class _AdminAddProductScreenState extends State<AdminAddProductScreen> {
   final _formKey = GlobalKey<FormState>();
 
   final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _priceController = TextEditingController();
   final TextEditingController _subCategoryController = TextEditingController();
   final TextEditingController _brandController = TextEditingController();
+  final TextEditingController _locationController = TextEditingController(text: 'Bengaluru');
   final TextEditingController _shortDescController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
+
+  bool _isSubmitting = false;
 
   String _selectedCategory = 'Electronics & Gadgets';
   final List<String> _categories = [
@@ -36,7 +44,20 @@ class _AdminAddProductScreenState extends State<AdminAddProductScreen> {
     'Wearables & Smart Watches',
     'Computers & Laptops',
     'Home Appliances',
+    'Vehicles',
+    'Fashion',
   ];
+
+  final List<String> _sampleImages = [
+    'assets/images/h.png',
+    'assets/images/h1.png',
+    'assets/images/h2.png',
+    'assets/images/h3.png',
+    'assets/images/h4.png',
+    'assets/images/h5.png',
+    'assets/images/h6.png',
+  ];
+  late String _selectedImagePath;
 
   final List<SpecItem> _specifications = [
     SpecItem(label: 'Battery Life', value: '30 Hours'),
@@ -44,10 +65,18 @@ class _AdminAddProductScreenState extends State<AdminAddProductScreen> {
   ];
 
   @override
+  void initState() {
+    super.initState();
+    _selectedImagePath = _sampleImages.first;
+  }
+
+  @override
   void dispose() {
     _nameController.dispose();
+    _priceController.dispose();
     _subCategoryController.dispose();
     _brandController.dispose();
+    _locationController.dispose();
     _shortDescController.dispose();
     _descriptionController.dispose();
     super.dispose();
@@ -65,16 +94,72 @@ class _AdminAddProductScreenState extends State<AdminAddProductScreen> {
     });
   }
 
-  void _submitForm() {
-    if (_formKey.currentState?.validate() ?? false) {
+  Future<void> _submitForm() async {
+    if (!(_formKey.currentState?.validate() ?? false)) return;
+
+    setState(() => _isSubmitting = true);
+    final apiService = context.read<ApiService>();
+
+    final rawPrice = _priceController.text.replaceAll(',', '').replaceAll('₹', '').trim();
+    final priceVal = double.tryParse(rawPrice) ?? 999.0;
+
+    final specMap = <String, dynamic>{};
+    for (final s in _specifications) {
+      if (s.label.trim().isNotEmpty && s.value.trim().isNotEmpty) {
+        specMap[s.label.trim()] = s.value.trim();
+      }
+    }
+    if (_brandController.text.trim().isNotEmpty) {
+      specMap['Brand'] = _brandController.text.trim();
+    }
+
+    final newListing = MarketListing(
+      id: 'list_${DateTime.now().millisecondsSinceEpoch}',
+      title: _nameController.text.trim(),
+      price: priceVal,
+      formattedPrice: '₹ ${priceVal.toInt()}',
+      location: _locationController.text.trim().isNotEmpty ? _locationController.text.trim() : 'Bengaluru',
+      category: _selectedCategory,
+      subcategory: _subCategoryController.text.trim(),
+      imagePath: _selectedImagePath,
+      description: _descriptionController.text.trim().isNotEmpty
+          ? _descriptionController.text.trim()
+          : _shortDescController.text.trim(),
+      sellerId: 'ven_zara_p',
+      sellerName: 'Zara Philip',
+      status: 'active',
+      isFeatured: true,
+      createdAt: DateTime.now(),
+      specifications: specMap,
+    );
+
+    final created = await apiService.createListing(newListing);
+
+    if (!mounted) return;
+    setState(() => _isSubmitting = false);
+
+    if (created != null) {
+      // Refresh buyer-facing cubit so buyer view sees the live update
+      try {
+        context.read<ProductsCubit>().loadInitialData();
+      } catch (_) {}
+
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Product "${_nameController.text.isEmpty ? "Wireless Noise Cancelling Headphones" : _nameController.text}" added to catalog!'),
+          content: Text('Product "${newListing.title}" created & saved to MySQL database!'),
           backgroundColor: const Color(0xFF16A34A),
           behavior: SnackBarBehavior.floating,
         ),
       );
       widget.onBack();
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Failed to save product to database. Please try again.'),
+          backgroundColor: Color(0xFFDC2626),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
     }
   }
 
@@ -101,10 +186,11 @@ class _AdminAddProductScreenState extends State<AdminAddProductScreen> {
               ),
             ),
             Text(
-              'Sharma Electronics',
+              'Sharma Electronics • MySQL Live',
               style: GoogleFonts.inter(
                 fontSize: 12,
-                color: const Color(0xFF64748B),
+                color: const Color(0xFF16A34A),
+                fontWeight: FontWeight.w500,
               ),
             ),
           ],
@@ -149,11 +235,11 @@ class _AdminAddProductScreenState extends State<AdminAddProductScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // ── 1. Product Name ──
-                _buildFieldLabel('Product Name'),
+                _buildFieldLabel('Product Name *'),
                 const SizedBox(height: 6),
                 _buildTextField(
                   controller: _nameController,
-                  hintText: 'e.g. Wireless Noise Cancelling Headphones',
+                  hintText: 'e.g. Sony WH-1000XM5 Wireless Headphones',
                   validator: (val) {
                     if (val == null || val.trim().isEmpty) {
                       return 'Please enter product name';
@@ -164,7 +250,55 @@ class _AdminAddProductScreenState extends State<AdminAddProductScreen> {
 
                 const SizedBox(height: 18),
 
-                // ── 2. Category Dropdown ──
+                // ── 2. Price & Location (2-Column Row) ──
+                Row(
+                  children: [
+                    Expanded(
+                      flex: 5,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          _buildFieldLabel('Price (₹) *'),
+                          const SizedBox(height: 6),
+                          _buildTextField(
+                            controller: _priceController,
+                            hintText: 'e.g. 19999',
+                            keyboardType: TextInputType.number,
+                            validator: (val) {
+                              if (val == null || val.trim().isEmpty) {
+                                return 'Enter price';
+                              }
+                              final num = double.tryParse(val.replaceAll(',', '').replaceAll('₹', '').trim());
+                              if (num == null || num <= 0) {
+                                return 'Valid price required';
+                              }
+                              return null;
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(width: 14),
+                    Expanded(
+                      flex: 5,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          _buildFieldLabel('Location'),
+                          const SizedBox(height: 6),
+                          _buildTextField(
+                            controller: _locationController,
+                            hintText: 'e.g. Bengaluru',
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+
+                const SizedBox(height: 18),
+
+                // ── 3. Category Dropdown ──
                 _buildFieldLabel('Category'),
                 const SizedBox(height: 6),
                 Container(
@@ -200,7 +334,7 @@ class _AdminAddProductScreenState extends State<AdminAddProductScreen> {
 
                 const SizedBox(height: 18),
 
-                // ── 3. Subcategory & Brand (2-Column Row) ──
+                // ── 4. Subcategory & Brand (2-Column Row) ──
                 Row(
                   children: [
                     Expanded(
@@ -211,7 +345,7 @@ class _AdminAddProductScreenState extends State<AdminAddProductScreen> {
                           const SizedBox(height: 6),
                           _buildTextField(
                             controller: _subCategoryController,
-                            hintText: 'e.g. Headphones',
+                            hintText: 'e.g. Over-Ear Headphones',
                           ),
                         ],
                       ),
@@ -225,7 +359,7 @@ class _AdminAddProductScreenState extends State<AdminAddProductScreen> {
                           const SizedBox(height: 6),
                           _buildTextField(
                             controller: _brandController,
-                            hintText: 'e.g. SoundMax',
+                            hintText: 'e.g. Sony',
                           ),
                         ],
                       ),
@@ -235,7 +369,66 @@ class _AdminAddProductScreenState extends State<AdminAddProductScreen> {
 
                 const SizedBox(height: 18),
 
-                // ── 4. Short Description ──
+                // ── 5. Product Image Selection ──
+                _buildFieldLabel('Select Product Image'),
+                const SizedBox(height: 8),
+                SizedBox(
+                  height: 68,
+                  child: ListView.separated(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: _sampleImages.length,
+                    separatorBuilder: (_, _) => const SizedBox(width: 10),
+                    itemBuilder: (ctx, idx) {
+                      final img = _sampleImages[idx];
+                      final isSelected = _selectedImagePath == img;
+                      return GestureDetector(
+                        onTap: () => setState(() => _selectedImagePath = img),
+                        child: AnimatedContainer(
+                          duration: const Duration(milliseconds: 200),
+                          width: 68,
+                          height: 68,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(
+                              color: isSelected ? const Color(0xFF7C3AED) : const Color(0xFFE2E8F0),
+                              width: isSelected ? 2.5 : 1,
+                            ),
+                          ),
+                          clipBehavior: Clip.antiAlias,
+                          child: Stack(
+                            fit: StackFit.expand,
+                            children: [
+                              Image.asset(
+                                img,
+                                fit: BoxFit.cover,
+                                errorBuilder: (context, error, stackTrace) => const Center(
+                                  child: Icon(Icons.inventory_2_outlined, color: Color(0xFF64748B)),
+                                ),
+                              ),
+                              if (isSelected)
+                                Positioned(
+                                  top: 4,
+                                  right: 4,
+                                  child: Container(
+                                    padding: const EdgeInsets.all(2),
+                                    decoration: const BoxDecoration(
+                                      color: Color(0xFF7C3AED),
+                                      shape: BoxShape.circle,
+                                    ),
+                                    child: const Icon(Icons.check, size: 12, color: Colors.white),
+                                  ),
+                                ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+
+                const SizedBox(height: 18),
+
+                // ── 6. Short Description ──
                 _buildFieldLabel('Short Description'),
                 const SizedBox(height: 6),
                 _buildTextField(
@@ -245,7 +438,7 @@ class _AdminAddProductScreenState extends State<AdminAddProductScreen> {
 
                 const SizedBox(height: 18),
 
-                // ── 5. Full Description ──
+                // ── 7. Full Description ──
                 _buildFieldLabel('Description'),
                 const SizedBox(height: 6),
                 _buildTextField(
@@ -256,7 +449,7 @@ class _AdminAddProductScreenState extends State<AdminAddProductScreen> {
 
                 const SizedBox(height: 22),
 
-                // ── 6. Specifications Section ──
+                // ── 8. Specifications Section ──
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -356,9 +549,9 @@ class _AdminAddProductScreenState extends State<AdminAddProductScreen> {
 
                 const SizedBox(height: 32),
 
-                // ── 7. Continue CTA Button ──
+                // ── 9. Continue CTA Button ──
                 GestureDetector(
-                  onTap: _submitForm,
+                  onTap: _isSubmitting ? null : _submitForm,
                   child: Container(
                     width: double.infinity,
                     height: 52,
@@ -378,15 +571,21 @@ class _AdminAddProductScreenState extends State<AdminAddProductScreen> {
                       ],
                     ),
                     alignment: Alignment.center,
-                    child: Text(
-                      'Continue',
-                      style: GoogleFonts.inter(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w700,
-                        color: Colors.white,
-                        letterSpacing: 0.3,
-                      ),
-                    ),
+                    child: _isSubmitting
+                        ? const SizedBox(
+                            width: 22,
+                            height: 22,
+                            child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2.5),
+                          )
+                        : Text(
+                            'Save to Catalog & Database',
+                            style: GoogleFonts.inter(
+                              fontSize: 15,
+                              fontWeight: FontWeight.w700,
+                              color: Colors.white,
+                              letterSpacing: 0.3,
+                            ),
+                          ),
                   ),
                 ),
               ],
@@ -412,11 +611,13 @@ class _AdminAddProductScreenState extends State<AdminAddProductScreen> {
     required TextEditingController controller,
     required String hintText,
     int maxLines = 1,
+    TextInputType keyboardType = TextInputType.text,
     String? Function(String?)? validator,
   }) {
     return TextFormField(
       controller: controller,
       maxLines: maxLines,
+      keyboardType: keyboardType,
       validator: validator,
       style: GoogleFonts.inter(fontSize: 13.5, color: const Color(0xFF0F172A)),
       decoration: _inputDecoration(hint: hintText),

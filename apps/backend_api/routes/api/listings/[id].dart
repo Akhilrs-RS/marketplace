@@ -7,6 +7,7 @@ Future<Response> onRequest(RequestContext context, String id) async {
   switch (context.request.method) {
     case HttpMethod.get:
       return _getListing(id);
+    case HttpMethod.put:
     case HttpMethod.patch:
       return _updateListing(context, id);
     case HttpMethod.delete:

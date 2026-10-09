@@ -125,6 +125,53 @@ class ApiService {
     return listing;
   }
 
+  Future<MarketListing?> updateListing(String id, Map<String, dynamic> updates) async {
+    try {
+      final response = await _client
+          .patch(
+            Uri.parse('$baseUrl/listings/$id'),
+            headers: {'Content-Type': 'application/json'},
+            body: jsonEncode(updates),
+          )
+          .timeout(const Duration(seconds: 3));
+
+      if (response.statusCode == 200) {
+        final body = jsonDecode(response.body) as Map<String, dynamic>;
+        return MarketListing.fromJson(body['data'] as Map<String, dynamic>);
+      }
+    } catch (_) {}
+
+    final idx = _fallbackListings.indexWhere((e) => e.id == id);
+    if (idx != -1) {
+      final old = _fallbackListings[idx];
+      final updated = old.copyWith(
+        title: updates['title'] as String?,
+        imagePath: (updates['image_path'] ?? updates['imagePath']) as String?,
+        status: updates['status'] as String?,
+        description: updates['description'] as String?,
+      );
+      _fallbackListings[idx] = updated;
+      return updated;
+    }
+    return null;
+  }
+
+  Future<bool> deleteListing(String id) async {
+    try {
+      final response = await _client
+          .delete(Uri.parse('$baseUrl/listings/$id'))
+          .timeout(const Duration(seconds: 3));
+
+      if (response.statusCode == 200) {
+        _fallbackListings.removeWhere((e) => e.id == id);
+        return true;
+      }
+    } catch (_) {}
+
+    _fallbackListings.removeWhere((e) => e.id == id);
+    return true;
+  }
+
   // ==========================================
   // 3. Vehicles Details
   // ==========================================

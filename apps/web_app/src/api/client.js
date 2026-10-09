@@ -141,6 +141,36 @@ export async function createListing(listingData) {
   }
 }
 
+export async function updateListing(id, updates) {
+  try {
+    const res = await fetch(`${API_BASE}/listings/${id}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(updates),
+    });
+    return await res.json();
+  } catch (err) {
+    console.error(`Error updating listing ${id}:`, err);
+    return { success: false, message: err.message };
+  }
+}
+
+export async function updateListingImage(id, imagePath) {
+  return updateListing(id, { image_path: imagePath });
+}
+
+export async function deleteListing(id) {
+  try {
+    const res = await fetch(`${API_BASE}/listings/${id}`, {
+      method: 'DELETE',
+    });
+    return await res.json();
+  } catch (err) {
+    console.error(`Error deleting listing ${id}:`, err);
+    return { success: false, message: err.message };
+  }
+}
+
 export async function sendInquiry(inquiryData) {
   try {
     const res = await fetch(`${API_BASE}/conversations`, {
@@ -154,3 +184,5 @@ export async function sendInquiry(inquiryData) {
     return { success: true, message: 'Message sent successfully' };
   }
 }
+
+

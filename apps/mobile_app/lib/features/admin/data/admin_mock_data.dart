@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_models/shared_models.dart';
 
 class TopSellingProduct {
   final String title;
@@ -42,6 +43,7 @@ class AdminCatalogProduct {
   final String status; // 'Active', 'Draft', 'Pending', 'Out Stock'
   final bool isInStock;
   final IconData icon;
+  final String? imagePath;
 
   const AdminCatalogProduct({
     required this.id,
@@ -51,7 +53,58 @@ class AdminCatalogProduct {
     required this.status,
     required this.isInStock,
     required this.icon,
+    this.imagePath,
   });
+
+  factory AdminCatalogProduct.fromMarketListing(MarketListing listing) {
+    IconData getIcon(String cat) {
+      final c = cat.toLowerCase();
+      if (c.contains('electric') || c.contains('electronic') || c.contains('gadget') || c.contains('headphone') || c.contains('audio')) {
+        return Icons.headset_rounded;
+      }
+      if (c.contains('mobile') || c.contains('phone')) {
+        return Icons.phone_android_rounded;
+      }
+      if (c.contains('laptop') || c.contains('computer')) {
+        return Icons.laptop_mac_rounded;
+      }
+      if (c.contains('vehicle') || c.contains('car') || c.contains('bike')) {
+        return Icons.directions_car_rounded;
+      }
+      if (c.contains('appliance') || c.contains('home')) {
+        return Icons.kitchen_rounded;
+      }
+      return Icons.inventory_2_outlined;
+    }
+
+    final isStock = listing.status.toLowerCase() != 'out stock' &&
+        listing.status.toLowerCase() != 'out of stock';
+    String normStatus = 'Active';
+    if (listing.status.toLowerCase() == 'draft') {
+      normStatus = 'Draft';
+    } else if (listing.status.toLowerCase() == 'pending') {
+      normStatus = 'Pending';
+    } else if (!isStock) {
+      normStatus = 'Out Stock';
+    }
+
+    final skuId = listing.id.length > 6
+        ? listing.id.substring(listing.id.length - 6).toUpperCase()
+        : listing.id.toUpperCase();
+
+    return AdminCatalogProduct(
+      id: listing.id,
+      title: listing.title,
+      categoryAndSku: '${listing.category} • SKU-$skuId',
+      price: listing.formattedPrice.isNotEmpty
+          ? listing.formattedPrice
+          : '₹ ${listing.price.toInt()}',
+      status: normStatus,
+      isInStock: isStock,
+      icon: getIcon(listing.category),
+      imagePath: listing.imagePath,
+    );
+  }
 }
 
 class OrderKpiMetric {

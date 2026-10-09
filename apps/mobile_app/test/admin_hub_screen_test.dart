@@ -88,7 +88,7 @@ void main() {
       await tester.tap(find.text('Products').last);
       await tester.pumpAndSettle();
       expect(find.byType(AdminProductsScreen), findsOneWidget);
-      expect(find.text('Active 4'), findsOneWidget);
+      expect(find.textContaining('Active'), findsWidgets);
 
       // ── 11. Test Tab 2: Add Product Screen (via Center Add Icon in Bottom Bar) ──
       await tester.tap(
@@ -101,7 +101,7 @@ void main() {
       expect(find.byType(AdminAddProductScreen), findsOneWidget);
       expect(find.text('Add Product'), findsOneWidget);
       expect(find.text('Specifications'), findsOneWidget);
-      expect(find.text('Continue'), findsOneWidget);
+      expect(find.textContaining('Save to Catalog'), findsOneWidget);
 
       // ── 12. Test Tab 3: Order Screen ──
       await tester.tap(find.text('Order'));

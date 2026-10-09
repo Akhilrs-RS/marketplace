@@ -49,11 +49,8 @@ class AdminProductCard extends StatelessWidget {
                 width: 1,
               ),
             ),
-            child: Icon(
-              product.icon,
-              color: const Color(0xFF334155),
-              size: 30,
-            ),
+            clipBehavior: Clip.antiAlias,
+            child: _buildThumbnail(),
           ),
           const SizedBox(width: 12),
 
@@ -151,4 +148,45 @@ class AdminProductCard extends StatelessWidget {
       ),
     );
   }
+
+  Widget _buildThumbnail() {
+    final imgPath = product.imagePath;
+    if (imgPath == null || imgPath.isEmpty) {
+      return Icon(
+        product.icon,
+        color: const Color(0xFF334155),
+        size: 30,
+      );
+    }
+
+    if (imgPath.startsWith('http://') || imgPath.startsWith('https://')) {
+      return Image.network(
+        imgPath,
+        fit: BoxFit.cover,
+        errorBuilder: (context, error, stackTrace) => Icon(
+          product.icon,
+          color: const Color(0xFF334155),
+          size: 30,
+        ),
+      );
+    }
+
+    String asset = imgPath;
+    if (asset.startsWith('/')) {
+      asset = 'assets$asset';
+    } else if (!asset.startsWith('assets/')) {
+      asset = 'assets/images/$asset';
+    }
+
+    return Image.asset(
+      asset,
+      fit: BoxFit.cover,
+      errorBuilder: (context, error, stackTrace) => Icon(
+        product.icon,
+        color: const Color(0xFF334155),
+        size: 30,
+      ),
+    );
+  }
 }
+

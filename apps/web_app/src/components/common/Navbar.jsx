@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Search, Heart, MessageSquare, Menu, X, Building2, ChevronDown, User, PlusCircle, LogOut, Package } from 'lucide-react';
+import { Search, Heart, MessageSquare, Menu, X, Building2, ChevronDown, User, PlusCircle, LogOut, Package, ShieldCheck, ArrowLeft } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import './Navbar.css';
 
@@ -42,7 +42,8 @@ export default function Navbar({ onOpenPostAd, favoritesCount = 0, unreadMessage
     return null;
   }
 
-  const isSolidPage = location.pathname.startsWith('/messages') || location.pathname.startsWith('/my-ads');
+  const isAdminPage = location.pathname.startsWith('/admin');
+  const isSolidPage = location.pathname.startsWith('/messages') || location.pathname.startsWith('/my-ads') || isAdminPage;
 
   return (
     <header className={`navbar-root ${scrolled || isSolidPage ? 'navbar-scrolled' : 'navbar-transparent'}`}>
@@ -52,57 +53,139 @@ export default function Navbar({ onOpenPostAd, favoritesCount = 0, unreadMessage
           <Link to="/" className="figma-navbar-brand">
             <span className="figma-brand-text">All in One Today</span>
           </Link>
+          {isAdminPage && (
+            <div className="figma-admin-nav-tag">
+              <ShieldCheck size={14} />
+              <span>Admin Portal</span>
+            </div>
+          )}
         </div>
 
-        {/* Desktop Navigation Links matching reference screenshot exactly:
-            Browse | Shops | Favorites | Message | Login (or Logged-in User menu) */}
-        <nav className="figma-desktop-nav">
-          <Link to="/listings" className="figma-nav-item">
-            <Search size={16} className="nav-item-icon" />
-            <span>Browse</span>
-          </Link>
+        {/* Navigation Links: Admin variant vs Marketplace Buyer variant */}
+        {isAdminPage ? (
+          <nav className="figma-desktop-nav">
+            <Link to="/" className="btn-back-marketplace">
+              <ArrowLeft size={16} />
+              <span>Back to Marketplace</span>
+            </Link>
 
-          <Link to="/shops" className="figma-nav-item">
-            <Building2 size={16} className="nav-item-icon" />
-            <span>Shops</span>
-          </Link>
-
-          <Link to="/listings?favorites=true" className="figma-nav-item">
-            <Heart size={16} className="nav-item-icon" />
-            <span>Favorites</span>
-            {favoritesCount > 0 && <span className="nav-fav-pill">{favoritesCount}</span>}
-          </Link>
-
-          <Link to="/messages" className="figma-nav-item">
-            <MessageSquare size={16} className="nav-item-icon" />
-            <span>Message</span>
-            {unreadMessagesCount > 0 && <span className="nav-fav-pill">{unreadMessagesCount}</span>}
-          </Link>
-
-          {/* Authentication State:
-              - Normal / Logged Out: clean "Login" text action
-              - Logged In: User Profile pill with dropdown (My Ads, Post Ad, Logout) */}
-          {!isLoggedIn ? (
-            <button
-              type="button"
-              className="figma-nav-login-btn"
-              onClick={openLoginModal}
-            >
-              Login
-            </button>
-          ) : (
-            <div className="figma-nav-user-dropdown" ref={userMenuRef}>
+            {!isLoggedIn ? (
               <button
                 type="button"
-                className="figma-nav-user-pill"
-                onClick={() => setUserMenuOpen(!userMenuOpen)}
+                className="figma-nav-login-btn"
+                onClick={openLoginModal}
               >
-                <div className="nav-user-avatar">
-                  {currentUser?.name ? currentUser.name[0].toUpperCase() : 'U'}
-                </div>
-                <span className="nav-user-name">{currentUser?.name || 'My Account'}</span>
-                <ChevronDown size={14} className={`nav-user-chevron ${userMenuOpen ? 'open' : ''}`} />
+                Login
               </button>
+            ) : (
+              <div className="figma-nav-user-dropdown" ref={userMenuRef}>
+                <button
+                  type="button"
+                  className="figma-nav-user-pill"
+                  onClick={() => setUserMenuOpen(!userMenuOpen)}
+                >
+                  <div className="nav-user-avatar">
+                    {currentUser?.name ? currentUser.name[0].toUpperCase() : 'A'}
+                  </div>
+                  <span className="nav-user-name">{currentUser?.name || 'Administrator'}</span>
+                  <ChevronDown size={14} className={`nav-user-chevron ${userMenuOpen ? 'open' : ''}`} />
+                </button>
+
+                {userMenuOpen && (
+                  <div className="figma-user-popover">
+                    <div className="user-popover-header">
+                      <strong className="user-popover-name">{currentUser?.name || 'Administrator'}</strong>
+                      <span className="user-popover-role">Admin Access</span>
+                    </div>
+
+                    <div className="user-popover-menu">
+                      <Link
+                        to="/"
+                        className="user-popover-item"
+                        onClick={() => setUserMenuOpen(false)}
+                      >
+                        <Package size={15} />
+                        <span>Marketplace Home</span>
+                      </Link>
+
+                      <Link
+                        to="/my-ads"
+                        className="user-popover-item"
+                        onClick={() => setUserMenuOpen(false)}
+                      >
+                        <Package size={15} />
+                        <span>My Personal Ads</span>
+                      </Link>
+
+                      <div className="user-popover-divider" />
+
+                      <button
+                        type="button"
+                        className="user-popover-item logout-item"
+                        onClick={() => {
+                          setUserMenuOpen(false);
+                          logout();
+                        }}
+                      >
+                        <LogOut size={15} />
+                        <span>Log Out</span>
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+          </nav>
+        ) : (
+          <nav className="figma-desktop-nav">
+            <Link to="/listings" className="figma-nav-item">
+              <Search size={16} className="nav-item-icon" />
+              <span>Browse</span>
+            </Link>
+
+            <Link to="/shops" className="figma-nav-item">
+              <Building2 size={16} className="nav-item-icon" />
+              <span>Shops</span>
+            </Link>
+
+            <Link to="/listings?favorites=true" className="figma-nav-item">
+              <Heart size={16} className="nav-item-icon" />
+              <span>Favorites</span>
+              {favoritesCount > 0 && <span className="nav-fav-pill">{favoritesCount}</span>}
+            </Link>
+
+            <Link to="/messages" className="figma-nav-item">
+              <MessageSquare size={16} className="nav-item-icon" />
+              <span>Message</span>
+              {unreadMessagesCount > 0 && <span className="nav-fav-pill">{unreadMessagesCount}</span>}
+            </Link>
+
+            <Link to="/admin" className="figma-nav-item">
+              <ShieldCheck size={16} className="nav-item-icon" />
+              <span>Admin</span>
+            </Link>
+
+            {!isLoggedIn ? (
+              <button
+                type="button"
+                className="figma-nav-login-btn"
+                onClick={openLoginModal}
+              >
+                Login
+              </button>
+            ) : (
+              <div className="figma-nav-user-dropdown" ref={userMenuRef}>
+                <button
+                  type="button"
+                  className="figma-nav-user-pill"
+                  onClick={() => setUserMenuOpen(!userMenuOpen)}
+                >
+                  <div className="nav-user-avatar">
+                    {currentUser?.name ? currentUser.name[0].toUpperCase() : 'U'}
+                  </div>
+                  <span className="nav-user-name">{currentUser?.name || 'My Account'}</span>
+                  <ChevronDown size={14} className={`nav-user-chevron ${userMenuOpen ? 'open' : ''}`} />
+                </button>
 
               {userMenuOpen && (
                 <div className="figma-user-popover">
@@ -140,6 +223,15 @@ export default function Navbar({ onOpenPostAd, favoritesCount = 0, unreadMessage
                     </Link>
 
                     <Link
+                      to="/admin"
+                      className="user-popover-item"
+                      onClick={() => setUserMenuOpen(false)}
+                    >
+                      <ShieldCheck size={15} />
+                      <span>Admin Management</span>
+                    </Link>
+
+                    <Link
                       to="/listings?favorites=true"
                       className="user-popover-item"
                       onClick={() => setUserMenuOpen(false)}
@@ -167,6 +259,7 @@ export default function Navbar({ onOpenPostAd, favoritesCount = 0, unreadMessage
             </div>
           )}
         </nav>
+      )}
 
         {/* Mobile Toggle */}
         <button 
@@ -199,6 +292,17 @@ export default function Navbar({ onOpenPostAd, favoritesCount = 0, unreadMessage
             <span>Message</span>
             {unreadMessagesCount > 0 && <span className="nav-fav-pill" style={{ marginLeft: 'auto' }}>{unreadMessagesCount}</span>}
           </Link>
+          {isAdminPage ? (
+            <Link to="/" onClick={() => setMobileMenuOpen(false)} style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#c4b5fd', fontWeight: '600' }}>
+              <ArrowLeft size={16} />
+              <span>Back to Marketplace</span>
+            </Link>
+          ) : (
+            <Link to="/admin" onClick={() => setMobileMenuOpen(false)}>
+              <ShieldCheck size={16} />
+              <span>Admin Management</span>
+            </Link>
+          )}
 
           {!isLoggedIn ? (
             <button

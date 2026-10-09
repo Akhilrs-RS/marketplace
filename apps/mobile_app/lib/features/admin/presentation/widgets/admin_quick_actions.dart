@@ -18,6 +18,7 @@ class AdminQuickActions extends StatelessWidget {
   final VoidCallback onViewOrders;
   final VoidCallback onCreateOffers;
   final VoidCallback onReports;
+  final VoidCallback? onManageAds;
 
   const AdminQuickActions({
     super.key,
@@ -25,6 +26,7 @@ class AdminQuickActions extends StatelessWidget {
     required this.onViewOrders,
     required this.onCreateOffers,
     required this.onReports,
+    this.onManageAds,
   });
 
   @override
@@ -36,9 +38,9 @@ class AdminQuickActions extends StatelessWidget {
         onTap: onAddProduct,
       ),
       QuickActionItem(
-        icon: Icons.inventory_2_outlined,
-        label: 'Add Product',
-        onTap: onAddProduct,
+        icon: Icons.campaign_rounded,
+        label: 'Manage Ads',
+        onTap: onManageAds ?? onAddProduct,
       ),
       QuickActionItem(
         icon: Icons.shopping_cart_outlined,
@@ -51,9 +53,9 @@ class AdminQuickActions extends StatelessWidget {
         onTap: onCreateOffers,
       ),
       QuickActionItem(
-        icon: Icons.post_add_rounded,
-        label: 'Add Product',
-        onTap: onAddProduct,
+        icon: Icons.photo_library_outlined,
+        label: 'Edit Images',
+        onTap: onManageAds ?? onAddProduct,
       ),
       QuickActionItem(
         icon: Icons.description_outlined,

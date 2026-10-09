@@ -13,6 +13,7 @@ import ShopVehiclesPage from './pages/ShopVehiclesPage';
 import MessagesPage from './pages/MessagesPage';
 import PostAdPage from './pages/PostAdPage';
 import MyAdsPage from './pages/MyAdsPage';
+import AdminManagementPage from './pages/AdminManagementPage';
 import { AuthProvider, useAuth } from './context/AuthContext';
 
 // Scroll to top helper
@@ -137,6 +138,10 @@ function AppContent() {
           <Route 
             path="/post-ad" 
             element={<PostAdPage />} 
+          />
+          <Route 
+            path="/admin" 
+            element={<AdminManagementPage />} 
           />
           <Route 
             path="*" 

@@ -18,6 +18,7 @@ class AdminHomeTab extends StatelessWidget {
   final VoidCallback onViewOrders;
   final VoidCallback onCreateOffers;
   final VoidCallback onReports;
+  final VoidCallback? onManageAds;
 
   const AdminHomeTab({
     super.key,
@@ -29,12 +30,13 @@ class AdminHomeTab extends StatelessWidget {
     required this.onViewOrders,
     required this.onCreateOffers,
     required this.onReports,
+    this.onManageAds,
   });
 
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      padding: const EdgeInsets.only(bottom: 100),
+      padding: const EdgeInsets.only(bottom: 120),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -89,6 +91,7 @@ class AdminHomeTab extends StatelessWidget {
                   onViewOrders: onViewOrders,
                   onCreateOffers: onCreateOffers,
                   onReports: onReports,
+                  onManageAds: onManageAds,
                 ),
 
                 const SizedBox(height: 20),

@@ -322,6 +322,7 @@ class DatabaseService {
       status: updates['status'] as String?,
       isFeatured: updates['is_featured'] as bool?,
       description: updates['description'] as String?,
+      imagePath: (updates['image_path'] ?? updates['imagePath']) as String?,
     );
 
     // Update in-memory
@@ -333,7 +334,7 @@ class DatabaseService {
         await _pool!.execute(
           '''
             UPDATE listings
-            SET title = :title, price = :price, formatted_price = :formatted_price, location = :location, status = :status, is_featured = :is_featured, description = :description, updated_at = NOW()
+            SET title = :title, price = :price, formatted_price = :formatted_price, location = :location, status = :status, is_featured = :is_featured, description = :description, image_path = :image_path, updated_at = NOW()
             WHERE id = :id
           ''',
           {
@@ -345,6 +346,7 @@ class DatabaseService {
             'status': updated.status,
             'is_featured': updated.isFeatured ? 1 : 0,
             'description': updated.description,
+            'image_path': updated.imagePath,
           },
         );
       } catch (e) {

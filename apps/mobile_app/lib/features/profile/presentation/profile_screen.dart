@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../../admin/cubit/admin_auth_cubit.dart';
 import '../../messages/presentation/messages_screen.dart';
 import '../../notifications/presentation/notifications_screen.dart';
 import 'screens/favorites_screen.dart';
@@ -379,78 +377,26 @@ class _ProfileScreenState extends State<ProfileScreen> {
               },
             ),
 
-            const SizedBox(height: 28),
+            const SizedBox(height: 24),
 
-            // ── MarketPlace Hub Admin Quick Access ──
-            Container(
-              padding: const EdgeInsets.all(14),
-              decoration: BoxDecoration(
-                color: const Color(0xFF0B0E14),
-                borderRadius: BorderRadius.circular(16),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.12),
-                    blurRadius: 10,
-                    offset: const Offset(0, 4),
-                  ),
-                ],
-              ),
-              child: Row(
+            // ── Customer Footer & Support ──
+            Center(
+              child: Column(
                 children: [
-                  Container(
-                    width: 40,
-                    height: 40,
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFFBBF24).withValues(alpha: 0.15),
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(color: const Color(0xFFFBBF24), width: 1.2),
-                    ),
-                    alignment: Alignment.center,
-                    child: const Icon(
-                      Icons.admin_panel_settings_rounded,
-                      color: Color(0xFFFBBF24),
-                      size: 22,
+                  Text(
+                    'Galletrix Marketplace • Version 1.0.0',
+                    style: GoogleFonts.inter(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w500,
+                      color: const Color(0xFF94A3B8),
                     ),
                   ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'MarketPlace Hub',
-                          style: GoogleFonts.inter(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w700,
-                            color: Colors.white,
-                          ),
-                        ),
-                        Text(
-                          'Sign in as Admin (Zara Philip)',
-                          style: GoogleFonts.inter(
-                            fontSize: 11.5,
-                            color: const Color(0xFF94A3B8),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      context.read<AdminAuthCubit>().loginAsAdmin();
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF7C3AED),
-                      foregroundColor: Colors.white,
-                      elevation: 0,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(18),
-                      ),
-                      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-                    ),
-                    child: const Text(
-                      'Open Hub',
-                      style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700),
+                  const SizedBox(height: 4),
+                  Text(
+                    'Trusted Peer-to-Peer & Business Commerce',
+                    style: GoogleFonts.inter(
+                      fontSize: 11,
+                      color: const Color(0xFFCBD5E1),
                     ),
                   ),
                 ],

@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'core/services/api_service.dart';
 import 'core/theme/app_theme.dart';
 import 'features/admin/cubit/admin_auth_cubit.dart';
-import 'features/admin/cubit/admin_auth_state.dart';
 import 'features/admin/presentation/admin_hub_screen.dart';
 import 'features/cart/cubit/cart_cubit.dart';
 import 'features/explore/presentation/explore_screen.dart';
@@ -53,7 +52,19 @@ class GalletrixMarketplaceApp extends StatelessWidget {
           theme: AppTheme.lightTheme,
           darkTheme: AppTheme.darkTheme,
           themeMode: ThemeMode.light,
-          home: const MainNavigationScreen(),
+          initialRoute: startAsAdmin ? '/admin' : '/',
+          onGenerateRoute: (settings) {
+            if (settings.name == '/admin') {
+              return MaterialPageRoute(
+                builder: (_) => const AdminHubScreen(),
+                settings: settings,
+              );
+            }
+            return MaterialPageRoute(
+              builder: (_) => const MainNavigationScreen(),
+              settings: settings,
+            );
+          },
         ),
       ),
     );
@@ -84,18 +95,9 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AdminAuthCubit, AdminAuthState>(
-      builder: (context, authState) {
-        // If user is logged in as Admin, open MarketPlace Hub directly as requested
-        if (authState.isAdmin) {
-          return AdminHubScreen(
-            onSwitchToBuyer: () => _goToTab(0),
-          );
-        }
-
-        final screens = [
-          // Tab 0: Home Screen
-          HomeScreen(
+    final screens = [
+      // Tab 0: Home Screen
+      HomeScreen(
             onOpenCart: () => _goToTab(1),
             onOpenSearch: () {
               setState(() => _searchQueryForExplore = null);
@@ -135,7 +137,5 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
             onAddPressed: () => _goToTab(2),
           ),
         );
-      },
-    );
   }
 }

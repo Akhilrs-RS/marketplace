@@ -5,6 +5,7 @@ import '../../notifications/presentation/notifications_screen.dart';
 import '../cubit/admin_auth_cubit.dart';
 import '../cubit/admin_auth_state.dart';
 import 'screens/admin_add_product_screen.dart';
+import 'screens/admin_ads_management_screen.dart';
 import 'screens/admin_analytics_screen.dart';
 import 'screens/admin_home_tab.dart';
 import 'screens/admin_onboarding_screen.dart';
@@ -42,6 +43,13 @@ class _AdminHubScreenState extends State<AdminHubScreen> {
           onLogin: () => Navigator.pop(context),
         ),
       ),
+    );
+  }
+
+  void _openAdsManagement() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => const AdminAdsManagementScreen()),
     );
   }
 
@@ -114,6 +122,16 @@ class _AdminHubScreenState extends State<AdminHubScreen> {
                 const Divider(height: 1),
                 const SizedBox(height: 12),
                 ListTile(
+                  leading: const Icon(Icons.campaign_outlined, color: Color(0xFF7C3AED)),
+                  title: Text('Manage User Ads & Product Images', style: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w600)),
+                  subtitle: Text('Edit product images, add or delete marketplace ads', style: GoogleFonts.inter(fontSize: 12)),
+                  trailing: const Icon(Icons.chevron_right_rounded),
+                  onTap: () {
+                    Navigator.pop(ctx);
+                    _openAdsManagement();
+                  },
+                ),
+                ListTile(
                   leading: const Icon(Icons.palette_outlined, color: Color(0xFF7C3AED)),
                   title: Text('View Welcome / Onboarding Screen', style: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w600)),
                   subtitle: Text('Preview the Figma onboarding & login screen', style: GoogleFonts.inter(fontSize: 12)),
@@ -131,16 +149,15 @@ class _AdminHubScreenState extends State<AdminHubScreen> {
                   onTap: () => Navigator.pop(ctx),
                 ),
                 ListTile(
-                  leading: const Icon(Icons.swap_horiz_rounded, color: Color(0xFF0F172A)),
-                  title: Text('Switch to Customer / Buyer View', style: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w600)),
-                  subtitle: Text('Browse marketplace listings as a normal buyer', style: GoogleFonts.inter(fontSize: 12)),
+                  leading: const Icon(Icons.logout_rounded, color: Color(0xFFEF4444)),
+                  title: Text('Admin Sign Out', style: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w600, color: const Color(0xFFEF4444))),
+                  subtitle: Text('End administrative session', style: GoogleFonts.inter(fontSize: 12)),
                   trailing: const Icon(Icons.chevron_right_rounded),
                   onTap: () {
                     Navigator.pop(ctx);
-                    context.read<AdminAuthCubit>().loginAsCustomer();
-                    if (widget.onSwitchToBuyer != null) {
-                      widget.onSwitchToBuyer!();
-                    }
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Logged out from Marketplace Hub')),
+                    );
                   },
                 ),
               ],
@@ -163,6 +180,7 @@ class _AdminHubScreenState extends State<AdminHubScreen> {
           onViewOrders: () => setState(() => _currentNavIndex = 3),
           onCreateOffers: () => setState(() => _currentNavIndex = 2),
           onReports: () => setState(() => _currentNavIndex = 4),
+          onManageAds: _openAdsManagement,
         );
       case 1:
         return AdminProductsScreen(
@@ -194,6 +212,7 @@ class _AdminHubScreenState extends State<AdminHubScreen> {
           onViewOrders: () => setState(() => _currentNavIndex = 3),
           onCreateOffers: () => setState(() => _currentNavIndex = 2),
           onReports: () => setState(() => _currentNavIndex = 4),
+          onManageAds: _openAdsManagement,
         );
     }
   }
